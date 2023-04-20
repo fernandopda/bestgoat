@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./App.css";
 import Goal from "./Goal";
 import LoginPopup from "./LoginPopup";
+import RankingPage from "./RankingPage";
 
 function App() {
   const [goals, setGoals] = useState([
@@ -9,7 +10,7 @@ function App() {
       id: 1,
       title: "Roberto Carlos Thunderbolt Strike vs Tenerife (1998)",
       description:
-        "he passage discusses Roberto Carlos famous free kick goal for Real Madrid against Tenerife and why its considered by some to be the greatest goal of all time.",
+        "Roberto Carlos famous free kick goal for Real Madrid against Tenerife and why its considered by some to be the greatest goal of all time.",
       videoURL: (
         <iframe
           width="877"
@@ -21,7 +22,7 @@ function App() {
           allowfullscreen
         ></iframe>
       ),
-      votes: 0,
+      votes: 5,
     },
     {
       id: 2,
@@ -39,7 +40,7 @@ function App() {
           allowfullscreen
         ></iframe>
       ),
-      votes: 0,
+      votes: 10,
     },
     {
       id: 3,
@@ -57,7 +58,7 @@ function App() {
           allowfullscreen
         ></iframe>
       ),
-      votes: 0,
+      votes: 55,
     },
     {
       id: 4,
@@ -75,7 +76,7 @@ function App() {
           allowfullscreen
         ></iframe>
       ),
-      votes: 0,
+      votes: 3,
     },
     {
       id: 5,
@@ -93,12 +94,13 @@ function App() {
           allowfullscreen
         ></iframe>
       ),
-      votes: 0,
+      votes: 33,
     },
   ]);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
+  const isRankingPage = true;
 
   const openLoginPopup = () => {
     setIsLoginPopupOpen(true);
@@ -106,33 +108,47 @@ function App() {
   const closeLoginPopup = () => {
     setIsLoginPopupOpen(false);
   };
+  const goBack = () => {
+    window.history.back();
+  };
   return (
     <div className="container">
-      <header>
-        <h1>Best Soccer Goals</h1>
-      </header>
       <main>
-        <div className="search">
-          <input
-            type="text"
-            placeholder="Search for a goal..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-        <div class="goalContainer">
-          <div className="goal-list">
-            {goals
-              .filter((goal) =>
-                goal.title
-                  .toLocaleLowerCase()
-                  .includes(searchTerm.toLocaleLowerCase())
-              )
-              .map((goal) => (
-                <Goal key={goal.id} {...goal} openLoginPopup={openLoginPopup} />
-              ))}
-          </div>
-        </div>
+        {isRankingPage ? (
+          <RankingPage goals={goals} goBack={goBack} />
+        ) : (
+          <>
+            <header>
+              <h1>Best Soccer Goals</h1>
+            </header>
+            <div className="search">
+              <input
+                type="text"
+                placeholder="Search for a goal..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            <div class="goal-container">
+              <div className="goal-list">
+                {goals
+                  .filter((goal) =>
+                    goal.title
+                      .toLocaleLowerCase()
+                      .includes(searchTerm.toLocaleLowerCase())
+                  )
+                  .map((goal) => (
+                    <Goal
+                      key={goal.id}
+                      {...goal}
+                      openLoginPopup={openLoginPopup}
+                      // onVote={handleVote}
+                    />
+                  ))}
+              </div>
+            </div>
+          </>
+        )}
         <LoginPopup
           isOpen={isLoginPopupOpen}
           onRequestClose={closeLoginPopup}
