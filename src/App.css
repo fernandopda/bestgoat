@@ -254,3 +254,31 @@ footer p {
   cursor: pointer;
   border-radius: 4px;
 }
+/* Nav Bar */
+.nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1e3b5a;
+  padding: 1rem 2rem;
+  color: white;
+}
+
+.nav-logo {
+  font-size: 1.5rem;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+}
+
+.nav-links button {
+  background-color: #7da0b6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 1rem;
+  cursor: pointer;
+}

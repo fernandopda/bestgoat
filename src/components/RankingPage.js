@@ -1,6 +1,7 @@
 import React from "react";
-import "./App.css";
+import "../App.css";
 import RankingGoals from "./RankingGoals";
+
 const RankingPage = ({ goals }) => {
   const sortedGoals = [...goals].sort((a, b) => b.votes - a.votes);
 

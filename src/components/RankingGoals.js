@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import "./App.css";
+import "../App.css";
 
 function RankingGoals({
   id,
@@ -16,12 +16,12 @@ function RankingGoals({
     setIsVideoVisible(!isVideoVisible);
   };
   return (
-    <div class="ranking-goal-card">
-      <div class="ranking-goal-title" onClick={toggleVideo}>
+    <div className="ranking-goal-card">
+      <div className="ranking-goal-title" onClick={toggleVideo}>
         <span className="ranking-position">{position}</span> {title}
       </div>
-      <div class="ranking-goal-description">{description}</div>
-      {isVideoVisible && <div class="ranking-goal-video">{videoURL}</div>}
+      <div className="ranking-goal-description">{description}</div>
+      {isVideoVisible && <div className="ranking-goal-video">{videoURL}</div>}
     </div>
   );
 }

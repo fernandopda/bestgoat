@@ -1,10 +1,26 @@
 import React, { useState } from "react";
 import "./App.css";
-import Goal from "./Goal";
-import LoginPopup from "./LoginPopup";
-import RankingPage from "./RankingPage";
-
+import Goal from "./components/Goal";
+import LoginPopup from "./components/LoginPopup";
+import RankingPage from "./components/RankingPage";
+import NavBar from "./components/NavBar";
+import { useEffect } from "react";
+import { gapi } from "gapi-script";
 function App() {
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://apis.google.com/js/api.js";
+    script.onload = () => {
+      gapi.load("auth2", () => {
+        gapi.auth2.init({
+          client_id:
+            "247163941989-2gj6cem762ausmk5dghv3uu739t2b5dt.apps.googleusercontent.com",
+        });
+      });
+    };
+    document.body.appendChild(script);
+  }, []);
+
   const [goals, setGoals] = useState([
     {
       id: 1,
@@ -17,9 +33,9 @@ function App() {
           height="658"
           src="https://www.youtube.com/embed/WhVDFEW5348"
           title="Roberto Carlos Impossible Goal against Tenerife in HQ"
-          frameborder="0"
+          frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen
+          allowFullScreen
         ></iframe>
       ),
       votes: 5,
@@ -35,9 +51,9 @@ function App() {
           height="658"
           src="https://www.youtube.com/embed/ZgqsaDnsEq8"
           title="Zlatan Ibrahimovic Goal for Ajax"
-          frameborder="0"
+          frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen
+          allowFullScreen
         ></iframe>
       ),
       votes: 10,
@@ -53,9 +69,9 @@ function App() {
           height="658"
           src="https://www.youtube.com/embed/Oaxnk-Si61Y"
           title="Maradona wonder goal v England Mexico 86 - Víctor Hugo Morales commentary - HD"
-          frameborder="0"
+          frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen
+          allowFullScreen
         ></iframe>
       ),
       votes: 55,
@@ -71,9 +87,9 @@ function App() {
           height="658"
           src="https://www.youtube.com/embed/RM_5tJncHww"
           title="Zlatan Ibrahimovic&#39;s famous 30-yard bicycle kick vs England"
-          frameborder="0"
+          frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen
+          allowFullScreen
         ></iframe>
       ),
       votes: 3,
@@ -89,9 +105,9 @@ function App() {
           height="658"
           src="https://www.youtube.com/embed/1wvwSER_w-M"
           title="Goal Neymar vs Flamengo  Puskas Award 2011 Candidate"
-          frameborder="0"
+          frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen
+          allowFullScreen
         ></iframe>
       ),
       votes: 33,
@@ -100,7 +116,13 @@ function App() {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
-  const isRankingPage = true;
+  const isRankingPage = false;
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const handleLoginSuccess = () => {
+    setIsAuthenticated(true);
+    setIsLoginPopupOpen(false);
+  };
 
   const openLoginPopup = () => {
     setIsLoginPopupOpen(true);
@@ -108,14 +130,21 @@ function App() {
   const closeLoginPopup = () => {
     setIsLoginPopupOpen(false);
   };
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+  };
   const goBack = () => {
     window.history.back();
   };
+
   return (
     <div className="container">
       <main>
-        {isRankingPage ? (
-          <RankingPage goals={goals} goBack={goBack} />
+        {isAuthenticated ? (
+          <>
+            <NavBar onLogout={handleLogout} /> {/* Add the NavBar component */}
+            <RankingPage goals={goals} goBack={goBack} />
+          </>
         ) : (
           <>
             <header>
@@ -129,7 +158,7 @@ function App() {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <div class="goal-container">
+            <div className="goal-container">
               <div className="goal-list">
                 {goals
                   .filter((goal) =>
@@ -152,6 +181,7 @@ function App() {
         <LoginPopup
           isOpen={isLoginPopupOpen}
           onRequestClose={closeLoginPopup}
+          onLoginSuccess={handleLoginSuccess}
         />
       </main>
       <footer>
