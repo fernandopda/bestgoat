@@ -1,5 +1,4 @@
 const express = require("express");
-const router = express.Router();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const authController = require("./auth");
@@ -17,4 +16,3 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
-module.exports = router;

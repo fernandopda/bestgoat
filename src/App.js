@@ -4,6 +4,7 @@ import Goal from "./components/Goal";
 import LoginPopup from "./components/LoginPopup";
 import RankingPage from "./components/RankingPage";
 import NavBar from "./components/NavBar";
+import AdminPage from "./components/AdminPage";
 import { useEffect } from "react";
 import { gapi } from "gapi-script";
 function App() {
@@ -21,6 +22,7 @@ function App() {
     document.body.appendChild(script);
   }, []);
 
+  const [isAdmin, setIsAdmin] = useState(false);
   const [goals, setGoals] = useState([
     {
       id: 1,
@@ -142,8 +144,12 @@ function App() {
       <main>
         {isAuthenticated ? (
           <>
-            <NavBar onLogout={handleLogout} /> {/* Add the NavBar component */}
-            <RankingPage goals={goals} goBack={goBack} />
+            <NavBar onLogout={handleLogout} />
+            {isAdmin ? (
+              <AdminPage />
+            ) : (
+              <RankingPage goals={goals} goBack={goBack} />
+            )}
           </>
         ) : (
           <>
@@ -171,7 +177,6 @@ function App() {
                       key={goal.id}
                       {...goal}
                       openLoginPopup={openLoginPopup}
-                      // onVote={handleVote}
                     />
                   ))}
               </div>
@@ -182,6 +187,7 @@ function App() {
           isOpen={isLoginPopupOpen}
           onRequestClose={closeLoginPopup}
           onLoginSuccess={handleLoginSuccess}
+          setIsAdmin={setIsAdmin}
         />
       </main>
       <footer>

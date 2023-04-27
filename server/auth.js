@@ -22,6 +22,67 @@ const connection = mysql.createConnection({
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
+/* Admin add goals */
+const addGoals = (req, res) => {
+  const { title, description, videoURL, votes } = req.body;
+
+  const query =
+    "INSERT INTO goals (title, description, videoURL, votes) VALUES (?, ?, ?, ?)";
+  connection.query(
+    query,
+    [title, description, videoURL, votes],
+    (err, result) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({ message: "Internal Server Error" });
+      } else {
+        res
+          .status(201)
+          .json({ message: "Goal created successfully", id: result.insertId });
+      }
+    }
+  );
+};
+
+const getUserById = (userId, callback) => {
+  connection.query("SELECT * FROM users WHERE id = ?", [userId], callback);
+};
+
+const getUserByGoogleId = (googleId, callback) => {
+  connection.query(
+    "SELECT * FROM users WHERE google_id = ?",
+    [googleId],
+    callback
+  );
+};
+
+const createUser = (email, googleId, callback) => {
+  const createUserQuery = "INSERT INTO users (email, google_id) VALUES (?, ?)";
+  connection.query(createUserQuery, [email, googleId], callback);
+};
+
+const isAdmin = (req, res, next) => {
+  const userId = req.user.id;
+  console.log("userId:", userId);
+
+  getUserById(userId, (err, results) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ message: "Internal Server Error" });
+    } else if (!results || results.length === 0) {
+      console.log("no results found for userId:", userId);
+      res.status(404).json({ message: "User not found" });
+    } else {
+      const user = results[0];
+      if (user.is_admin) {
+        next();
+      } else {
+        res.status(403).json({ message: "Forbidden" });
+      }
+    }
+  });
+};
+
 const googleLogin = async (req, res) => {
   try {
     console.log("reqBody", req.body);
@@ -33,53 +94,50 @@ const googleLogin = async (req, res) => {
     });
     const { email, sub: googleId } = ticket.getPayload();
     console.log(email);
-    // Check if user exists in the database
-    connection.query(
-      "SELECT * FROM users WHERE google_id = ?",
-      [googleId],
-      async (err, results) => {
-        if (err) {
-          console.error(err);
-          res.status(500).json({ message: "Internal Server Error" });
-        } else if (!results || results.length === 0) {
-          // User doesn't exist, create a new user with the Google ID and email
-          console.log("criando user");
-          const createUserQuery =
-            "INSERT INTO users (email, google_id) VALUES (?, ?)";
-          connection.query(
-            createUserQuery,
-            [email, googleId],
-            (err, result) => {
-              if (err) {
-                console.error(err);
-                res.status(500).json({ message: "Internal Server Error" });
-              } else {
-                console.log("entrou");
-                const userId = result.insertId;
-                const token = jwt.sign({ id: userId }, process.env.JWT_SECRET, {
-                  expiresIn: process.env.JWT_EXPIRES_IN,
-                });
-                res.status(200).json({ token });
-                console.log(token);
-              }
-            }
-          );
-        } else {
-          console.log("user exists!");
-          const userId = results[0].id;
-          const token = jwt.sign({ id: userId }, process.env.JWT_SECRET, {
-            expiresIn: process.env.JWT_EXPIRES_IN,
-          });
-          res.status(200).json({ token });
-        }
+
+    getUserByGoogleId(googleId, async (err, results) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({ message: "Internal Server Error", err });
+        // Creates a new user in case it doest exist
+      } else if (!results || results.length === 0) {
+        console.log("creating user");
+        createUser(email, googleId, (err, result) => {
+          if (err) {
+            console.error(err);
+            res.status(500).json({
+              message: "It was not possible to create a new user",
+              err,
+            });
+          } else {
+            console.log("user created");
+            const userId = result.insertId;
+            const token = jwt.sign({ id: userId }, process.env.JWT_SECRET, {
+              expiresIn: process.env.JWT_EXPIRES_IN,
+            });
+            res.status(200).json({ token });
+          }
+        });
+      } else {
+        console.log("user exists!");
+        const user = results[0];
+        console.log("USER:", user);
+        const userId = user.ID;
+        console.log("USERID:", userId);
+        const token = jwt.sign({ id: userId }, process.env.JWT_SECRET, {
+          expiresIn: process.env.JWT_EXPIRES_IN,
+        });
+        console.log("USER ADMIN", user.is_admin ? "YES" : "NO");
+        res.status(200).json({ token, isAdmin: user.is_admin });
       }
-    );
+    });
   } catch (err) {
     console.error("Google login failed:", err);
     res.status(500).json({ message: "AUTH!! Internal Server Error" });
   }
 };
 
+/* EMAIL LOGIN */
 // const login = async (req, res) => {
 //   try {
 //     const { email, password } = req.body;
@@ -118,7 +176,11 @@ const googleLogin = async (req, res) => {
 
 // Define the login route and use the login function as the route handler
 // router.post("/login", login);
-router.post("/googleLogin", googleLogin);
 
 // Export the router instance instead of the object
+// Add middleware and routes to the router instance
+router.post("/googleLogin", googleLogin);
+router.post("/addGoals", isAdmin, addGoals);
+
+// Export the router instance
 module.exports = router;
