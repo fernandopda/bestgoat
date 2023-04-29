@@ -5,9 +5,34 @@ const AdminPage = () => {
   const [description, setDescription] = useState("");
   const [videoURL, setVideoURL] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     // Call the API to add the goal to the database
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/addGoals", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("userSave")}`,
+        },
+        body: JSON.stringify({ title, description, videoURL, votes: 0 }),
+      });
+
+      const data = await response.json();
+
+      if (response.status === 201) {
+        console.log("Goal created successfully:", data);
+        // Clear the input fields after submitting
+        setTitle("");
+        setDescription("");
+        setVideoURL("");
+      } else {
+        console.error("Error:", data.message);
+      }
+    } catch (err) {
+      console.error("Error adding goal:", err);
+    }
   };
 
   return (

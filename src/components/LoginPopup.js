@@ -6,7 +6,14 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 import "../App.css";
 
-const LoginPopup = ({ isOpen, onRequestClose, onLoginSuccess, setIsAdmin }) => {
+const LoginPopup = ({
+  isOpen,
+  onRequestClose,
+  onLoginSuccess,
+  setIsAdmin,
+  setUserToken,
+  setUserId: setUserId,
+}) => {
   async function loginWithGoogle(tokenId) {
     const authResponse = await fetch(
       "http://localhost:5000/api/auth/googleLogin",
@@ -25,6 +32,9 @@ const LoginPopup = ({ isOpen, onRequestClose, onLoginSuccess, setIsAdmin }) => {
       localStorage.setItem("userSave", data.token);
       console.log(data);
       setIsAdmin(data.isAdmin);
+      setUserToken(tokenId);
+      setUserId(data.userId);
+      console.log("USER ID IS:!!", data.userId);
       console.log(data.isAdmin);
       console.log("Logged in with Google");
       onLoginSuccess();

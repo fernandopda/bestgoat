@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { OAuth2Client } = require("google-auth-library");
 const { promisify } = require("util");
+const { constrainedMemory } = require("process");
 const app = express();
 require("dotenv").config();
 app.use((req, res, next) => {
@@ -27,14 +28,14 @@ const addGoals = (req, res) => {
   const { title, description, videoURL, votes } = req.body;
 
   const query =
-    "INSERT INTO goals (title, description, videoURL, votes) VALUES (?, ?, ?, ?)";
+    "INSERT INTO goals (title, description, url, votes) VALUES (?, ?, ?, ?)";
   connection.query(
     query,
     [title, description, videoURL, votes],
     (err, result) => {
       if (err) {
         console.error(err);
-        res.status(500).json({ message: "Internal Server Error" });
+        res.status(500).json({ message: "Internal Server Error", err });
       } else {
         res
           .status(201)
@@ -42,6 +43,16 @@ const addGoals = (req, res) => {
       }
     }
   );
+};
+const getGoals = (req, res) => {
+  connection.query("SELECT * FROM goals", (err, results) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ message: "Internal Server Error", err });
+    } else {
+      res.status(200).json(results);
+    }
+  });
 };
 
 const getUserById = (userId, callback) => {
@@ -59,6 +70,24 @@ const getUserByGoogleId = (googleId, callback) => {
 const createUser = (email, googleId, callback) => {
   const createUserQuery = "INSERT INTO users (email, google_id) VALUES (?, ?)";
   connection.query(createUserQuery, [email, googleId], callback);
+};
+const authenticateJWT = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (authHeader) {
+    const token = authHeader.split(" ")[1]; // Get the token part from the "Bearer <token>" format
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+      if (err) {
+        return res.sendStatus(403); // If the token is not valid, return 403 (Forbidden)
+      }
+
+      req.user = user; // Set the req.user object
+      next(); // Proceed to the next middleware function
+    });
+  } else {
+    res.sendStatus(401); // If no authorization header is present, return 401 (Unauthorized)
+  }
 };
 
 const isAdmin = (req, res, next) => {
@@ -119,16 +148,13 @@ const googleLogin = async (req, res) => {
           }
         });
       } else {
-        console.log("user exists!");
         const user = results[0];
-        console.log("USER:", user);
         const userId = user.ID;
-        console.log("USERID:", userId);
         const token = jwt.sign({ id: userId }, process.env.JWT_SECRET, {
           expiresIn: process.env.JWT_EXPIRES_IN,
         });
         console.log("USER ADMIN", user.is_admin ? "YES" : "NO");
-        res.status(200).json({ token, isAdmin: user.is_admin });
+        res.status(200).json({ token, isAdmin: user.is_admin, userId });
       }
     });
   } catch (err) {
@@ -136,7 +162,56 @@ const googleLogin = async (req, res) => {
     res.status(500).json({ message: "AUTH!! Internal Server Error" });
   }
 };
+const vote = (req, res) => {
+  const userId = req.body.userId;
+  const goalId = req.body.goalId;
+  console.log("USER AUTH", userId);
+  console.log("GOALIDMAN", goalId);
+  connection.query(
+    "SELECT * FROM users WHERE id = ?",
+    [userId],
+    (err, results) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({ message: "Internal Server Error", err });
+      } else {
+        const user = results[0];
 
+        if (user.voted) {
+          res.status(403).json({ message: "User has already voted" });
+        } else {
+          connection.query(
+            "UPDATE goals SET votes = votes + 1 WHERE id = ?",
+            [goalId],
+            (err, result) => {
+              if (err) {
+                console.error(err);
+                res.status(500).json({ message: "Internal Server Error", err });
+              } else {
+                connection.query(
+                  "UPDATE users SET voted = 1 WHERE id = ?",
+                  [userId],
+                  (err, result) => {
+                    if (err) {
+                      console.error(err);
+                      res
+                        .status(500)
+                        .json({ message: "Internal Server Error", err });
+                    } else {
+                      res
+                        .status(200)
+                        .json({ message: "Vote successfully submitted" });
+                    }
+                  }
+                );
+              }
+            }
+          );
+        }
+      }
+    }
+  );
+};
 /* EMAIL LOGIN */
 // const login = async (req, res) => {
 //   try {
@@ -180,7 +255,9 @@ const googleLogin = async (req, res) => {
 // Export the router instance instead of the object
 // Add middleware and routes to the router instance
 router.post("/googleLogin", googleLogin);
-router.post("/addGoals", isAdmin, addGoals);
+router.post("/addGoals", authenticateJWT, isAdmin, addGoals);
+router.get("/getGoals", getGoals);
+router.post("/vote", vote);
 
 // Export the router instance
 module.exports = router;
