@@ -74,9 +74,15 @@ function App() {
   return (
     <div className="container">
       <main>
+        <NavBar
+          isAuthenticated={isAuthenticated}
+          openLogin={openLoginPopup}
+          onLogout={handleLogout}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+        />
         {isAuthenticated && isVoted ? (
           <>
-            <NavBar onLogout={handleLogout} />
             {isAdmin ? (
               <AdminPage />
             ) : (
@@ -85,17 +91,6 @@ function App() {
           </>
         ) : (
           <>
-            <header>
-              <h1>Best Soccer Goals</h1>
-            </header>
-            <div className="search">
-              <input
-                type="text"
-                placeholder="Search for a goal..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
             <div className="goal-container">
               <div className="goal-list">
                 {goals
@@ -110,9 +105,10 @@ function App() {
                       {...goal}
                       openLoginPopup={openLoginPopup}
                       isAuthenticated={isAuthenticated}
-                      isVoded={isVoted}
+                      setIsVoded={setIsVoted}
                       token={userToken}
                       userId={userId}
+                      setIsVoted={setIsVoted}
                     />
                   ))}
               </div>
@@ -123,6 +119,7 @@ function App() {
           isOpen={isLoginPopupOpen}
           onRequestClose={closeLoginPopup}
           onLoginSuccess={handleLoginSuccess}
+          setIsVoted={setIsVoted}
           setIsAdmin={setIsAdmin}
           setUserToken={setUserToken}
           setUserId={setUserId}

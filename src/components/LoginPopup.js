@@ -9,11 +9,41 @@ import "../App.css";
 const LoginPopup = ({
   isOpen,
   onRequestClose,
+  setIsVoted,
   onLoginSuccess,
   setIsAdmin,
   setUserToken,
   setUserId: setUserId,
 }) => {
+  const fetchVoteStatus = async (userId) => {
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/checkVote", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId: userId }),
+      });
+
+      if (response.status === 200) {
+        const data = await response.json();
+        if (data.goalVotedId > 0) {
+          console.log("User has already voted GOAL ID:", data.goalVotedId);
+          setIsVoted(true);
+          console.log(setIsVoted);
+          // Use data.goalVotedId to get the voted goal ID and handle accordingly
+        } else {
+          console.log("User has not voted yet");
+          setIsVoted(false);
+        }
+      } else {
+        throw new Error("Error fetching vote status", response);
+      }
+    } catch (error) {
+      console.error("Error fetching vote status:", error);
+    }
+  };
+
   async function loginWithGoogle(tokenId) {
     const authResponse = await fetch(
       "http://localhost:5000/api/auth/googleLogin",
@@ -38,6 +68,7 @@ const LoginPopup = ({
       console.log(data.isAdmin);
       console.log("Logged in with Google");
       onLoginSuccess();
+      fetchVoteStatus(data.userId);
     } else {
       console.error("Error:", data.message);
     }

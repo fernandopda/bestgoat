@@ -11,7 +11,7 @@ function Goal({
   votes,
   openLoginPopup,
   isAuthenticated,
-  isVoted,
+  setIsVoted,
   token,
   userId,
 }) {
@@ -26,6 +26,7 @@ function Goal({
       });
       if (response.status === 200) {
         console.log("Vote submitted successfully");
+        setIsVoted(true);
       } else if (response.status === 403) {
         const errorData = await response.json();
         console.log("Error:", errorData);
@@ -33,8 +34,6 @@ function Goal({
         console.log(response.status);
         console.log("User has already voted");
         console.log(token);
-        // isVoted = true; // This won't work, as you cannot reassign a prop.
-        // Redirect to the ranking page or handle the situation as you need.
       } else {
         throw new Error("Error voting", token, response);
       }

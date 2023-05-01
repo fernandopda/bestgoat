@@ -7,8 +7,6 @@ const RankingPage = ({ goals }) => {
 
   return (
     <div className="ranking-container">
-      <header>Top soccer goals ever!</header>
-
       <main>
         <div className="ranking-goal-container">
           {sortedGoals.map((goal, i) => (

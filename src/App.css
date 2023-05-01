@@ -6,12 +6,16 @@
     transform: rotate(360deg);
   }
 }
+html {
+  scroll-behavior: smooth;
+}
 
 body {
-  font-family: "Arial", sans-serif;
-  background-color: #f0f0f0;
+  font-family: "Roboto", sans-serif;
+  background-color: #fafafa;
   margin: 0;
   padding: 0;
+  color: #333;
 }
 
 header {
@@ -31,9 +35,9 @@ main {
 }
 
 footer {
-  background-color: #34495e;
+  background-color: #333;
   padding: 16px 0;
-  color: white;
+  color: #f1f1f1;
   text-align: center;
 }
 
@@ -51,7 +55,7 @@ footer p {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 24px;
 }
 
 .goal-card {
@@ -60,26 +64,31 @@ footer p {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
   margin-bottom: 30px;
+  max-width: 800px; /* Limit the width of the goal card */
+  width: 100%; /* Make the goal card responsive */
 }
-
 .goal-title {
-  font-size: 24px;
+  font-size: 28px; /* Increase the font size for better readability */
   font-weight: bold;
   margin-bottom: 10px;
+  text-align: center; /* Center align the title */
 }
 
 .goal-description {
-  font-size: 16px;
+  font-size: 18px; /* Increase the font size for better readability */
   margin-bottom: 16px;
   text-align: center;
+  line-height: 1.5; /* Improve the line spacing for better readability */
 }
 
 .goal-video {
   width: 100%;
-  height: 0;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
   position: relative;
-  margin-bottom: 16px;
+  padding-top: 56.25%;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 .goal-video iframe {
@@ -87,7 +96,7 @@ footer p {
   top: 0;
   left: 0;
   width: 100%;
-  height: 450px;
+  height: 100%;
 }
 .goal-list {
   display: flex;
@@ -97,34 +106,25 @@ footer p {
 }
 
 .vote-button {
-  background-color: #4caf50;
+  width: 90%;
+  height: 48px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #0b0c0a;
+  color: #fff;
   border: none;
-  color: white;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 10px 2px;
-  cursor: pointer;
   border-radius: 4px;
+  cursor: pointer;
+  margin: 0 auto;
+  display: block;
+  transition: background-color 0.3s, transform 0.3s;
 }
-
 .vote-button:hover {
   background-color: #34495e;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.search {
-  margin-bottom: 16px;
-}
-
-.search input {
-  width: 100%;
-  max-width: 800px;
-  padding: 8px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-}
 /* ranking */
 
 .ranking-goal-card {
@@ -255,30 +255,67 @@ footer p {
   border-radius: 4px;
 }
 /* Nav Bar */
+
+/* Nav Bar */
+/* Nav Bar */
 .nav-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  background-color: #1b1c1d;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #1e3b5a;
-  padding: 1rem 2rem;
-  color: white;
+  width: 100%;
 }
 
-.nav-logo {
-  font-size: 1.5rem;
-}
-
-.nav-links {
+.nav-left {
   display: flex;
   align-items: center;
 }
 
-.nav-links button {
-  background-color: #7da0b6;
+.nav-title {
+  margin: 20px;
+}
+
+.top-goals-msg {
+  margin: 20px;
+  font-size: 14px;
+  margin-left: 16px;
+}
+
+.nav-btn {
+  background-color: #208606;
   color: white;
-  border: none;
-  border-radius: 4px;
   padding: 8px 16px;
-  font-size: 1rem;
+  border: none;
   cursor: pointer;
+  font-size: 16px;
+  margin-right: 20px;
+}
+
+.nav-btn:hover {
+  background-color: #05713f;
+}
+
+.search {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.search input {
+  width: 90%;
+  max-width: 800px;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
 }

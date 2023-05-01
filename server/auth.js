@@ -19,6 +19,7 @@ const connection = mysql.createConnection({
   user: process.env.DT_DATABASE_USER,
   password: process.env.DT_DATABASE_PW,
   database: process.env.DT_DATABASE,
+  multipleStatements: true,
 });
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
@@ -162,6 +163,24 @@ const googleLogin = async (req, res) => {
     res.status(500).json({ message: "AUTH!! Internal Server Error" });
   }
 };
+const checkVote = (req, res) => {
+  const userId = req.body.userId;
+  connection.query(
+    "SELECT goalVoted FROM users WHERE id = ?",
+    [userId],
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        res.status(500).json({ message: "Internal Server Error", err });
+      } else {
+        res.status(200).json({
+          goalVotedId: results[0].goalVoted,
+        });
+      }
+    }
+  );
+};
+
 const vote = (req, res) => {
   const userId = req.body.userId;
   const goalId = req.body.goalId;
@@ -181,8 +200,8 @@ const vote = (req, res) => {
           res.status(403).json({ message: "User has already voted" });
         } else {
           connection.query(
-            "UPDATE goals SET votes = votes + 1 WHERE id = ?",
-            [goalId],
+            "UPDATE goals SET votes = votes + 1 WHERE id = ?; UPDATE users SET goalVoted = ? WHERE id = ?;",
+            [goalId, goalId, userId],
             (err, result) => {
               if (err) {
                 console.error(err);
@@ -258,6 +277,6 @@ router.post("/googleLogin", googleLogin);
 router.post("/addGoals", authenticateJWT, isAdmin, addGoals);
 router.get("/getGoals", getGoals);
 router.post("/vote", vote);
-
+router.post("/checkVote", checkVote);
 // Export the router instance
 module.exports = router;
