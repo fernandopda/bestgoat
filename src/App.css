@@ -128,47 +128,146 @@ footer p {
 /* ranking */
 
 .ranking-goal-card {
-  background-color: #f2f2f2;
+  position: relative;
+  background-color: #ffffff;
   padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
-  margin-bottom: 30px;
-}
-
-.ranking-goal-title {
-  text-align: center;
-  cursor: pointer;
-  font-size: 24px;
-  font-weight: bold;
   margin-bottom: 10px;
+}
+.ranking-goal-card:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+.ranking-goal-title {
+  margin-left: 30px;
+  color: rgb(57, 55, 55);
+  display: flex;
+  align-items: center;
+  font-family: "Arial", sans-serif; /* Add a font family */
+  font-weight: 600; /* Increase font weight to make it bolder */
+  font-size: 1.1em; /* Increase font size slightly */
+  padding-left: 40px;
 }
 
 .ranking-goal-description {
   font-size: 16px;
-  margin-bottom: 16px;
+  color: #3b3838;
   text-align: center;
+  margin-bottom: 30px;
 }
-.ranking-position {
-  color: rgb(179, 18, 18);
-  margin-right: 30px;
-  font-size: 35px;
+
+.separator {
+  color: black;
+  margin: 0 5px;
 }
 
 .ranking-goal-video {
   width: 100%;
   height: 0;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  padding-bottom: 43.25%; /* 16:9 aspect ratio */
   position: relative;
-  margin-bottom: 16px;
+  margin-top: -10px;
 }
 
 .ranking-goal-video iframe {
   position: absolute;
-  top: 10%;
-  left: 10%;
-  width: 80%;
+  width: 100%;
   height: 350px;
 }
+.percentage-container {
+  opacity: 0;
+  position: relative;
+  display: inline-block;
+  width: 40%;
+  height: 15px;
+  background-color: #eee;
+  margin-left: 10px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.percentage-filled {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: rgb(0, 0, 0);
+}
+
+.votesPercent {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgb(15, 14, 14);
+
+  font-size: 14px;
+}
+.ranking-position {
+  opacity: 50;
+  background-color: rgb(221, 137, 137);
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  color: white;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70%;
+  left: 0;
+  padding: 10px;
+  width: 20px;
+  position: absolute;
+  top: 0;
+  z-index: 1;
+}
+.ranking-goal-card.isActive {
+  background-color: #191a19;
+  box-shadow: none;
+}
+.top10 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 30px;
+  font-weight: 600;
+}
+.top {
+}
+.ten {
+  color: red;
+}
+.ranking-goal-card:hover .ranking-position {
+  background-color: red;
+}
+.ranking-goal-card.isActive .ranking-goal-title {
+  color: #ffffff;
+}
+.ranking-goal-card.isActive .ranking-goal-description {
+  color: #ffffff;
+}
+.ranking-goal-card.isActive .separator {
+  color: white;
+}
+.ranking-goal-card.isActive .votesPercent {
+  color: #be1414;
+}
+.ranking-goal-card.isActive .percentage-filled {
+  color: #101010;
+}
+.ranking-goal-card.isActive .percentage-container {
+  opacity: 100;
+}
+.ranking-goal-card.isActive .ranking-position {
+  opacity: 0;
+  width: 0.05%;
+  margin-top: 10px;
+  height: 2%;
+}
+
+.ranking-goal-card.isActive:hover {
+  box-shadow: none;
+}
+
 /* Login popup /
 / Add this to your App.css file */
 
@@ -254,9 +353,7 @@ footer p {
   cursor: pointer;
   border-radius: 4px;
 }
-/* Nav Bar */
 
-/* Nav Bar */
 /* Nav Bar */
 .nav-bar {
   display: flex;
@@ -283,7 +380,7 @@ footer p {
 }
 
 .nav-title {
-  margin: 20px;
+  font-size: 20px;
 }
 
 .top-goals-msg {

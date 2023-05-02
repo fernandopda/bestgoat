@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
 import Goal from "./components/Goal";
 import LoginPopup from "./components/LoginPopup";
 import RankingPage from "./components/RankingPage";
 import NavBar from "./components/NavBar";
 import AdminPage from "./components/AdminPage";
-import { useEffect } from "react";
+
 import { gapi } from "gapi-script";
 import axios from "axios";
 
@@ -20,6 +20,8 @@ function App() {
   const [isVoted, setIsVoted] = useState(false);
   const [userToken, setUserToken] = useState("");
   const [userId, setUserId] = useState();
+  const [totalVotes, setTotalVotes] = useState(0);
+  const navbarRef = useRef(null);
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -33,6 +35,7 @@ function App() {
       });
     };
     document.body.appendChild(script);
+
     fetchGoals();
   }, []);
 
@@ -43,11 +46,19 @@ function App() {
       );
       const data = response.data; // Access data with response.data
       setGoals(data);
-      console.log(data);
     } catch (error) {
       console.error("Error fetching goals:", error);
     }
   };
+
+  useEffect(() => {
+    setTotalVotes(
+      goals.reduce((acc, g) => {
+        return acc + g.votes;
+      }, 0)
+    );
+  }, [goals]);
+  console.log("TOTAL", totalVotes);
 
   const handleLoginSuccess = () => {
     setIsAuthenticated(true);
@@ -75,6 +86,7 @@ function App() {
     <div className="container">
       <main>
         <NavBar
+          ref={navbarRef}
           isAuthenticated={isAuthenticated}
           openLogin={openLoginPopup}
           onLogout={handleLogout}
@@ -86,7 +98,12 @@ function App() {
             {isAdmin ? (
               <AdminPage />
             ) : (
-              <RankingPage goals={goals} goBack={goBack} />
+              <RankingPage
+                goals={goals}
+                goBack={goBack}
+                navbarRef={navbarRef}
+                totalVotes={totalVotes}
+              />
             )}
           </>
         ) : (
