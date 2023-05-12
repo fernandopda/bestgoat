@@ -42,7 +42,7 @@ function App() {
   const fetchGoals = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/auth/getGoals"
+        "https://zcw74z8g88.execute-api.ap-southeast-2.amazonaws.com/test/goals"
       );
       const data = response.data; // Access data with response.data
       setGoals(data);

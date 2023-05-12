@@ -116,7 +116,7 @@ const isAdmin = (req, res, next) => {
 
 const googleLogin = async (req, res) => {
   try {
-    console.log("reqBody", req.body);
+    console.log("reqBody:", req.body);
     const { tokenId } = req.body;
 
     const ticket = await client.verifyIdToken({
@@ -124,7 +124,7 @@ const googleLogin = async (req, res) => {
       audience: process.env.GOOGLE_CLIENT_ID,
     });
     const { email, sub: googleId } = ticket.getPayload();
-    console.log(email);
+    console.log("this is email:", email);
 
     getUserByGoogleId(googleId, async (err, results) => {
       if (err) {

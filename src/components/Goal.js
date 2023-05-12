@@ -17,13 +17,16 @@ function Goal({
 }) {
   const handleVote = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/auth/vote", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ goalId: id, userId: userId }),
-      });
+      const response = await fetch(
+        "https://zcw74z8g88.execute-api.ap-southeast-2.amazonaws.com/test/vote",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id, userId }),
+        }
+      );
       if (response.status === 200) {
         console.log("Vote submitted successfully");
         setIsVoted(true);

@@ -1,0 +1,14 @@
+{
+  "name": "lambda-functions",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "dotenv": "^10.0.0",
+    "express": "^4.18.2",
+    "google-auth-library": "^7.14.1",
+    "jsonwebtoken": "^8.5.1",
+    "mysql": "^2.18.1",
+    "promise-mysql": "^5.2.0"
+  }
+}
