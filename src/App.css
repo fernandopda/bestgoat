@@ -46,9 +46,7 @@ footer p {
   font-size: 16px;
 }
 .container {
-  max-width: 900px;
   margin: 0 auto;
-  padding: 16px;
 }
 /* Goal list*/
 .goal-list {
@@ -127,6 +125,10 @@ footer p {
 
 /* ranking */
 
+.ranking-container {
+  margin-bottom: 500px;
+}
+
 .ranking-goal-card {
   position: relative;
   background-color: #ffffff;
@@ -140,19 +142,25 @@ footer p {
 }
 .ranking-goal-title {
   margin-left: 30px;
+  margin-top: 30px;
   color: rgb(57, 55, 55);
   display: flex;
   align-items: center;
-  font-family: "Arial", sans-serif; /* Add a font family */
-  font-weight: 600; /* Increase font weight to make it bolder */
-  font-size: 1.1em; /* Increase font size slightly */
+  font-family: "Arial", sans-serif;
+  font-weight: 600;
+  font-size: 1.1em;
   padding-left: 40px;
 }
 
 .ranking-goal-description {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 70%;
+  margin-left: 15%;
   font-size: 16px;
   color: #3b3838;
-  text-align: center;
   margin-bottom: 30px;
 }
 
@@ -169,10 +177,11 @@ footer p {
   margin-top: -10px;
 }
 
-.ranking-goal-video iframe {
+.ranking-video-iframe {
   position: absolute;
   width: 100%;
-  height: 350px;
+  height: 100%;
+  margin-bottom: 50px;
 }
 .percentage-container {
   opacity: 0;
@@ -268,8 +277,7 @@ footer p {
   box-shadow: none;
 }
 
-/* Login popup /
-/ Add this to your App.css file */
+/* Login popup */
 
 .login-modal {
   display: flex;
@@ -358,13 +366,14 @@ footer p {
 .nav-bar {
   display: flex;
   flex-direction: column;
-  align-items: center;
   padding: 16px;
   background-color: #1b1c1d;
   color: white;
   position: sticky;
   top: 0;
   z-index: 100;
+  margin-top: -30px;
+  height: 50px;
 }
 
 .navbar-top {
@@ -379,40 +388,263 @@ footer p {
   align-items: center;
 }
 
-.nav-title {
+.nav-title1 {
+  margin-left: 175px;
+  width: 200px;
   font-size: 20px;
 }
+.nav-title2 {
+  color: RED;
+  width: 200px;
+  font-size: 25px;
+}
 
-.top-goals-msg {
+.nav-top-goals-msg {
   margin: 20px;
   font-size: 14px;
   margin-left: 16px;
 }
-
-.nav-btn {
-  background-color: #208606;
+.nav-login-logo {
+  margin-left: 20px;
+  margin-right: 5px;
+  border-radius: 40px;
+  height: 20px;
+  display: flex;
+}
+.nav-link {
   color: white;
-  padding: 8px 16px;
-  border: none;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-  font-size: 16px;
-  margin-right: 20px;
+  transition: color 0.4s ease;
 }
 
-.nav-btn:hover {
-  background-color: #05713f;
+.nav-link:hover {
+  color: red;
 }
-
-.search {
+.nav-search {
   display: flex;
   justify-content: center;
-  width: 100%;
+  width: 60%;
+}
+.nav-search-responsive {
+  display: none;
 }
 
-.search input {
+.nav-search input {
   width: 90%;
   max-width: 800px;
   padding: 8px;
   border-radius: 4px;
   border: 1px solid #ccc;
+}
+.ranking-nav-login-logo {
+  margin-left: 20px;
+  margin-right: 5px;
+  border-radius: 40px;
+  height: 20px;
+  display: flex;
+}
+.ranking-nav-link {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.4s ease;
+}
+
+.ranking-nav-link:hover {
+  color: red;
+}
+.ranking-nav-left {
+  display: flex;
+  align-items: center;
+}
+.ranking-nav-title1 {
+  margin-left: 175px;
+  width: 200px;
+  font-size: 20px;
+}
+.ranking-nav-title2 {
+  color: RED;
+  width: 200px;
+  font-size: 25px;
+}
+.ranking-nav-top10 {
+  font-size: 35px;
+  margin-left: 100px;
+}
+.ranking-nav-top10-responsive {
+  display: none;
+}
+
+/* media queries */
+
+/* Ranking page */
+/* For mobile devices with width up to 480px */
+@media only screen and (max-width: 480px) {
+  .top-goals-msg {
+    margin: 16px;
+    font-size: 12px;
+    margin-left: 12px;
+  }
+  .ranking-goal-card {
+  }
+
+  .ranking-goal-title {
+    margin-left: 0px;
+    padding-left: 0px;
+    margin-top: 10px;
+    font-size: 12px;
+    padding-left: 30px;
+  }
+
+  .ranking-goal-description {
+    opacity: 0;
+  }
+
+  .goal-video-iframe {
+    height: 250px;
+  }
+
+  .votesPercent {
+    font-size: 12px;
+  }
+
+  .ranking-position {
+    font-size: 16px;
+    padding: 8px;
+    width: 18px;
+    height: 60%;
+  }
+}
+
+/* For mobile devices with width between 481px and 768px */
+@media only screen and (min-width: 481px) and (max-width: 768px) {
+  .top-goals-msg {
+    margin: 16px;
+    font-size: 12px;
+    margin-left: 12px;
+  }
+
+  .ranking-goal-title {
+    font-size: 1.05em;
+    padding-left: 35px;
+  }
+
+  .ranking-goal-description {
+    opacity: 0;
+  }
+
+  .goal-video-iframe {
+    height: 300px;
+  }
+
+  .votesPercent {
+    font-size: 12px;
+  }
+
+  .ranking-position {
+    font-size: 18px;
+    padding: 10px;
+    width: 20px;
+    height: 65%;
+  }
+}
+
+/* Nav-bar */
+@media only screen and (max-width: 480px) {
+  .nav-title1,
+  .ranking-nav-title1 {
+    margin-left: 70px;
+  }
+  .nav-title1 {
+    font-size: 13px;
+  }
+  .nav-title2 {
+    font-size: 18px;
+  }
+
+  .nav-login-logo,
+  .ranking-nav-login-logo {
+    margin-left: 2px;
+    height: 16px;
+  }
+
+  .nav-link {
+    font-size: 12px;
+  }
+
+  .nav-top-goals-msg {
+    margin: 10px;
+    font-size: 12px;
+    margin-left: 8px;
+  }
+  .nav-search {
+    display: none;
+  }
+  .nav-search-responsive {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .nav-search-responsive input {
+    width: 80%;
+    padding: 4px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+
+  .ranking-nav-title1 {
+    margin-left: 50px;
+    font-size: 12px;
+    margin-right: 0px;
+  }
+  .ranking-nav-title2 {
+    font-size: 15px;
+    margin-right: 10px;
+    margin-left: -20px;
+  }
+
+  .ranking-nav-top10 {
+    display: none;
+  }
+  .ranking-nav-top10-responsive {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+    padding-top: 10px;
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: 550;
+  }
+}
+@media only screen and (min-width: 481px) and (max-width: 768px) {
+  .nav-title1,
+  .ranking-nav-title1 {
+    margin-left: 32px;
+  }
+
+  .nav-search {
+    width: 50%;
+  }
+
+  .nav-login-logo,
+  .ranking-nav-login-logo {
+    height: 18px;
+  }
+
+  .nav-link,
+  .ranking-nav-link {
+    font-size: 13px;
+  }
+
+  .nav-top-goals-msg {
+    margin: 15px;
+    font-size: 13px;
+    margin-left: 10px;
+  }
 }

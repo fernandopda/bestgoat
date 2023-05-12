@@ -9,9 +9,9 @@ const RankingPage = ({ goals, navbarRef, totalVotes }) => {
   return (
     <div className="ranking-container">
       <main>
-        <div className="top10">
+        {/* <div className="top10">
           <span className="top">TOP</span> <span className="ten">10</span>
-        </div>
+        </div> */}
         <div className="ranking-goal-container">
           {sortedGoals.map((goal, i) => (
             <RankingGoals

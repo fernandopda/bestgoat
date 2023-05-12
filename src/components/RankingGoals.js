@@ -28,13 +28,22 @@ function RankingGoals({
     setActiveGoalId(id);
   };
 
+  const getScrollOffset = () => {
+    const navbarHeight = navbarRef.current.offsetHeight;
+    const additionalOffset = 10; // You can adjust this value for some additional space between the Nav bar and the video
+    return navbarHeight + additionalOffset;
+  };
+
+  // Update the scrollToCard function with the new offset calculation
   const scrollToCard = () => {
-    if (cardRef.current) {
-      console.log(navbarRef);
+    if (cardRef.current && navbarRef.current) {
       const cardRect = cardRef.current.getBoundingClientRect();
-      const navbarHeight = navbarRef.current.offsetHeight;
+      const navbarRect = navbarRef.current.getBoundingClientRect();
+      const additionalOffset = -5; // You can adjust this value for some additional space between the Nav bar and the video
+
       window.scrollTo({
-        top: cardRect.top + window.scrollY - navbarHeight,
+        top:
+          cardRect.top + window.scrollY - navbarRect.height - additionalOffset,
         behavior: "smooth",
       });
     }
@@ -50,6 +59,7 @@ function RankingGoals({
       {isActive && (
         <div className="ranking-goal-video">
           <iframe
+            className="ranking-video-iframe"
             width="877"
             height="658"
             src={url}
@@ -60,9 +70,9 @@ function RankingGoals({
           ></iframe>
         </div>
       )}
-      {isActive && (
+      {/* {isActive && (
         <div className="ranking-goal-description">{description}</div>
-      )}
+      )} */}
       <div className="ranking-position">
         <span> {position} </span>
       </div>
