@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import config from "../config";
 
 const AdminPage = () => {
   const [title, setTitle] = useState("");
@@ -10,17 +11,14 @@ const AdminPage = () => {
 
     // Call the API to add the goal to the database
     try {
-      const response = await fetch(
-        " https://zcw74z8g88.execute-api.ap-southeast-2.amazonaws.com/test/goals",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("userSave")}`,
-          },
-          body: JSON.stringify({ title, description, videoURL, votes: 0 }),
-        }
-      );
+      const response = await fetch(`${config.API_URL}/goals`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("userSave")}`,
+        },
+        body: JSON.stringify({ title, description, videoURL, votes: 0 }),
+      });
 
       const data = await response.json();
 

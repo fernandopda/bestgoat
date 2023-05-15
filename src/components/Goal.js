@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-
+import config from "../config";
 import "../App.css";
 
 function Goal({
@@ -17,16 +17,13 @@ function Goal({
 }) {
   const handleVote = async () => {
     try {
-      const response = await fetch(
-        "https://zcw74z8g88.execute-api.ap-southeast-2.amazonaws.com/test/vote",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ id, userId }),
-        }
-      );
+      const response = await fetch(`${config.API_URL}/vote`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ goalId: id, userId }),
+      });
       if (response.status === 200) {
         console.log("Vote submitted successfully");
         setIsVoted(true);

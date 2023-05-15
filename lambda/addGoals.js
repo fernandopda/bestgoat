@@ -1,10 +1,9 @@
 const createConnection = require("./db");
 const { promisify } = require("util");
 
-const connection = createConnection();
-
 const addGoals = async (event) => {
   try {
+    const connection = createConnection();
     // Parse the event.body, since it comes as a string
     const body = JSON.parse(event.body);
     const { title, description, videoURL, votes } = body;
