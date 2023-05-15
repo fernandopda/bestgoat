@@ -152,11 +152,15 @@ const googleLogin = async (req, res) => {
       } else {
         const user = results[0];
         const userId = user.ID;
+        const goalVoted = user.goalVoted;
+        console.log("this is the goal voted", goalVoted);
         const token = jwt.sign({ id: userId }, process.env.JWT_SECRET, {
           expiresIn: process.env.JWT_EXPIRES_IN,
         });
         console.log("USER ADMIN", user.is_admin ? "YES" : "NO");
-        res.status(200).json({ token, isAdmin: user.is_admin, userId });
+        res
+          .status(200)
+          .json({ token, isAdmin: user.is_admin, userId, goalVoted });
       }
     });
   } catch (err) {
@@ -196,8 +200,9 @@ const vote = (req, res) => {
         res.status(500).json({ message: "Internal Server Error", err });
       } else {
         const user = results[0];
-
-        if (user.voted) {
+        console.log("THIS IS THE USER!", user);
+        console.log("THIS IS THE GOAL VOTED!!:", user.goalVoted);
+        if (user.goalVoted > 0) {
           res.status(403).json({ message: "User has already voted" });
         } else {
           connection.query(
@@ -275,8 +280,8 @@ const vote = (req, res) => {
 // Export the router instance instead of the object
 // Add middleware and routes to the router instance
 router.post("/googleLogin", googleLogin);
-router.post("/addGoals", authenticateJWT, isAdmin, addGoals);
-router.get("/getGoals", getGoals);
+router.post("/goals", authenticateJWT, isAdmin, addGoals);
+router.get("/goals", getGoals);
 router.post("/vote", vote);
 router.post("/checkVote", checkVote);
 // Export the router instance

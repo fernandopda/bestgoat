@@ -3,7 +3,7 @@ import { GoogleLogin } from "react-google-login";
 import Modal from "react-modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-
+import config from "../config";
 import "../App.css";
 
 const LoginPopup = ({
@@ -16,16 +16,13 @@ const LoginPopup = ({
   setUserId: setUserId,
 }) => {
   async function loginWithGoogle(tokenId) {
-    const authResponse = await fetch(
-      " https://zcw74z8g88.execute-api.ap-southeast-2.amazonaws.com/test/googlelogin",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ tokenId }),
-      }
-    );
+    const authResponse = await fetch(`${config.API_URL}/googlelogin`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ tokenId }),
+    });
 
     const data = await authResponse.json();
 
@@ -39,6 +36,7 @@ const LoginPopup = ({
       console.log("Logged in with Google");
       onLoginSuccess();
       setUserId(data.userId);
+      console.log(data.goalVoted);
       console.log(data.goalVoted);
       if (data.goalVoted > 0) {
         setIsVoted(true);

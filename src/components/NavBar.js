@@ -4,12 +4,19 @@ import logo from "./img/login.png";
 
 const NavBar = forwardRef(
   (
-    { isAuthenticated, openLogin, onLogout, searchTerm, setSearchTerm },
+    {
+      isAuthenticated,
+      openLogin,
+      onLogout,
+      searchTerm,
+      setSearchTerm,
+      isVoted,
+    },
     ref
   ) => {
     return (
       <nav ref={ref} className="nav-bar">
-        {isAuthenticated ? (
+        {isAuthenticated && isVoted ? (
           <>
             <div className="ranking-nav-left">
               <img className="ranking-nav-login-logo" src={logo} />
@@ -30,9 +37,23 @@ const NavBar = forwardRef(
           <>
             <div className="nav-left">
               <img className="nav-login-logo" src={logo} />
-              <a className="nav-link" onClick={openLogin}>
-                LOGIN
-              </a>
+
+              {isAuthenticated ? (
+                <>
+                  <a className="nav-link" onClick={onLogout}>
+                    {" "}
+                    LOGOUT{" "}
+                  </a>
+                </>
+              ) : (
+                <>
+                  <a className="nav-link" onClick={openLogin}>
+                    {" "}
+                    LOGIN{" "}
+                  </a>
+                </>
+              )}
+
               <span className="nav-title1">Best Football Goals</span>
               <span className="nav-title2">OF ALL TIME</span>
               <div className="nav-search">

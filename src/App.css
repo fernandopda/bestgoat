@@ -214,7 +214,6 @@ footer p {
 }
 .ranking-position {
   opacity: 50;
-  background-color: rgb(221, 137, 137);
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
   color: white;
@@ -231,7 +230,6 @@ footer p {
   z-index: 1;
 }
 .ranking-goal-card.isActive {
-  background-color: #191a19;
   box-shadow: none;
 }
 .top10 {
@@ -284,18 +282,16 @@ footer p {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #f0eeee;
+  background-color: #000000;
+  color: #ffffff;
   position: absolute;
-  top: 50%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 400px;
+  width: 70%;
   max-width: 90%;
   padding: 32px;
   border-radius: 4px;
-}
-.login-modal:hover {
-  box-shadow: 0px 0px 5px 2px #918c8c;
 }
 
 .login-modal h2 {
@@ -552,6 +548,9 @@ footer p {
     width: 20px;
     height: 65%;
   }
+  .nav-bar {
+    height: 100px;
+  }
 }
 
 /* Nav-bar */
@@ -574,7 +573,7 @@ footer p {
   }
 
   .nav-link {
-    font-size: 12px;
+    font-size: 15px;
   }
 
   .nav-top-goals-msg {
@@ -593,20 +592,25 @@ footer p {
   }
   .nav-search-responsive input {
     width: 80%;
+    height: 40px;
     padding: 4px;
     border-radius: 4px;
     border: 1px solid #ccc;
+    touch-action: manipulation;
+    margin-top: 10px;
   }
-
+  .nav-bar {
+    height: 100px;
+  }
   .ranking-nav-title1 {
     margin-left: 50px;
     font-size: 12px;
     margin-right: 0px;
   }
   .ranking-nav-title2 {
-    font-size: 15px;
+    font-size: 20px;
     margin-right: 10px;
-    margin-left: -20px;
+    margin-left: -10px;
   }
 
   .ranking-nav-top10 {
@@ -618,8 +622,11 @@ footer p {
     margin-top: 15px;
     padding-top: 10px;
     margin-bottom: 10px;
-    font-size: 20px;
+    font-size: 35px;
     font-weight: 550;
+  }
+  .goal-video {
+    height: 00px;
   }
 }
 @media only screen and (min-width: 481px) and (max-width: 768px) {

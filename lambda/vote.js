@@ -27,7 +27,7 @@ const vote = async (event) => {
     console.log("this is the results length:", results.length);
     if (results) {
       const user = results;
-
+      console.log("server goal VOTED!:", user.goalVoted);
       if (user.goalVoted > 0) {
         return {
           statusCode: 403,

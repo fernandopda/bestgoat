@@ -5,6 +5,7 @@ import LoginPopup from "./components/LoginPopup";
 import RankingPage from "./components/RankingPage";
 import NavBar from "./components/NavBar";
 import AdminPage from "./components/AdminPage";
+import config from "./config";
 
 import { gapi } from "gapi-script";
 import axios from "axios";
@@ -41,9 +42,9 @@ function App() {
 
   const fetchGoals = async () => {
     try {
-      const response = await axios.get(
-        "https://zcw74z8g88.execute-api.ap-southeast-2.amazonaws.com/test/goals"
-      );
+      console.log("this is the config", config.API_URL);
+      const response = await axios.get(`${config.API_URL}/goals`);
+      console.log("this is the config", config.API_URL);
       const data = response.data; // Access data with response.data
       setGoals(data);
     } catch (error) {
@@ -92,6 +93,7 @@ function App() {
           onLogout={handleLogout}
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
+          isVoted={isVoted}
         />
         {isAuthenticated && isVoted ? (
           <>
