@@ -58,8 +58,6 @@ function RankingGoals({
         return "#C0C0C0";
       case 3:
         return "#CD7F32";
-      default:
-        return "#000000";
     }
   };
 
@@ -68,7 +66,6 @@ function RankingGoals({
       className={`ranking-goal-card${isActive ? " isActive" : ""}`}
       ref={cardRef}
       onClick={toggleVideo}
-      style={isActive ? { backgroundColor: getPositionColor(position) } : {}}
     >
       {isActive && (
         <div className="ranking-goal-video">
@@ -87,14 +84,30 @@ function RankingGoals({
       {/* {isActive && (
         <div className="ranking-goal-description">{description}</div>
       )} */}
-      <div
-        className="ranking-position"
-        style={{ backgroundColor: getPositionColor(position) }}
-      >
-        <span> {position} </span>
+      <div className="ranking-position">
+        <span
+          className="ranking-number-position"
+          style={{ color: getPositionColor(position) }}
+        >
+          {" "}
+          {position}{" "}
+        </span>
       </div>
-      <div className="ranking-goal-title">
-        <span className="title">{title}</span>
+      <div className="ranking-goal-title" style={isActive ? {} : {}}>
+        <span
+          className="ranking-title-position"
+          style={
+            isActive
+              ? {
+                  opacity: 100,
+                  color: getPositionColor(position),
+                }
+              : { opacity: 0 }
+          }
+        >
+          {position}
+        </span>
+        <span className="ranking-title">{title}</span>
         <div className="percentage-container">
           <div
             className="percentage-filled"
