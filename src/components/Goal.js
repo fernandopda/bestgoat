@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import config from "../config";
 import "../App.css";
+import soccer_ball from "./img/soccer_ball2.svg";
 
 function Goal({
   id,
@@ -15,8 +16,10 @@ function Goal({
   token,
   userId,
 }) {
+  const [isLoading, setIsLoading] = useState(false);
   const handleVote = async () => {
     try {
+      setIsLoading(true);
       const response = await fetch(`${config.API_URL}/vote`, {
         method: "POST",
         headers: {
@@ -39,11 +42,24 @@ function Goal({
       }
     } catch (error) {
       console.error("Error voting:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="goal-card">
+      {isLoading && (
+        <div className="loading-overlay">
+          <div className="ball-container">
+            <img
+              src={soccer_ball}
+              alt="Soccer Ball"
+              className="soccer-ball-spinner"
+            />
+          </div>
+        </div>
+      )}
       <div className="goal-title">{title}</div>
       <div className="goal-description">{description}</div>
       <div className="goal-video">

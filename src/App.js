@@ -5,6 +5,7 @@ import LoginPopup from "./components/LoginPopup";
 import RankingPage from "./components/RankingPage";
 import NavBar from "./components/NavBar";
 import AdminPage from "./components/AdminPage";
+import LandingPage from "./components/LandingPage";
 import config from "./config";
 
 import { gapi } from "gapi-script";
@@ -22,6 +23,7 @@ function App() {
   const [userToken, setUserToken] = useState("");
   const [userId, setUserId] = useState();
   const [totalVotes, setTotalVotes] = useState(0);
+  const [showLandingPage, setShowLandingPage] = useState(true);
   const navbarRef = useRef(null);
 
   useEffect(() => {
@@ -85,67 +87,71 @@ function App() {
 
   return (
     <div className="container">
-      <main>
-        <NavBar
-          ref={navbarRef}
-          isAuthenticated={isAuthenticated}
-          openLogin={openLoginPopup}
-          onLogout={handleLogout}
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          isVoted={isVoted}
-        />
-        {isAuthenticated && isVoted ? (
-          <>
-            {isAdmin ? (
-              <AdminPage />
-            ) : (
-              <RankingPage
-                goals={goals}
-                goBack={goBack}
-                navbarRef={navbarRef}
-                totalVotes={totalVotes}
-              />
-            )}
-          </>
-        ) : (
-          <>
-            <div className="goal-container">
-              <div className="goal-list">
-                {goals
-                  .filter((goal) =>
-                    goal.title
-                      .toLocaleLowerCase()
-                      .includes(searchTerm.toLocaleLowerCase())
-                  )
-                  .map((goal) => (
-                    <Goal
-                      key={goal.id}
-                      {...goal}
-                      openLoginPopup={openLoginPopup}
-                      isAuthenticated={isAuthenticated}
-                      setIsVoded={setIsVoted}
-                      token={userToken}
-                      userId={userId}
-                      setIsVoted={setIsVoted}
-                    />
-                  ))}
+      {showLandingPage ? (
+        <LandingPage onProceed={() => setShowLandingPage(false)} />
+      ) : (
+        <main>
+          <NavBar
+            ref={navbarRef}
+            isAuthenticated={isAuthenticated}
+            openLogin={openLoginPopup}
+            onLogout={handleLogout}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            isVoted={isVoted}
+          />
+          {isAuthenticated && isVoted ? (
+            <>
+              {isAdmin ? (
+                <AdminPage />
+              ) : (
+                <RankingPage
+                  goals={goals}
+                  goBack={goBack}
+                  navbarRef={navbarRef}
+                  totalVotes={totalVotes}
+                />
+              )}
+            </>
+          ) : (
+            <>
+              <div className="goal-container">
+                <div className="goal-list">
+                  {goals
+                    .filter((goal) =>
+                      goal.title
+                        .toLocaleLowerCase()
+                        .includes(searchTerm.toLocaleLowerCase())
+                    )
+                    .map((goal) => (
+                      <Goal
+                        key={goal.id}
+                        {...goal}
+                        openLoginPopup={openLoginPopup}
+                        isAuthenticated={isAuthenticated}
+                        setIsVoded={setIsVoted}
+                        token={userToken}
+                        userId={userId}
+                        setIsVoted={setIsVoted}
+                      />
+                    ))}
+                </div>
               </div>
-            </div>
-          </>
-        )}
-        <LoginPopup
-          isOpen={isLoginPopupOpen}
-          onRequestClose={closeLoginPopup}
-          onLoginSuccess={handleLoginSuccess}
-          setIsVoted={setIsVoted}
-          setIsAdmin={setIsAdmin}
-          setUserToken={setUserToken}
-          setUserId={setUserId}
-        />
-      </main>
+            </>
+          )}
+          <LoginPopup
+            isOpen={isLoginPopupOpen}
+            closeLoginPopup={closeLoginPopup}
+            onLoginSuccess={handleLoginSuccess}
+            setIsVoted={setIsVoted}
+            setIsAdmin={setIsAdmin}
+            setUserToken={setUserToken}
+            setUserId={setUserId}
+          />
+        </main>
+      )}
       <footer>
-        <p>&copy; 2023 Soccer Goals. All rights reserved.</p>
+        <p>&copy; 2023 BestGOAT. All rights reserved.</p>
       </footer>
     </div>
   );

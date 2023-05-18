@@ -5,16 +5,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import config from "../config";
 import "../App.css";
-
+import soccer_ball from "./img/soccer_ball2.svg";
 const LoginPopup = ({
   isOpen,
-  onRequestClose,
+  closeLoginPopup,
   setIsVoted,
   onLoginSuccess,
   setIsAdmin,
   setUserToken,
   setUserId: setUserId,
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
   async function loginWithGoogle(tokenId) {
     const authResponse = await fetch(`${config.API_URL}/googlelogin`, {
       method: "POST",
@@ -54,22 +55,38 @@ const LoginPopup = ({
 
   const handleGoogleLogin = async (response) => {
     const { tokenId } = response;
+
     try {
+      setIsLoading(true);
       await loginWithGoogle(tokenId);
     } catch (error) {
       console.error("Login with Google failed:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <Modal
       isOpen={isOpen}
-      onRequestClose={onRequestClose}
+      onRequestClose={closeLoginPopup}
       contentLabel="Login Modal"
       className="login-modal"
       ariaHideApp={false}
     >
-      <button onClick={onRequestClose} className="close-modal">
+      {isLoading && (
+        <div className="loading-overlay">
+          <div className="ball-container">
+            <img
+              src={soccer_ball}
+              alt="Soccer Ball"
+              className="soccer-ball-spinner"
+            />
+          </div>
+        </div>
+      )}
+
+      <button onClick={closeLoginPopup} className="close-modal">
         <FontAwesomeIcon icon={faTimes} />
       </button>
       <h2>Login</h2>

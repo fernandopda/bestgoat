@@ -1,6 +1,7 @@
 import React, { forwardRef } from "react";
 import "../App.css";
 import logo from "./img/login.png";
+import navText from "./img/navBarText.png";
 
 const NavBar = forwardRef(
   (
@@ -23,19 +24,16 @@ const NavBar = forwardRef(
               <a className="ranking-nav-link" onClick={onLogout}>
                 LOGOUT
               </a>
-              <span className="ranking-nav-title1">Best Football Goals</span>
-              <span className="ranking-nav-title2">OF ALL TIME</span>
+              <div className="nav-text-img">
+                <img src={navText} alt="Navigation Text" />
+              </div>
               <span className="ranking-nav-top10">TOP 10 </span>
-              {/* 
-              <button className="nav-btn" onClick={onLogout}>
-                Logout
-              </button> */}
             </div>
             <span className="ranking-nav-top10-responsive">TOP 10 </span>
           </>
         ) : (
           <>
-            <div className="nav-left">
+            <div className="displaynone nav-left ">
               <img className="nav-login-logo" src={logo} />
 
               {isAuthenticated ? (
@@ -54,8 +52,12 @@ const NavBar = forwardRef(
                 </>
               )}
 
-              <span className="nav-title1">Best Football Goals</span>
-              <span className="nav-title2">OF ALL TIME</span>
+              <p className="nav-top-goals-msg"></p>
+            </div>
+            <div className="nav-center">
+              <div className="nav-text-img">
+                <img src={navText} alt="Navigation Text" />
+              </div>
               <div className="nav-search">
                 <input
                   type="text"
@@ -64,7 +66,6 @@ const NavBar = forwardRef(
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              <p className="nav-top-goals-msg"></p>
             </div>
             <div className="nav-search-responsive">
               <input
