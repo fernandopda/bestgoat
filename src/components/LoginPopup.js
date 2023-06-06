@@ -6,16 +6,19 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import config from "../config";
 import "../App.css";
 import soccer_ball from "./img/soccer_ball2.svg";
+
 const LoginPopup = ({
   isOpen,
   closeLoginPopup,
   setIsVoted,
   onLoginSuccess,
   setIsAdmin,
+  setGoalVoted,
   setUserToken,
-  setUserId: setUserId,
+  setUserId,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+
   async function loginWithGoogle(tokenId) {
     const authResponse = await fetch(`${config.API_URL}/googlelogin`, {
       method: "POST",
@@ -29,18 +32,14 @@ const LoginPopup = ({
 
     if (authResponse.status === 200) {
       localStorage.setItem("userSave", data.token);
-      console.log(data);
       setIsAdmin(data.isAdmin);
       setUserToken(data.token);
-      console.log("USER ID IS:!!", data.userId);
-      console.log(data.isAdmin);
-      console.log("Logged in with Google");
       onLoginSuccess();
       setUserId(data.userId);
-      console.log(data.goalVoted);
-      console.log(data.goalVoted);
+
       if (data.goalVoted > 0) {
         setIsVoted(true);
+        setGoalVoted(data.goalVoted);
       } else {
         setIsVoted(false);
       }
@@ -91,6 +90,13 @@ const LoginPopup = ({
       </button>
       <h2>Login</h2>
       <div className="social-login">
+        <div className="social-login-text">
+          Hey there! 👋 To ensure every vote counts, we ask that you log in
+          before voting. This helps us keep things fair and square by allowing
+          each account a single vote. After casting your vote, you can check the
+          top 10 goals voted by users.
+        </div>
+
         <div className="googleLogin">
           <GoogleLogin
             clientId={process.env.GOOGLE_CLIENT_ID}
@@ -106,37 +112,3 @@ const LoginPopup = ({
 };
 
 export default LoginPopup;
-
-// const fetchVoteStatus = async (userId) => {
-//   try {
-//     const response = await fetch(
-//       "https://zcw74z8g88.execute-api.ap-southeast-2.amazonaws.com/test/checkvote",
-//       {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({ userId }),
-//       }
-//     );
-
-//     if (response.status === 200) {
-//       const data = await response.json();
-//       console.log("data is this:", data);
-//       if (data.goalVotedId > 0) {
-//         console.log("data is this:", data);
-//         console.log("User has already voted GOAL ID:", data.goalVotedId);
-//         setIsVoted(true);
-//         console.log(setIsVoted);
-//         // Use data.goalVotedId to get the voted goal ID and handle accordingly
-//       } else {
-//         console.log("User has not voted yet");
-//         setIsVoted(false);
-//       }
-//     } else {
-//       throw new Error("Error fetching vote status", response);
-//     }
-//   } catch (error) {
-//     console.error("Error fetching vote status:", error);
-//   }
-// };

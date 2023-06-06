@@ -16,6 +16,8 @@ body {
   margin: 0;
   padding: 0;
   color: #333;
+
+  overflow-x: hidden;
 }
 
 header {
@@ -43,25 +45,28 @@ footer {
 
 footer p {
   margin: 0;
-  font-size: 16px;
+  font-size: 13px;
 }
+.blur {
+  filter: blur(1.5px);
+}
+
 .displaynone {
   opacity: 0;
 }
 .container {
   margin: 0 auto;
 }
-/* Landing Page */
+
 /* Landing Page */
 
-/* CSS */
 .landing-page {
   background-color: #000000;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height: 70vh;
   text-align: center;
 }
 .landing-page-logo img {
@@ -82,14 +87,14 @@ footer p {
 }
 .landing-page-text2 {
   font-size: 24px;
-  margin-bottom: 40px;
+  margin-bottom: 70px;
   color: #ffffff;
 }
 
 .landing-page-main-text {
   text-align: center;
   width: 500px;
-  margin-top: 30px;
+  margin-top: 150px;
   margin-right: 150px;
   margin-bottom: 50px;
 }
@@ -115,12 +120,14 @@ footer p {
 /* CTA Button */
 .landing-page .landing-page-btn {
   align-items: center;
-
+  display: flex;
+  position: relative;
   color: #ffffff;
   background-color: #ff0000;
   font-size: 20px;
   padding: 20px 50px;
   margin-top: 20px;
+  margin-bottom: 100px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -146,7 +153,7 @@ footer p {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
   margin-bottom: 30px;
-  max-width: 1100px; /* Limit the width of the goal card */
+  max-width: 800px; /* Limit the width of the goal card */
   width: 100%; /* Make the goal card responsive */
 }
 .goal-title {
@@ -167,7 +174,7 @@ footer p {
   width: 100%;
   position: relative;
   padding-top: 56.25%;
-  margin-bottom: 24px;
+  margin-bottom: 94px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   border-radius: 4px;
   overflow: hidden;
@@ -201,31 +208,54 @@ footer p {
   display: block;
   transition: background-color 0.3s, transform 0.3s;
 }
-.vote-button:hover {
-  background-color: #34495e;
+.vote-button-red {
+  width: 90%;
+  height: 48px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #e80707;
+  color: #fcfcfc;
+
+  border: none;
+  border-radius: 4px;
+
+  cursor: pointer;
+  margin: 0 auto;
+  display: block;
+  transition: background-color 0.3s, transform 0.3s;
+}
+.vote-button-red:hover {
+  background-color: #bcc6d0;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.vote-button:hover {
+  background-color: #bcc6d0;
+  transform: translateY(-2px);
 }
 
 /* ranking */
 
 .ranking-container {
+  margin-left: 100px;
+  width: 1800px;
   margin-bottom: 500px;
 }
 
 .ranking-goal-card {
   position: relative;
-
   background-color: #ffffff;
-  margin-left: 250px;
   padding: 20px;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
-  margin-bottom: 10px;
+
+  margin-bottom: 2px;
   width: 70%;
+  border: 1px solid #dddddd; /* Add a subtle border */
 }
-.ranking-goal-card:hover {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+
+@media (hover: hover) and (pointer: fine) {
+  .ranking-goal-card:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    background-color: #f5f0f0;
+  }
 }
 .ranking-goal-title {
   margin-left: 30px;
@@ -271,15 +301,15 @@ footer p {
   margin-bottom: 50px;
 }
 .percentage-container {
-  opacity: 0;
   position: relative;
-  display: inline-block;
-  width: 40%;
+  display: none;
+  width: 60%;
   height: 15px;
   background-color: #eee;
   margin-left: 10px;
   border-radius: 4px;
   overflow: hidden;
+  margin-left: 50px;
 }
 
 .percentage-filled {
@@ -287,7 +317,7 @@ footer p {
   top: 0;
   left: 0;
   height: 100%;
-  background-color: rgb(0, 0, 0);
+  background-color: rgb(205, 73, 73);
 }
 
 .votesPercent {
@@ -301,21 +331,21 @@ footer p {
 }
 .ranking-position {
   opacity: 50;
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
+
   color: white;
   background-color: #1b1c1d;
   font-size: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 70%;
+  height: 80%;
   left: 0;
   padding: 10px;
   width: 20px;
   position: absolute;
   top: 0;
   z-index: 1;
+  margin-top: 2px;
 }
 .ranking-goal-card.isActive {
   background-color: #1b1c1d;
@@ -343,13 +373,18 @@ footer p {
   color: white;
 }
 .ranking-goal-card.isActive .votesPercent {
-  color: #be1414;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 24px;
+  color: #000000;
 }
 .ranking-goal-card.isActive .percentage-filled {
-  color: #101010;
+  color: #000000;
 }
 .ranking-goal-card.isActive .percentage-container {
-  opacity: 100;
+  display: inline-block;
+  height: 30px;
+  width: 700px;
+  margin-left: 100px;
 }
 .ranking-goal-card.isActive .ranking-position {
   opacity: 0;
@@ -468,7 +503,10 @@ footer p {
   flex-direction: column;
   width: 100%;
 }
-
+.social-login-text {
+  margin-bottom: 30px;
+  margin-top: 30px;
+}
 .googleLogin,
 .facebookLogin {
   display: flex;
@@ -569,15 +607,22 @@ footer p {
   height: 20px;
   display: flex;
 }
+.ranking-nav-text-img {
+}
 .ranking-nav-link {
   color: white;
   text-decoration: none;
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 600;
   cursor: pointer;
   transition: color 0.4s ease;
 }
-
+.ranking-title-position {
+  margin-right: 30px;
+  margin-left: -60px;
+  font-size: 30px;
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
+}
 .ranking-nav-link:hover {
   color: red;
 }
@@ -595,12 +640,6 @@ footer p {
   width: 200px;
   font-size: 25px;
 }
-.ranking-title-position {
-  margin-right: 30px;
-  margin-left: -60px;
-  font-size: 30px;
-  text-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
-}
 .ranking-nav-top10 {
   font-size: 35px;
   margin-left: 100px;
@@ -608,10 +647,133 @@ footer p {
 .ranking-nav-top10-responsive {
   display: none;
 }
+.ranking-nav-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: -30px; /* Adjust this value as needed */
+  width: 70%; /* Decrease the width to 70% */
+  margin: auto; /* Center the element */
+}
 
-/* media queries */
+.ranking-nav-text-img {
+  margin-top: 0px;
+}
+.ranking-nav-link {
+  font-size: 15px;
+}
+.ranking-goal-container label {
+  display: flex;
+  position: relative;
+  color: white;
+  background-color: black;
+  width: 72.5%;
+  padding: 10px 0;
+  text-align: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 30px;
+}
 
-/* Ranking page */
+.ranking-goal-user-pick {
+  margin-top: 20px;
+}
+
+/* Admin page */
+.admin-page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.admin-page-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 300px;
+}
+
+.admin-page-form-group {
+  margin-bottom: 10px;
+}
+
+.admin-page-input-field {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.admin-page-submit-button {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.admin-page-submit-button:hover {
+  background-color: #45a049;
+}
+/* privacy policy*/
+.privacy-policy-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  color: #000;
+  padding: 20px;
+  border-radius: 5px;
+  width: 500px;
+  font-size: 15px;
+  max-width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 40px;
+}
+
+.privacy-policy-modal h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.privacy-policy-modal p {
+  margin-bottom: 10px;
+}
+
+.privacy-policy-modal a {
+  color: #000;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.privacy-policy-modal a:hover {
+  color: #333;
+}
+
+.privacy-policy-modal button {
+  background-color: #000;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.privacy-policy-modal button:hover {
+  background-color: #333;
+}
+.privacy-policy-link {
+  margin-bottom: 15px;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 13px;
+}
 
 /* Media queries for mobile devices up to iPhone Pro */
 @media only screen and (max-width: 480px) {
@@ -631,8 +793,17 @@ footer p {
   .ranking-goal-description {
     display: none;
   }
-  .goal-video-iframe {
-    height: 250px;
+
+  .goal-description {
+    display: none;
+  }
+  .goal-video {
+  }
+  .goal-title {
+    font-size: 15px;
+  }
+  .vote-button {
+    margin-top: -40px;
   }
   .votesPercent {
     font-size: 12px;
@@ -644,6 +815,7 @@ footer p {
     height: 60%;
   }
   .ranking-goal-card {
+    margin-bottom: 0px;
     margin-left: 0px;
     width: 100%;
   }
@@ -661,21 +833,39 @@ footer p {
     height: 300px;
   }
   .percentage-container {
-    opacity: 0;
+    display: none;
     position: relative;
     width: 100%;
     margin-bottom: 10px;
     margin-left: 20px;
-    margin-right: 100px;
+    margin-right: 60px;
     height: 18px;
     background-color: #eee;
 
     border-radius: 4px;
     bottom: 0; /* Keep the element at the bottom */
   }
+  .ranking-goal-card.isActive .votesPercent {
+    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+    font-size: 14px;
+    color: #000000;
+  }
+  .ranking-goal-card.isActive .percentage-container {
+    display: inline-block;
+    height: 20px;
+    width: 400px;
+    margin-left: 20px;
+  }
+
+  .ranking-goal-title {
+    width: 100%;
+    font-size: 12px;
+  }
 
   .ranking-goal-card.isActive .ranking-goal-title {
-    font-size: 10px;
+    width: 400px;
+    margin-left: 0px;
+    font-size: 7px;
     margin-bottom: 10px;
     position: absolute;
     bottom: 0;
@@ -684,26 +874,63 @@ footer p {
     text-align: center;
     color: #ffffff;
   }
+
   .ranking-title-position {
-    margin-right: 30px;
-    margin-left: -10px;
+    margin-right: 20px;
+    margin-left: -20px;
     font-size: 30px;
     text-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
   }
 }
 @media only screen and (max-width: 480px) {
+  .landing-page {
+    height: 70vh;
+  }
+  .landing-page .landing-page-btn {
+    align-items: center;
+    display: flex;
+    position: relative;
+    color: #ffffff;
+    background-color: #ff0000;
+    font-size: 20px;
+    padding: 20px 50px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+  .landing-page-main-text {
+    text-align: center;
+    width: 500px;
+    margin-top: 0px;
+    margin-right: 150px;
+    margin-bottom: 50px;
+  }
+  .landing-page-logo img {
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 0px;
+    margin-bottom: 0px;
+    height: 130px;
+    width: 200px;
+  }
+
   .landing-page-text1 {
     margin-left: 50px;
     margin-right: 50px;
     margin-top: 200px;
-    font-size: 20px;
-    margin-bottom: 60px;
+    font-size: 15px;
+    margin-bottom: 20px;
     color: #ffffff;
   }
   .landing-page-text2 {
     margin-left: 50px;
     margin-right: 50px;
-    font-size: 20px;
+    font-size: 15px;
     margin-bottom: 40px;
     color: #ffffff;
   }
@@ -711,6 +938,11 @@ footer p {
     margin-right: 100px;
     margin-top: 80px;
     font-size: 60px;
+  }
+  .landing-page-logo {
+  }
+  .nav-bar {
+    width: 90%;
   }
   .nav-title1,
   .ranking-nav-title1 {
@@ -722,6 +954,9 @@ footer p {
   .nav-title2 {
     font-size: 18px;
   }
+  .nav-center {
+    flex-direction: row;
+  }
   .nav-login-logo,
   .ranking-nav-login-logo {
     margin-left: 2px;
@@ -729,6 +964,11 @@ footer p {
   }
   .nav-link {
     font-size: 15px;
+  }
+  .nav-text-img {
+    margin-top: 10px;
+    margin-right: 140px;
+    width: 230px;
   }
   .nav-top-goals-msg {
     margin: 10px;
@@ -747,16 +987,19 @@ footer p {
   .nav-search-responsive input {
     width: 80%;
     height: 40px;
+    margin-right: 25px;
     padding: 4px;
     border-radius: 4px;
     border: 1px solid #ccc;
     touch-action: manipulation;
     margin-top: 10px;
+    font-size: 22px;
   }
   .nav-bar {
-    width: 100%;
-    height: 100px;
+    width: 95%;
+    height: 120px;
   }
+
   .nav-text-img img {
     margin-left: 60px;
     width: 230px;
@@ -784,15 +1027,30 @@ footer p {
     font-size: 35px;
     font-weight: 550;
   }
+  .ranking-goal-container label {
+    margin-top: -25px;
+    margin-left: 0px;
+    width: 111%;
+  }
+  .ranking-container {
+    padding: 0px;
+    width: 92%;
+    margin-bottom: 500px;
+    margin-left: 0px;
+  }
   .goal-video {
     height: 0;
   }
   .login-modal {
+    margin-top: 100px;
     width: 60%;
+  }
+  .privacy-policy-modal {
+    font-size: 11px;
   }
 }
 /* Media queries for landscape mode */
-@media only screen and (min-device-width: 320px) and (max-device-width: 812px) and (orientation: landscape) {
+@media only screen and (min-device-width: 320px) and (max-device-width: 950px) and (orientation: landscape) {
   .nav-bar {
     height: 20px;
     width: 100%;
@@ -822,6 +1080,9 @@ footer p {
   .nav-search {
     width: 40%;
   }
+  .nav-center {
+    flex-direction: row;
+  }
   .nav-login-logo,
   .ranking-nav-login-logo {
     height: 15px;
@@ -829,6 +1090,25 @@ footer p {
   .nav-link,
   .ranking-nav-link {
     font-size: 12px;
+  }
+  .nav-search {
+    width: 100%;
+    margin-left: 100px;
+  }
+
+  .goal-card {
+    height: 300px;
+  }
+  .goal-video iframe {
+    margin-left: 50px;
+    width: 80%;
+    height: 60%;
+  }
+  .goal-title {
+    font-size: 20px;
+  }
+  .goal-description {
+    display: none;
   }
 
   .ranking-goal-title {
@@ -840,6 +1120,10 @@ footer p {
   }
   .votesPercent {
     font-size: 10px;
+  }
+  .ranking-nav-text-img {
+    top: 0;
+    position: absolute;
   }
   .ranking-position {
     font-size: 16px;
@@ -866,6 +1150,20 @@ footer p {
     text-align: center;
     color: #ffffff;
   }
+  .ranking-goal-card.isActive .percentage-container {
+    display: inline-block;
+    height: 25px;
+    width: 400px;
+    margin-left: 40px;
+  }
+  .ranking-goal-card.isActive .votesPercent {
+    font-size: 20px;
+  }
+  .ranking-container {
+    width: 100%;
+    margin-bottom: 500px;
+    margin-left: 0px;
+  }
   .ranking-title-position {
     margin-right: 30px;
     margin-bottom: 15px;
@@ -873,6 +1171,7 @@ footer p {
     font-size: 30px;
     text-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
   }
+
   .ranking-video-iframe {
     position: absolute;
 
@@ -882,9 +1181,22 @@ footer p {
     margin-left: 0px;
     margin-top: 0px;
   }
+
+  .ranking-goal-container label {
+    margin-left: 0px;
+    width: 100%;
+  }
+  .ranking-nav-text-img {
+    margin-top: 10px;
+  }
   .login-modal {
     width: 50%;
   }
+}
+.privacy-policy-modal {
+  margin-top: 5px;
+  font-size: 8px;
+  width: 100%;
 }
 
 /* Media queries for medium-sized screens */
@@ -927,7 +1239,7 @@ footer p {
     margin-left: 32px;
   }
   .nav-search {
-    width: 50%;
+    width: 0%;
   }
   .nav-login-logo,
   .ranking-nav-login-logo {

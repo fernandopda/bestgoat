@@ -24,12 +24,15 @@ const NavBar = forwardRef(
               <a className="ranking-nav-link" onClick={onLogout}>
                 LOGOUT
               </a>
-              <div className="nav-text-img">
-                <img src={navText} alt="Navigation Text" />
-              </div>
-              <span className="ranking-nav-top10">TOP 10 </span>
+
+              {/* 
+             <button className="nav-btn" onClick={onLogout}>
+               Logout
+             </button> */}
             </div>
-            <span className="ranking-nav-top10-responsive">TOP 10 </span>
+            <div className="ranking-nav-center ">
+              <img className="ranking-nav-text-img" src={navText} />
+            </div>
           </>
         ) : (
           <>

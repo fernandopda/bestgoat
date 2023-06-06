@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import axios from "axios";
-import config from "../config";
+import LazyLoad from "react-lazyload";
 import "../App.css";
 import soccer_ball from "./img/soccer_ball2.svg";
-
+import config from "../config";
 function Goal({
   id,
   title,
@@ -13,10 +12,13 @@ function Goal({
   openLoginPopup,
   isAuthenticated,
   setIsVoted,
+  setGoalVoted,
   token,
   userId,
 }) {
   const [isLoading, setIsLoading] = useState(false);
+  const [isMediaLoaded, setIsMediaLoaded] = useState(false);
+
   const handleVote = async () => {
     try {
       setIsLoading(true);
@@ -27,16 +29,12 @@ function Goal({
         },
         body: JSON.stringify({ goalId: id, userId }),
       });
+      const data = await response.json();
       if (response.status === 200) {
-        console.log("Vote submitted successfully");
+        setGoalVoted(data.goalVoted);
         setIsVoted(true);
       } else if (response.status === 403) {
         const errorData = await response.json();
-        console.log("Error:", errorData);
-        console.log(response);
-        console.log(response.status);
-        console.log("User has already voted");
-        console.log(token);
       } else {
         throw new Error("Error voting", token, response);
       }
@@ -48,7 +46,7 @@ function Goal({
   };
 
   return (
-    <div className="goal-card">
+    <div className={`goal-card ${isMediaLoaded ? "" : "blur"}`}>
       {isLoading && (
         <div className="loading-overlay">
           <div className="ball-container">
@@ -63,18 +61,19 @@ function Goal({
       <div className="goal-title">{title}</div>
       <div className="goal-description">{description}</div>
       <div className="goal-video">
-        <iframe
-          width="877"
-          height="658"
-          src={url}
-          title={title}
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowFullScreen
-        ></iframe>
+        <LazyLoad once placeholder={<div>Loading...</div>}>
+          <iframe
+            onLoad={() => setIsMediaLoaded(true)}
+            src={url}
+            title={title}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          />
+        </LazyLoad>
       </div>
       {isAuthenticated ? (
-        <button className="vote-button" onClick={handleVote}>
+        <button className="vote-button-red" onClick={handleVote}>
           Vote
         </button>
       ) : (

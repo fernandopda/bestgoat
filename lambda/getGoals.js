@@ -9,7 +9,7 @@ const queryAsync = promisify(connection.query).bind(connection);
 const getGoals = async (event) => {
   const getGoals = async () => {
     try {
-      const results = await queryAsync("SELECT * FROM goals");
+      const results = await queryAsync("SELECT * FROM goals ORDER BY RAND()");
       return {
         statusCode: 200,
         body: JSON.stringify(results),
