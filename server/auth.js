@@ -223,9 +223,9 @@ const vote = (req, res) => {
                         .status(500)
                         .json({ message: "Internal Server Error", err });
                     } else {
-                      res
-                        .status(200)
-                        .json({ message: "Vote successfully submitted" });
+                      res.status(200).json({
+                        message: "Vote successfully submitted",
+                      });
                     }
                   }
                 );

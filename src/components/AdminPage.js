@@ -37,30 +37,41 @@ const AdminPage = () => {
   };
 
   return (
-    <div>
+    <div className="admin-page-container">
       <h2>Add a new goal</h2>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="title">Title:</label>
-        <input
-          type="text"
-          id="title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <label htmlFor="description">Description:</label>
-        <textarea
-          id="description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-        <label htmlFor="videoURL">Video URL:</label>
-        <input
-          type="text"
-          id="videoURL"
-          value={videoURL}
-          onChange={(e) => setVideoURL(e.target.value)}
-        />
-        <button type="submit">Add Goal</button>
+      <form className="admin-page-form" onSubmit={handleSubmit}>
+        <div className="admin-page-form-group">
+          <label htmlFor="title">Title:</label>
+          <input
+            className="admin-page-input-field"
+            type="text"
+            id="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </div>
+        <div className="admin-page-form-group">
+          <label htmlFor="description">Description:</label>
+          <textarea
+            className="admin-page-input-field"
+            id="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </div>
+        <div className="admin-page-form-group">
+          <label htmlFor="videoURL">Video URL:</label>
+          <input
+            className="admin-page-input-field"
+            type="text"
+            id="videoURL"
+            value={videoURL}
+            onChange={(e) => setVideoURL(e.target.value)}
+          />
+        </div>
+        <button className="admin-page-submit-button" type="submit">
+          Add Goal
+        </button>
       </form>
     </div>
   );

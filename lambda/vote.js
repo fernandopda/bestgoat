@@ -35,6 +35,9 @@ const vote = async (event) => {
           headers: {
             "Access-Control-Allow-Origin":
               process.env.ACCESS_CONTROL_ALLOW_ORIGIN,
+            "Access-Control-Allow-Headers":
+              "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+            "Access-Control-Allow-Methods": "OPTIONS,POST",
           },
         };
       } else {
@@ -48,10 +51,16 @@ const vote = async (event) => {
 
         return {
           statusCode: 200,
-          body: JSON.stringify({ message: "Vote successfully submitted" }),
+          body: JSON.stringify({
+            message: "Vote successfully submitted",
+            goalVoted: goalId,
+          }),
           headers: {
             "Access-Control-Allow-Origin":
               process.env.ACCESS_CONTROL_ALLOW_ORIGIN,
+            "Access-Control-Allow-Headers":
+              "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+            "Access-Control-Allow-Methods": "OPTIONS,POST",
           },
         };
       }
@@ -62,6 +71,9 @@ const vote = async (event) => {
         headers: {
           "Access-Control-Allow-Origin":
             process.env.ACCESS_CONTROL_ALLOW_ORIGIN,
+          "Access-Control-Allow-Headers":
+            "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+          "Access-Control-Allow-Methods": "OPTIONS,POST",
         },
       };
     }
@@ -75,6 +87,9 @@ const vote = async (event) => {
       }),
       headers: {
         "Access-Control-Allow-Origin": process.env.ACCESS_CONTROL_ALLOW_ORIGIN,
+        "Access-Control-Allow-Headers":
+          "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+        "Access-Control-Allow-Methods": "OPTIONS,POST",
       },
     };
   }

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { animated, useTransition } from "react-spring";
-import bestgoatlogo from "./img/bestGoat.png";
 
 const LandingPage = ({ onProceed }) => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
@@ -13,7 +12,7 @@ const LandingPage = ({ onProceed }) => {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentWordIndex((prevIndex) => (prevIndex + 1) % words.length);
-    }, 2000); // Change word every 2 seconds
+    }, 1200); // Change word every 2 seconds
 
     return () => {
       clearInterval(timer);
@@ -40,19 +39,16 @@ const LandingPage = ({ onProceed }) => {
         </h1>
       </div>
       <div className="landing-page-text1">
-        You will be presented with a list of famous goals throughout history.
+        You will be presented with a list of the best goals ever scored.
       </div>
       <div className="landing-page-text2">
-        Vote for your favorite and see if it makes our Top 10 list of all-time
-        greatest goals.
+        Vote for your favorite and see if it makes our Top 10 list of the{" "}
+        <span style={{ color: "red" }}>Best Goals Of All Time.</span>
       </div>
 
       <button className="landing-page-btn" onClick={onProceed}>
-        Start Voting
+        Watch Goals!
       </button>
-      <div className="landing-page-logo">
-        <img src={bestgoatlogo} />
-      </div>
     </div>
   );
 };

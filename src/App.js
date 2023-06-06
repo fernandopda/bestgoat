@@ -7,9 +7,10 @@ import NavBar from "./components/NavBar";
 import AdminPage from "./components/AdminPage";
 import LandingPage from "./components/LandingPage";
 import config from "./config";
-
+import bestgoatlogo from "./components/img/bestGoat.png";
 import { gapi } from "gapi-script";
 import axios from "axios";
+import PrivacyPolicy from "./components/PrivacyPolicy";
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -24,6 +25,7 @@ function App() {
   const [userId, setUserId] = useState();
   const [totalVotes, setTotalVotes] = useState(0);
   const [showLandingPage, setShowLandingPage] = useState(true);
+  const [goalVoted, setGoalVoted] = useState(0);
   const navbarRef = useRef(null);
 
   useEffect(() => {
@@ -32,8 +34,7 @@ function App() {
     script.onload = () => {
       gapi.load("auth2", () => {
         gapi.auth2.init({
-          client_id:
-            "247163941989-2gj6cem762ausmk5dghv3uu739t2b5dt.apps.googleusercontent.com",
+          client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
         });
       });
     };
@@ -41,12 +42,13 @@ function App() {
 
     fetchGoals();
   }, []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [isVoted, isAdmin]);
 
   const fetchGoals = async () => {
     try {
-      console.log("this is the config", config.API_URL);
       const response = await axios.get(`${config.API_URL}/goals`);
-      console.log("this is the config", config.API_URL);
       const data = response.data; // Access data with response.data
       setGoals(data);
     } catch (error) {
@@ -61,7 +63,6 @@ function App() {
       }, 0)
     );
   }, [goals]);
-  console.log("TOTAL", totalVotes);
 
   const handleLoginSuccess = () => {
     setIsAuthenticated(true);
@@ -110,6 +111,7 @@ function App() {
                   goBack={goBack}
                   navbarRef={navbarRef}
                   totalVotes={totalVotes}
+                  goalVoted={goalVoted}
                 />
               )}
             </>
@@ -133,6 +135,7 @@ function App() {
                         token={userToken}
                         userId={userId}
                         setIsVoted={setIsVoted}
+                        setGoalVoted={setGoalVoted}
                       />
                     ))}
                 </div>
@@ -143,6 +146,7 @@ function App() {
             isOpen={isLoginPopupOpen}
             closeLoginPopup={closeLoginPopup}
             onLoginSuccess={handleLoginSuccess}
+            setGoalVoted={setGoalVoted}
             setIsVoted={setIsVoted}
             setIsAdmin={setIsAdmin}
             setUserToken={setUserToken}
@@ -150,7 +154,11 @@ function App() {
           />
         </main>
       )}
-      <footer>
+      <footer className="footer">
+        <div className="landing-page-logo">
+          <img src={bestgoatlogo} alt="Best Goals Of All Time logo" />
+        </div>
+        <PrivacyPolicy />
         <p>&copy; 2023 BestGOAT. All rights reserved.</p>
       </footer>
     </div>

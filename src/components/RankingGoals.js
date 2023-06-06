@@ -22,8 +22,6 @@ function RankingGoals({
   }, [isActive]);
 
   const cardRef = useRef(null);
-  console.log("VOTES!!!", votes);
-  console.log("TOTALVOTES", totalVotes);
   const toggleVideo = () => {
     setActiveGoalId(id);
   };
