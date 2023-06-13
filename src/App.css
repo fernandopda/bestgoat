@@ -448,7 +448,8 @@ footer p {
   width: 30%;
   max-width: 90%;
   padding: 32px;
-  border-radius: 4px;
+  border-radius: 100px;
+  opacity: 90%;
 }
 
 .login-modal h2 {
