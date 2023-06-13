@@ -1,3 +1,22 @@
+/**
+ * The `LoginPopup` component is a modal that enables the user to log in with Google authentication.
+ *
+ * Props:
+ * - `isOpen`: Controls the visibility of the modal.
+ * - `closeLoginPopup`: Function that closes the modal.
+ * - `setIsVoted`: Function that updates whether the user has voted.
+ * - `onLoginSuccess`: Function that runs when the user successfully logs in.
+ * - `setIsAdmin`: Function that updates whether the user is an admin.
+ * - `setGoalVoted`: Function that updates the ID of the goal the user voted for.
+ * - `setUserToken`: Function that saves the user token.
+ * - `setUserId`: Function that saves the user ID.
+ *
+ * State:
+ * - `isLoading`: Indicates whether a login request is in progress.
+ *
+ * Upon a successful login, it saves the user token, user ID, admin status, and the voted goal ID in the local state.
+ */
+
 import React, { useState } from "react";
 import { GoogleLogin } from "react-google-login";
 import Modal from "react-modal";
@@ -19,6 +38,7 @@ const LoginPopup = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
+  // Function to authenticate with Google and log in
   async function loginWithGoogle(tokenId) {
     const authResponse = await fetch(`${config.API_URL}/googlelogin`, {
       method: "POST",
@@ -30,6 +50,7 @@ const LoginPopup = ({
 
     const data = await authResponse.json();
 
+    // If response status is 200 (sucessfull), set necessary user details and close the popup
     if (authResponse.status === 200) {
       localStorage.setItem("userSave", data.token);
       setIsAdmin(data.isAdmin);
@@ -40,18 +61,26 @@ const LoginPopup = ({
       if (data.goalVoted > 0) {
         setIsVoted(true);
         setGoalVoted(data.goalVoted);
+        window.alert(
+          "You've already voted, we are redirecting you to our top 10..."
+        );
       } else {
         setIsVoted(false);
+        window.alert(
+          "You are now logged in, please choose wisely as you only can vote once, enjoy!"
+        );
       }
     } else {
       console.error("Error:", data.message);
     }
   }
 
+  // Function to handle failure of Google Login
   const onGoogleLoginFailure = (error) => {
     console.log("Google login failed:", error);
   };
 
+  // Function to handle successful Google Login
   const handleGoogleLogin = async (response) => {
     const { tokenId } = response;
 
@@ -65,45 +94,48 @@ const LoginPopup = ({
     }
   };
 
+  // Rendering the component
   return (
     <Modal
-      isOpen={isOpen}
-      onRequestClose={closeLoginPopup}
-      contentLabel="Login Modal"
-      className="login-modal"
-      ariaHideApp={false}
+      isOpen={isOpen} // Prop to control whether modal is open
+      onRequestClose={closeLoginPopup} // Function to run when modal should close
+      contentLabel="Login Modal" // Aria label for accessibility
+      className="login-modal" // CSS class
+      ariaHideApp={false} // Accessibility setting
     >
       {isLoading && (
         <div className="loading-overlay">
+          {" "}
+          {/* Overlay for loading state */}
           <div className="ball-container">
             <img
-              src={soccer_ball}
+              src={soccer_ball} // Display a soccer ball image
               alt="Soccer Ball"
-              className="soccer-ball-spinner"
+              className="soccer-ball-spinner" // Add spinning animation through CSS
             />
           </div>
         </div>
       )}
-
       <button onClick={closeLoginPopup} className="close-modal">
-        <FontAwesomeIcon icon={faTimes} />
+        {" "}
+        {/* Button to close the modal */}
+        <FontAwesomeIcon icon={faTimes} /> {/* 'X' icon from FontAwesome */}
       </button>
-      <h2>Login</h2>
+      <h2>Login</h2> {/* Modal title */}
       <div className="social-login">
         <div className="social-login-text">
-          Hey there! 👋 To ensure every vote counts, we ask that you log in
-          before voting. This helps us keep things fair and square by allowing
-          each account a single vote. After casting your vote, you can check the
-          top 10 goals voted by users.
+          To vote and view top-voted goals, please log in. One vote per user!
         </div>
 
         <div className="googleLogin">
+          {" "}
+          {/* Google login button */}
           <GoogleLogin
-            clientId={process.env.GOOGLE_CLIENT_ID}
-            buttonText="Login with Google"
-            onSuccess={handleGoogleLogin}
-            onFailure={onGoogleLoginFailure}
-            cookiePolicy={"single_host_origin"}
+            clientId={process.env.GOOGLE_CLIENT_ID} // Google client ID
+            buttonText="Login with Google" // Text for the button
+            onSuccess={handleGoogleLogin} // Function to handle successful login
+            onFailure={onGoogleLoginFailure} // Function to handle failed login
+            cookiePolicy={"single_host_origin"} // Cookie policy
           />
         </div>
       </div>

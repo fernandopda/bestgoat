@@ -1,8 +1,16 @@
+/*
+The Goal.js component represents individual goals in the voting system. It includes details about the goal, such as its title, description, and video URL. This component uses states to handle the loading of media and user interactions with the voting system.
+
+*/
+
 import React, { useState } from "react";
 import LazyLoad from "react-lazyload";
 import "../App.css";
 import soccer_ball from "./img/soccer_ball2.svg";
 import config from "../config";
+
+// The Goal component represents a single goal in the application.
+// It shows details about the goal, as well as providing functionality to vote for the goal.
 function Goal({
   id,
   title,
@@ -16,10 +24,19 @@ function Goal({
   token,
   userId,
 }) {
+  // These states are used to control loading states and media loading states.
   const [isLoading, setIsLoading] = useState(false);
   const [isMediaLoaded, setIsMediaLoaded] = useState(false);
 
+  // handleVote function is responsible for voting functionality.
+  // It sends a POST request to the /vote endpoint to vote for a particular goal.
+
   const handleVote = async () => {
+    // Open a confirmation dialog. If the user clicks "Cancel", this function will return immediately.
+    if (!window.confirm(`Are you sure you want to vote for ${title}?`)) {
+      return;
+    }
+
     try {
       setIsLoading(true);
       const response = await fetch(`${config.API_URL}/vote`, {
@@ -48,6 +65,7 @@ function Goal({
   return (
     <div className={`goal-card ${isMediaLoaded ? "" : "blur"}`}>
       {isLoading && (
+        // Loading overlay for when the voting process is ongoing
         <div className="loading-overlay">
           <div className="ball-container">
             <img
