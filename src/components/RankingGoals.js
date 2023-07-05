@@ -26,18 +26,12 @@ function RankingGoals({
     setActiveGoalId(id);
   };
 
-  const getScrollOffset = () => {
-    const navbarHeight = navbarRef.current.offsetHeight;
-    const additionalOffset = 10; // You can adjust this value for some additional space between the Nav bar and the video
-    return navbarHeight + additionalOffset;
-  };
-
   // Update the scrollToCard function with the new offset calculation
   const scrollToCard = () => {
     if (cardRef.current && navbarRef.current) {
       const cardRect = cardRef.current.getBoundingClientRect();
       const navbarRect = navbarRef.current.getBoundingClientRect();
-      const additionalOffset = -5; // You can adjust this value for some additional space between the Nav bar and the video
+      const additionalOffset = -5;
 
       window.scrollTo({
         top:

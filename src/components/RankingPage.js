@@ -34,9 +34,9 @@ const RankingPage = ({ goals, navbarRef, totalVotes, goalVoted }) => {
             <UserPickedGoal
               goals={sortedGoals}
               goalVoted={goalVoted}
-              position={
-                sortedGoals.findIndex((goal) => goal.id === goalVoted) + 1
-              }
+              // position={
+              //   sortedGoals.findIndex((goal) => goal.id === goalVoted) + 1
+              // }
               isActive={goalVoted === activeUserPickedGoalId}
               setActiveGoalId={setActiveUserPickedGoalId}
               navbarRef={navbarRef}
