@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
 import Goal from "./components/Goal";
+import Hero from "./components/Hero";
 import LoginPopup from "./components/LoginPopup";
 import RankingPage from "./components/RankingPage";
 import NavBar from "./components/NavBar";
@@ -27,6 +28,8 @@ function App() {
   const [showLandingPage, setShowLandingPage] = useState(true);
   const [goalVoted, setGoalVoted] = useState(0);
   const navbarRef = useRef(null);
+  const goalListRef = useRef(null);
+  let hasScrolled = false;
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -46,6 +49,35 @@ function App() {
     window.scrollTo(0, 0);
   }, [isVoted, isAdmin]);
 
+  useEffect(() => {
+    setTotalVotes(
+      goals.reduce((acc, g) => {
+        return acc + g.votes;
+      }, 0)
+    );
+  }, [goals]);
+
+  useEffect(() => {
+    const handleHeroNavScroll = () => {
+      if (hasScrolled) {
+        return;
+      }
+
+      const goalListPos = goalListRef.current.offsetTop;
+      const scrollPos = window.scrollY;
+      const additionalOffset = 180;
+
+      if (scrollPos + additionalOffset >= goalListPos) {
+        navbarRef.current.style.display = "flex";
+      } else {
+        navbarRef.current.style.display = "none";
+      }
+    };
+    window.addEventListener("scroll", handleHeroNavScroll);
+
+    return () => window.removeEventListener("scroll", handleHeroNavScroll);
+  }, []);
+
   const fetchGoals = async () => {
     try {
       const response = await axios.get(`${config.API_URL}/goals`);
@@ -55,14 +87,6 @@ function App() {
       console.error("Error fetching goals:", error);
     }
   };
-
-  useEffect(() => {
-    setTotalVotes(
-      goals.reduce((acc, g) => {
-        return acc + g.votes;
-      }, 0)
-    );
-  }, [goals]);
 
   const handleLoginSuccess = () => {
     setIsAuthenticated(true);
@@ -88,72 +112,70 @@ function App() {
 
   return (
     <div className="container">
-      {showLandingPage ? (
-        <LandingPage onProceed={() => setShowLandingPage(false)} />
-      ) : (
-        <main>
-          <NavBar
-            ref={navbarRef}
-            isAuthenticated={isAuthenticated}
-            openLogin={openLoginPopup}
-            onLogout={handleLogout}
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            isVoted={isVoted}
-          />
-          {isAuthenticated && isVoted ? (
-            <>
-              {isAdmin ? (
-                <AdminPage />
-              ) : (
-                <RankingPage
-                  goals={goals}
-                  goBack={goBack}
-                  navbarRef={navbarRef}
-                  totalVotes={totalVotes}
-                  goalVoted={goalVoted}
-                />
-              )}
-            </>
-          ) : (
-            <>
-              <div className="goal-container">
-                <div className="goal-list">
-                  {goals
-                    .filter((goal) =>
-                      goal.title
-                        .toLocaleLowerCase()
-                        .includes(searchTerm.toLocaleLowerCase())
-                    )
-                    .map((goal) => (
-                      <Goal
-                        key={goal.id}
-                        {...goal}
-                        openLoginPopup={openLoginPopup}
-                        isAuthenticated={isAuthenticated}
-                        setIsVoded={setIsVoted}
-                        token={userToken}
-                        userId={userId}
-                        setIsVoted={setIsVoted}
-                        setGoalVoted={setGoalVoted}
-                      />
-                    ))}
-                </div>
+      <main>
+        <NavBar
+          ref={navbarRef}
+          isAuthenticated={isAuthenticated}
+          openLogin={openLoginPopup}
+          onLogout={handleLogout}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          isVoted={isVoted}
+        />
+        {isAuthenticated && isVoted ? (
+          <>
+            {isAdmin ? (
+              <AdminPage />
+            ) : (
+              <RankingPage
+                goals={goals}
+                goBack={goBack}
+                navbarRef={navbarRef}
+                totalVotes={totalVotes}
+                goalVoted={goalVoted}
+              />
+            )}
+          </>
+        ) : (
+          <>
+            <div className="goal-container">
+              <Hero />
+              <div ref={goalListRef} className="goal-list">
+                {goals
+                  .filter((goal) =>
+                    goal.title
+                      .toLocaleLowerCase()
+                      .includes(searchTerm.toLocaleLowerCase())
+                  )
+                  .map((goal) => (
+                    <Goal
+                      key={goal.id}
+                      {...goal}
+                      openLoginPopup={openLoginPopup}
+                      isAuthenticated={isAuthenticated}
+                      setIsVoded={setIsVoted}
+                      token={userToken}
+                      userId={userId}
+                      setIsVoted={setIsVoted}
+                      setGoalVoted={setGoalVoted}
+                    />
+                  ))}
               </div>
-            </>
-          )}
-          <LoginPopup
-            isOpen={isLoginPopupOpen}
-            closeLoginPopup={closeLoginPopup}
-            onLoginSuccess={handleLoginSuccess}
-            setGoalVoted={setGoalVoted}
-            setIsVoted={setIsVoted}
-            setIsAdmin={setIsAdmin}
-            setUserToken={setUserToken}
-            setUserId={setUserId}
-          />
-        </main>
-      )}
+            </div>
+          </>
+        )}
+        <LoginPopup
+          isOpen={isLoginPopupOpen}
+          closeLoginPopup={closeLoginPopup}
+          onLoginSuccess={handleLoginSuccess}
+          setGoalVoted={setGoalVoted}
+          setIsVoted={setIsVoted}
+          setIsAdmin={setIsAdmin}
+          setUserToken={setUserToken}
+          setUserId={setUserId}
+        />
+      </main>
+
       <footer className="footer">
         <div className="landing-page-logo">
           <img src={bestgoatlogo} alt="Best Goals Of All Time logo" />
