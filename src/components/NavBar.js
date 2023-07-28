@@ -15,6 +15,10 @@ const NavBar = forwardRef(
     },
     ref
   ) => {
+    //  sets value for searchTeam on searchbar
+    const onSearchChange = (e) => {
+      setSearchTerm(e.target.value);
+    };
     return (
       <nav ref={ref} className="nav-bar">
         {isAuthenticated && isVoted ? (
@@ -22,7 +26,7 @@ const NavBar = forwardRef(
             <div className="ranking-nav-left">
               <img className="ranking-nav-login-logo" src={logo} />
               <a className="ranking-nav-link" onClick={onLogout}>
-                LOGOUT
+                GO BACK
               </a>
 
               {/* 
@@ -66,7 +70,7 @@ const NavBar = forwardRef(
                   type="text"
                   placeholder="Search for a goal.."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={onSearchChange}
                 />
               </div>
             </div>

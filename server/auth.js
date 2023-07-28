@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const { OAuth2Client } = require("google-auth-library");
 const { promisify } = require("util");
 const { constrainedMemory } = require("process");
+const axios = require("axios");
 const app = express();
 require("dotenv").config();
 app.use((req, res, next) => {
@@ -112,6 +113,68 @@ const isAdmin = (req, res, next) => {
       }
     }
   });
+};
+
+const voteWithGoogle = async (req, res) => {
+  try {
+    console.log("reqBody:", req.body);
+    const { tokenId, goalId } = req.body;
+
+    const ticket = await client.verifyIdToken({
+      idToken: tokenId,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    const { email, name, sub: googleId } = ticket.getPayload();
+    console.log("this is email:", email);
+    console.log("this is googleID", googleId);
+
+    connection.query(
+      "SELECT * FROM users WHERE email = ?",
+      [email],
+      (err, results) => {
+        if (err) {
+          console.error(err);
+          res.status(500).json({ message: "Internal Server Error", err });
+        } else {
+          const user = results[0];
+          if (!user) {
+            console.log("No user found with this email, creating new user");
+
+            connection.query(
+              "INSERT INTO users (name, email,google_id,goalVoted) VALUES (?, ?,?,?);UPDATE goals SET votes = votes + 1 WHERE id = ?;",
+              [name, email, googleId, goalId, goalId],
+              (err, results) => {
+                if (err) {
+                  console.error(err);
+                  res
+                    .status(500)
+                    .json({ message: "Failed to create new user", err });
+                } else {
+                  console.log(
+                    "New user created with name: " +
+                      name +
+                      " and email: " +
+                      email
+                  );
+                  res
+                    .status(200)
+                    .json({ message: "New user created, Vote successful!" });
+                }
+              }
+            );
+          } else {
+            if (user.goalVoted > 0) {
+              res.status(403).json({ message: "User has already voted" });
+              console.log("User already Voted on GoalID :", goalId);
+            }
+          }
+        }
+      }
+    );
+  } catch (err) {
+    console.error("Google login failed:", err);
+    res.status(500).json({ message: "AUTH!! Internal Server Error" });
+  }
 };
 
 const googleLogin = async (req, res) => {
@@ -237,6 +300,91 @@ const vote = (req, res) => {
     }
   );
 };
+
+const formVote = (req, res) => {
+  const userName = req.body.userName;
+  const userEmail = req.body.userEmail;
+  const goalId = req.body.goalId;
+  const captchaValue = req.body.captchaValue;
+  console.log("this is the captcha:", captchaValue);
+
+  console.log("This is the name: ", userName);
+  console.log("This is the email: ", userEmail);
+  console.log("GOALIDMAN", goalId);
+
+  const secretKey = process.env.RECAPTCHA_SITE_KEY;
+
+  // verifying the captcha token
+  axios
+    .post(
+      `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${captchaValue}`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
+        },
+      }
+    )
+    .then((response) => {
+      // if (!response.data.success) {
+      //   res.status(400).json({ message: "Recaptcha verification failed" });
+      //   return;
+      // }
+      console.log("Captcha response:", response.data.success);
+
+      // tries to select email from database
+      connection.query(
+        "SELECT * FROM users WHERE email = ?",
+        [userEmail],
+        (err, results) => {
+          if (err) {
+            console.error(err);
+            res.status(500).json({ message: "Internal Server Error", err });
+          } else {
+            const user = results[0];
+            // tests if there is an email found on datbase, if not creates a new one.
+            if (!user) {
+              console.log("No user found with this email, creating new user");
+
+              connection.query(
+                "INSERT INTO users (name, email,goalVoted) VALUES (?, ?,?);UPDATE goals SET votes = votes + 1 WHERE id = ?;",
+                [userName, userEmail, goalId, goalId],
+                (err, results) => {
+                  if (err) {
+                    console.error(err);
+                    res
+                      .status(500)
+                      .json({ message: "Failed to create new user", err });
+                  } else {
+                    console.log(
+                      "New user created with name: " +
+                        userName +
+                        " and email: " +
+                        userEmail
+                    );
+                    res
+                      .status(200)
+                      .json({ message: "New user created, Vote successful!" });
+                  }
+                }
+              );
+            } else {
+              // check if there is a vote submited with the email an doest allow a new vote.
+              if (user.goalVoted > 0) {
+                res.status(403).json({ message: "User has already voted" });
+                console.log("User already Voted on GoalID :", goalId);
+              }
+            }
+          }
+        }
+      );
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: "Recaptcha verification server error" });
+    });
+};
+
 /* EMAIL LOGIN */
 // const login = async (req, res) => {
 //   try {
@@ -280,9 +428,11 @@ const vote = (req, res) => {
 // Export the router instance instead of the object
 // Add middleware and routes to the router instance
 router.post("/googleLogin", googleLogin);
+router.post("/voteWithGoogle", voteWithGoogle);
 router.post("/goals", authenticateJWT, isAdmin, addGoals);
 router.get("/goals", getGoals);
 router.post("/vote", vote);
+router.post("/formVote", formVote);
 router.post("/checkVote", checkVote);
 // Export the router instance
 module.exports = router;

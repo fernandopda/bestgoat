@@ -11,41 +11,39 @@ const RankingPage = ({ goals, navbarRef, totalVotes, goalVoted }) => {
     .slice(0, 10)
     .sort((a, b) => a.votes - b.votes);
   return (
-    <div className="ranking-container">
-      <main>
-        <div className="ranking-goal-container">
-          <label>TOP 10</label>
-          {sortedTop10Goals.map(
-            (goal, i) =>
-              i < 10 && (
-                <RankingGoals
-                  key={goal.id}
-                  {...goal}
-                  position={10 - i}
-                  isActive={goal.id === activeGoalId}
-                  setActiveGoalId={setActiveGoalId}
-                  navbarRef={navbarRef}
-                  totalVotes={totalVotes}
-                />
-              )
-          )}
-          <div className="ranking-goal-user-pick">
-            <label>YOUR VOTE</label>
-            <UserPickedGoal
-              goals={sortedGoals}
-              goalVoted={goalVoted}
-              // position={
-              //   sortedGoals.findIndex((goal) => goal.id === goalVoted) + 1
-              // }
-              isActive={goalVoted === activeUserPickedGoalId}
-              setActiveGoalId={setActiveUserPickedGoalId}
-              navbarRef={navbarRef}
-              totalVotes={totalVotes}
-            />
-          </div>
-        </div>
-      </main>
-    </div>
+    <main>
+      <div className="ranking-goal-container">
+        <label>TOP 10</label>
+        {sortedTop10Goals.map(
+          (goal, i) =>
+            i < 10 && (
+              <RankingGoals
+                key={goal.id}
+                {...goal}
+                position={10 - i}
+                isActive={goal.id === activeGoalId}
+                setActiveGoalId={setActiveGoalId}
+                navbarRef={navbarRef}
+                totalVotes={totalVotes}
+              />
+            )
+        )}
+        {/* <div className="ranking-goal-user-pick">
+          <label>YOUR VOTE</label>
+          <UserPickedGoal
+            goals={sortedGoals}
+            goalVoted={goalVoted}
+            // position={
+            //   sortedGoals.findIndex((goal) => goal.id === goalVoted) + 1
+            // }
+            isActive={goalVoted === activeUserPickedGoalId}
+            setActiveGoalId={setActiveUserPickedGoalId}
+            navbarRef={navbarRef}
+            totalVotes={totalVotes}
+          />
+        </div> */}
+      </div>
+    </main>
   );
 };
 
