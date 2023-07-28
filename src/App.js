@@ -12,6 +12,7 @@ import bestgoatlogo from "./components/img/bestGoat.png";
 import { gapi } from "gapi-script";
 import axios from "axios";
 import PrivacyPolicy from "./components/PrivacyPolicy";
+import { forceCheck } from "react-lazyload";
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -22,6 +23,7 @@ function App() {
   const isRankingPage = false;
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isVoted, setIsVoted] = useState(false);
+  const [scrollTop, setScrollTop] = useState(false);
   const [userToken, setUserToken] = useState("");
   const [userId, setUserId] = useState();
   const [totalVotes, setTotalVotes] = useState(0);
@@ -30,6 +32,7 @@ function App() {
   const navbarRef = useRef(null);
   const goalListRef = useRef(null);
   let hasScrolled = false;
+  const goalListOffset = 180;
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -45,10 +48,12 @@ function App() {
 
     fetchGoals();
   }, []);
+  // scrolls to the top of the page when a vote is received
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [isVoted, isAdmin]);
+  }, [scrollTop]);
 
+  // counts the toal number of votes, so percentage of goals voted for each goal can be calculated in the top10
   useEffect(() => {
     setTotalVotes(
       goals.reduce((acc, g) => {
@@ -57,27 +62,37 @@ function App() {
     );
   }, [goals]);
 
+  // manages navBar display, according to the scroll position of the page
   useEffect(() => {
+    let initialHeight = window.innerHeight;
     const handleHeroNavScroll = () => {
       if (hasScrolled) {
         return;
       }
 
-      const goalListPos = goalListRef.current.offsetTop;
-      const scrollPos = window.scrollY;
-      const additionalOffset = 180;
+      if (window.innerHeight === initialHeight) {
+        const goalListPos = goalListRef.current.offsetTop;
+        const scrollPos = window.scrollY;
 
-      if (scrollPos + additionalOffset >= goalListPos) {
-        navbarRef.current.style.display = "flex";
-      } else {
-        navbarRef.current.style.display = "none";
+        if (scrollPos + goalListOffset >= goalListPos) {
+          navbarRef.current.style.display = "flex";
+          hasScrolled = true;
+        } else {
+          navbarRef.current.style.display = "none";
+        }
       }
     };
+
     window.addEventListener("scroll", handleHeroNavScroll);
 
     return () => window.removeEventListener("scroll", handleHeroNavScroll);
   }, []);
 
+  // Activates lazyloading everytime user input a text on searchbar
+  useEffect(() => {
+    forceCheck();
+  }, [searchTerm]);
+  // fetch list of goals from database
   const fetchGoals = async () => {
     try {
       const response = await axios.get(`${config.API_URL}/goals`);
@@ -85,6 +100,16 @@ function App() {
       setGoals(data);
     } catch (error) {
       console.error("Error fetching goals:", error);
+    }
+  };
+  // Scrolls the view when a input is added on serachBar
+  const scrollSearchInput = (newSerchTerm) => {
+    setSearchTerm(newSerchTerm);
+
+    if (goalListRef.current) {
+      window.scrollTo({
+        top: goalListRef.current.offsetTop - goalListOffset,
+      });
     }
   };
 
@@ -119,7 +144,7 @@ function App() {
           openLogin={openLoginPopup}
           onLogout={handleLogout}
           searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
+          setSearchTerm={scrollSearchInput}
           isVoted={isVoted}
         />
         {isAuthenticated && isVoted ? (
@@ -152,12 +177,16 @@ function App() {
                       key={goal.id}
                       {...goal}
                       openLoginPopup={openLoginPopup}
-                      isAuthenticated={isAuthenticated}
+                      setIsAuthenticated={setIsAuthenticated}
                       setIsVoded={setIsVoted}
                       token={userToken}
                       userId={userId}
+                      onLoginSuccess={handleLoginSuccess}
+                      setUserId={setUserId}
+                      setIsAdmin={setIsAdmin}
                       setIsVoted={setIsVoted}
                       setGoalVoted={setGoalVoted}
+                      setScrollTop={setScrollTop}
                     />
                   ))}
               </div>
