@@ -44,10 +44,6 @@ function Goal({
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 480);
 
   useEffect(() => {
-    setOffset(isMobile ? 100 : 800);
-  }, []);
-
-  useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 480);
     };
@@ -56,11 +52,6 @@ function Goal({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleFocus = (event) => {
-    if (isMobile) {
-      event.target.blur();
-    }
-  };
   const showForm = () => {
     setIsFormVisible(true);
   };
@@ -152,8 +143,9 @@ function Goal({
       setIsLoading(false);
     }
   };
+  /* Login With Google */
 
-  /* Function used to cast a vote with google credentials*/
+  /* Function used to cast a vote with google credentials ( no login session required)*/
   async function voteWithGoogle(tokenId, goalId) {
     try {
       const voteResponse = await fetch(`${config.API_URL}/voteWithGoogle`, {
@@ -179,52 +171,15 @@ function Goal({
     }
   }
 
-  /* Function to authenticate with Google and log in - (it is not being used in this version of the app) */
-  async function loginWithGoogle(tokenId) {
-    const authResponse = await fetch(`${config.API_URL}/googlelogin`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ tokenId }),
-    });
-
-    const data = await authResponse.json();
-
-    // If response status is 200 (sucessfull), set necessary user details and close the popup
-    if (authResponse.status === 200) {
-      localStorage.setItem("userSave", data.token);
-      setIsAdmin(data.isAdmin);
-      setUserToken(data.token);
-      onLoginSuccess();
-      setUserId(data.userId);
-
-      if (data.goalVoted > 0) {
-        setIsVoted(true);
-        setGoalVoted(data.goalVoted);
-        window.alert(
-          "You've already voted, we are redirecting you to our top 10..."
-        );
-      } else {
-        setIsVoted(false);
-        window.alert(
-          "You are now logged in, please choose wisely as you only can vote once, enjoy!"
-        );
-      }
-    } else {
-      console.error("Error:", data.message);
-    }
-  }
-
   /* Function to handles failure of Google Login */
   const onGoogleLoginFailure = (error) => {
     console.log("Google login failed:", error);
   };
 
-  /* Function to handles successful Google Login */
-  const handleGoogleLogin = async (response) => {
+  /* Function to handles google vote */
+  const handleGoogleVote = async (response) => {
     console.log("Google login successful. Response:", response);
-    const tokenId = response.tokenId;
+    const { tokenId } = response;
 
     try {
       setIsLoading(true);
@@ -277,7 +232,7 @@ function Goal({
               className="goal-vote-google-button"
               clientId={process.env.GOOGLE_CLIENT_ID} // Google client ID
               buttonText="Vote with Google" // Text for the button
-              onSuccess={handleGoogleLogin} // Function to handle successful login
+              onSuccess={handleGoogleVote} // Function to handle successful login
               onFailure={onGoogleLoginFailure} // Function to handle failed login
               cookiePolicy={"single_host_origin"} // Cookie policy
             />
@@ -301,14 +256,12 @@ function Goal({
                 name="userName"
                 type="text"
                 placeholder="Name"
-                onFocus={handleFocus}
               />
               <input
                 className="goal-input-class"
                 name="userEmail"
                 type="email"
                 placeholder="Email"
-                onFocus={handleFocus}
               />
               <ReCAPTCHA
                 className="goal-recaptcha"
@@ -341,3 +294,55 @@ function Goal({
 }
 
 export default Goal;
+
+/* Function to authenticate with Google and log in - (it is not being used in this version of the app) 
+ async function loginWithGoogle(tokenId) {
+  const authResponse = await fetch(`${config.API_URL}/googlelogin`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ tokenId }),
+  });
+
+  const data = await authResponse.json();
+
+  // If response status is 200 (sucessfull), set necessary user details and close the popup
+  if (authResponse.status === 200) {
+    localStorage.setItem("userSave", data.token);
+    setIsAdmin(data.isAdmin);
+    setUserToken(data.token);
+    onLoginSuccess();
+    setUserId(data.userId);
+
+    if (data.goalVoted > 0) {
+      setIsVoted(true);
+      setGoalVoted(data.goalVoted);
+      window.alert(
+        "You've already voted, we are redirecting you to our top 10..."
+      );
+    } else {
+      setIsVoted(false);
+      window.alert(
+        "You are now logged in, please choose wisely as you only can vote once, enjoy!"
+      );
+    }
+  } else {
+    console.error("Error:", data.message);
+  }
+} */
+
+/* Function to handle successful Google Login
+  const handleGoogleLogin = async (response) => {
+    const { tokenId } = response;
+
+    try {
+      setIsLoading(true);
+      await loginWithGoogle(tokenId);
+    } catch (error) {
+      console.error("Login with Google failed:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  */
