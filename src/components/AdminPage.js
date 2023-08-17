@@ -1,3 +1,5 @@
+/* component used to add new goals to the database when a admin user logs in */
+
 import React, { useState } from "react";
 import config from "../config";
 
@@ -6,6 +8,7 @@ const AdminPage = () => {
   const [description, setDescription] = useState("");
   const [videoURL, setVideoURL] = useState("");
 
+  /* calls server function when the details of a new goal are filled in the admin form */
   const handleSubmit = async (e) => {
     e.preventDefault();
 

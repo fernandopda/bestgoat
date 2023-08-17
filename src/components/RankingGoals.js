@@ -1,4 +1,4 @@
-// In RankingGoals.js
+/* component handles the goals card on the top 10 ranking section of the app */
 
 import React, { useRef, useEffect } from "react";
 import "../App.css";
@@ -6,7 +6,6 @@ import "../App.css";
 function RankingGoals({
   id,
   title,
-  description,
   url,
   votes,
   position,
@@ -26,7 +25,8 @@ function RankingGoals({
     setActiveGoalId(id);
   };
 
-  // Update the scrollToCard function with the new offset calculation
+  /* Uses card and nav bar reference position to scroll the page to a point where the card selected moves under navBar position */
+
   const scrollToCard = () => {
     if (cardRef.current && navbarRef.current) {
       const cardRect = cardRef.current.getBoundingClientRect();

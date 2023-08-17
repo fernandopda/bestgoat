@@ -6,7 +6,6 @@ import LoginPopup from "./components/LoginPopup";
 import RankingPage from "./components/RankingPage";
 import NavBar from "./components/NavBar";
 import AdminPage from "./components/AdminPage";
-import LandingPage from "./components/LandingPage";
 import config from "./config";
 import bestgoatlogo from "./components/img/bestGoat.png";
 import { gapi } from "gapi-script";
@@ -14,26 +13,42 @@ import axios from "axios";
 import PrivacyPolicy from "./components/PrivacyPolicy";
 import { forceCheck } from "react-lazyload";
 
+/* States
+	isAdmin - handles admin status
+	Goals - State array containing the goal cards info
+	searchTerm - Holds content input on the search bar
+	isAuthenticated - Golds authentication state of the user
+	isVoted - checks if user already voted
+	scrollTop - is set to true if conditions are met and the page scrolls to its top
+	userToken - Hols google token
+	userId - Hols user ID
+	totalVotes - holds the number of total votes
+	goalVoted - holds ID of the goal currently voted
+	navBarRef - holds nav bar reference
+	goalListRef - holds goal list Ref
+
+  */
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [goals, setGoals] = useState([]);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
-  const isRankingPage = false;
+
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isVoted, setIsVoted] = useState(false);
   const [scrollTop, setScrollTop] = useState(false);
   const [userToken, setUserToken] = useState("");
   const [userId, setUserId] = useState();
   const [totalVotes, setTotalVotes] = useState(0);
-  const [showLandingPage, setShowLandingPage] = useState(true);
+
   const [goalVoted, setGoalVoted] = useState(0);
   const navbarRef = useRef(null);
   const goalListRef = useRef(null);
   let hasScrolled = false;
   const goalListOffset = 180;
 
+  // loads google API
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://apis.google.com/js/api.js";

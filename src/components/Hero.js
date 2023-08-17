@@ -1,3 +1,5 @@
+/* Component handless hero section of the page */
+
 import React, { useState, useEffect } from "react";
 import soccerCrew from "./img/soccerCrew.avif";
 function Hero({}) {
