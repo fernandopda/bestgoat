@@ -20,17 +20,9 @@ function Goal({
   title,
   description,
   url,
-  votes,
-  openLoginPopup,
   setIsAuthenticated,
   setIsVoted,
   setGoalVoted,
-  token,
-  userId,
-  setIsAdmin,
-  onLoginSuccess,
-  setUserId,
-  setUserToken,
   setScrollTop,
 }) {
   // These states are used to control loading states and media loading states.
@@ -43,6 +35,7 @@ function Goal({
   const [offset, setOffset] = useState(800);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 480);
 
+  //??
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 480);
@@ -52,13 +45,14 @@ function Goal({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // show form when vote button is clicked
   const showForm = () => {
     setIsFormVisible(true);
   };
   const showEntriesForm = () => {
     setIsFormEntriesVisible(true);
   };
-
+  // messaged displayed when user votges
   const voteSuccess = () => {
     setFormMessage(
       "Thank you for voting! You will now be redirected for the top 10 goals.."
@@ -80,7 +74,7 @@ function Goal({
     }, 3500);
   };
 
-  /* validades when user enter an email on the form */
+  /* validates email format after user input*/
   function validateEmail(email) {
     var re =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -92,8 +86,7 @@ function Goal({
     return true;
   }
 
-  /* handleVote function is responsible for voting functionality.
-  it sends a POST request to the /vote endpoint to vote for a particular goal.*/
+  /* responsible for handling vote using name and email form*/
   const handleVote = async (e) => {
     e.preventDefault();
     const userName = e.target.elements.userName.value;
@@ -102,7 +95,7 @@ function Goal({
     if (!validateEmail(userEmail)) {
       return;
     }
-    //check if user has already voted in the last 7 days
+    /* utilizes cookies to c heck if the customer has voted in the last 7 days */
     const hasVoted = Cookies.get("hasVoted");
     // if (hasVoted) {
     //   setError(
@@ -143,7 +136,6 @@ function Goal({
       setIsLoading(false);
     }
   };
-  /* Login With Google */
 
   /* Function used to cast a vote with google credentials ( no login session required)*/
   async function voteWithGoogle(tokenId, goalId) {
@@ -176,7 +168,7 @@ function Goal({
     console.log("Google login failed:", error);
   };
 
-  /* Function to handles google vote */
+  /* Function executed when login with google is executed by the user, calling voteWithGoogle function to cast vote in case of succefull authentication  */
   const handleGoogleVote = async (response) => {
     console.log("Google login successful. Response:", response);
     const { tokenId } = response;
@@ -294,55 +286,3 @@ function Goal({
 }
 
 export default Goal;
-
-/* Function to authenticate with Google and log in - (it is not being used in this version of the app) 
- async function loginWithGoogle(tokenId) {
-  const authResponse = await fetch(`${config.API_URL}/googlelogin`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ tokenId }),
-  });
-
-  const data = await authResponse.json();
-
-  // If response status is 200 (sucessfull), set necessary user details and close the popup
-  if (authResponse.status === 200) {
-    localStorage.setItem("userSave", data.token);
-    setIsAdmin(data.isAdmin);
-    setUserToken(data.token);
-    onLoginSuccess();
-    setUserId(data.userId);
-
-    if (data.goalVoted > 0) {
-      setIsVoted(true);
-      setGoalVoted(data.goalVoted);
-      window.alert(
-        "You've already voted, we are redirecting you to our top 10..."
-      );
-    } else {
-      setIsVoted(false);
-      window.alert(
-        "You are now logged in, please choose wisely as you only can vote once, enjoy!"
-      );
-    }
-  } else {
-    console.error("Error:", data.message);
-  }
-} */
-
-/* Function to handle successful Google Login
-  const handleGoogleLogin = async (response) => {
-    const { tokenId } = response;
-
-    try {
-      setIsLoading(true);
-      await loginWithGoogle(tokenId);
-    } catch (error) {
-      console.error("Login with Google failed:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  */

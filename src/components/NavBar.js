@@ -1,3 +1,5 @@
+/* component handless nav bar of the page */
+
 import React, { forwardRef } from "react";
 import "../App.css";
 import logo from "./img/login.png";

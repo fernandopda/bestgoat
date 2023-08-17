@@ -1,3 +1,5 @@
+/* page shows the top 10 goals voted by users */
+
 import React, { useState } from "react";
 import "../App.css";
 import RankingGoals from "./RankingGoals";

@@ -1,20 +1,6 @@
 /**
  * The `LoginPopup` component is a modal that enables the user to log in with Google authentication.
- *
- * Props:
- * - `isOpen`: Controls the visibility of the modal.
- * - `closeLoginPopup`: Function that closes the modal.
- * - `setIsVoted`: Function that updates whether the user has voted.
- * - `onLoginSuccess`: Function that runs when the user successfully logs in.
- * - `setIsAdmin`: Function that updates whether the user is an admin.
- * - `setGoalVoted`: Function that updates the ID of the goal the user voted for.
- * - `setUserToken`: Function that saves the user token.
- * - `setUserId`: Function that saves the user ID.
- *
- * State:
- * - `isLoading`: Indicates whether a login request is in progress.
- *
- * Upon a successful login, it saves the user token, user ID, admin status, and the voted goal ID in the local state.
+ Upon a successful login, it saves the user token, user ID, admin status, and the voted goal ID in the local state.
  */
 
 import React, { useState } from "react";
@@ -97,11 +83,11 @@ const LoginPopup = ({
   // Rendering the component
   return (
     <Modal
-      isOpen={isOpen} // Prop to control whether modal is open
-      onRequestClose={closeLoginPopup} // Function to run when modal should close
-      contentLabel="Login Modal" // Aria label for accessibility
-      className="login-modal" // CSS class
-      ariaHideApp={false} // Accessibility setting
+      isOpen={isOpen}
+      onRequestClose={closeLoginPopup}
+      contentLabel="Login Modal"
+      className="login-modal"
+      ariaHideApp={false}
     >
       {isLoading && (
         <div className="loading-overlay">
@@ -109,9 +95,9 @@ const LoginPopup = ({
           {/* Overlay for loading state */}
           <div className="ball-container">
             <img
-              src={soccer_ball} // Display a soccer ball image
+              src={soccer_ball}
               alt="Soccer Ball"
-              className="soccer-ball-spinner" // Add spinning animation through CSS
+              className="soccer-ball-spinner"
             />
           </div>
         </div>
@@ -131,11 +117,11 @@ const LoginPopup = ({
           {" "}
           {/* Google login button */}
           <GoogleLogin
-            clientId={process.env.GOOGLE_CLIENT_ID} // Google client ID
-            buttonText="Login with Google" // Text for the button
-            onSuccess={handleGoogleLogin} // Function to handle successful login
-            onFailure={onGoogleLoginFailure} // Function to handle failed login
-            cookiePolicy={"single_host_origin"} // Cookie policy
+            clientId={process.env.GOOGLE_CLIENT_ID}
+            buttonText="Login with Google"
+            onSuccess={handleGoogleLogin}
+            onFailure={onGoogleLoginFailure}
+            cookiePolicy={"single_host_origin"}
           />
         </div>
       </div>
