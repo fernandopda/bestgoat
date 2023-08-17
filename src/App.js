@@ -65,27 +65,33 @@ function App() {
   // manages navBar display, according to the scroll position of the page
   useEffect(() => {
     let initialHeight = window.innerHeight;
+    const handleResize = () => {
+      initialHeight = window.innerHeight;
+    };
+
     const handleHeroNavScroll = () => {
       if (hasScrolled) {
         return;
       }
 
-      if (window.innerHeight === initialHeight) {
-        const goalListPos = goalListRef.current.offsetTop;
-        const scrollPos = window.scrollY;
+      const goalListPos = goalListRef.current.offsetTop;
+      const scrollPos = window.scrollY;
 
-        if (scrollPos + goalListOffset >= goalListPos) {
-          navbarRef.current.style.display = "flex";
-          hasScrolled = true;
-        } else {
-          navbarRef.current.style.display = "none";
-        }
+      if (scrollPos + goalListOffset >= goalListPos) {
+        navbarRef.current.style.display = "flex";
+        hasScrolled = true;
+      } else {
+        navbarRef.current.style.display = "none";
       }
     };
 
+    window.addEventListener("resize", handleResize);
     window.addEventListener("scroll", handleHeroNavScroll);
 
-    return () => window.removeEventListener("scroll", handleHeroNavScroll);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("scroll", handleHeroNavScroll);
+    };
   }, []);
 
   // Activates lazyloading everytime user input a text on searchbar

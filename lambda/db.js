@@ -1,5 +1,3 @@
-// Database connection function
-
 const mysql = require("mysql");
 require("dotenv").config();
 
@@ -14,6 +12,15 @@ function createConnection() {
       database: process.env.DT_DATABASE,
       port: 3306,
       multipleStatements: true,
+    });
+
+    connection.connect((err) => {
+      if (err) {
+        console.error("Error connecting to the database:", err.stack);
+        return;
+      }
+
+      console.log("Successfully connected to the database");
     });
   }
 

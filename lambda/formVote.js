@@ -1,119 +1,90 @@
-/**
- * This module provides a function for handling voting on goals.
- * The function retrieves the vote information from the request body,
- * checks if the user has already voted, and if not, increments the vote count for the specified goal and sets the user's voted status. If an error occurs during the process, an error message is returned.
- * Note: This function expects to receive an event with a request body containing userId and goalId.
- */
-
-const { promisify } = require("util");
+const axios = require("axios");
 const createConnection = require("./db");
-require("dotenv").config();
 
-// The `vote` function is responsible for handling the voting operation
-const vote = async (event) => {
+// Function to add CORS headers to your response
+const addCorsHeaders = (response) => {
+  return {
+    ...response,
+    headers: {
+      "Access-Control-Allow-Headers":
+        "Content-Type,X-Amz-Date,X-Amz-Security-Token,Authorization,X-Api-Key,X-Requested-With,Accept",
+      "Access-Control-Allow-Origin": "https://www.bestgoat.net",
+      "Access-Control-Allow-Methods": "OPTIONS,PUT",
+      "Access-Control-Allow-Credentials": "true",
+      "Cross-Origin-Opener-Policy": "same-origin-allow-popups",
+    },
+  };
+};
+
+const formVote = async (event) => {
   try {
     const connection = createConnection();
+    const { userName, userEmail, goalId, captchaValue } = JSON.parse(
+      event.body
+    );
+    const secretKey = process.env.RECAPTCHA_SITE_KEY;
 
-    let body;
-    try {
-      // Parse the incoming event body to get the user's and goal's IDs
-      body = JSON.parse(event.body);
-    } catch (err) {
-      console.log("Failed passing the body", event.body);
-
-      // If the parsing fails, throw the error
-      throw err;
-    }
-
-    const userId = body.userId;
-    const goalId = body.goalId;
-
-    // SQL query to get the user by ID
-    const query = "SELECT * FROM users WHERE id = ?";
-
-    // Execute the query and await the result
-    const [results] = await promisify(connection.query).bind(connection)(
-      query,
-      [userId]
+    // verifying the captcha token
+    const response = await axios.post(
+      `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${captchaValue}`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
+        },
+      }
     );
 
-    // If a user with the given ID exists
-    if (results) {
-      const user = results;
+    // Add captcha success validation if needed
+    // if (!response.data.success) {
+    //   return addCorsHeaders({
+    //     statusCode: 400,
+    //     body: JSON.stringify({ message: 'Recaptcha verification failed' }),
+    //   });
+    // }
 
-      // Check if the user has already voted
-      if (user.goalVoted > 0) {
-        // If so, return an error message
-        return {
-          statusCode: 403,
-          body: JSON.stringify({ message: "User has already voted" }),
-          headers: {
-            "Access-Control-Allow-Origin":
-              process.env.ACCESS_CONTROL_ALLOW_ORIGIN,
-            "Access-Control-Allow-Headers":
-              "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
-            "Access-Control-Allow-Methods": "OPTIONS,POST",
-          },
-        };
-      } else {
-        // If the user has not voted yet, update the votes for the goal and mark the user as having voted
-        const updateVotesQuery =
-          "UPDATE goals SET votes = votes + 1 WHERE id = ?; UPDATE users SET goalVoted = ? WHERE id = ?;";
+    // tries to select email from database
+    const [users] = await connection.query(
+      "SELECT * FROM users WHERE email = ?",
+      [userEmail]
+    );
+    const user = users[0];
 
-        await promisify(connection.query).bind(connection)(updateVotesQuery, [
-          goalId,
-          goalId,
-          userId,
-        ]);
+    if (!user) {
+      // No user found with this email, creating new user
+      const [results] = await connection.query(
+        "INSERT INTO users (name, email,goalVoted) VALUES (?, ?,?);UPDATE goals SET votes = votes + 1 WHERE id = ?;",
+        [userName, userEmail, goalId, goalId]
+      );
 
-        // Return a success message
-        return {
+      if (results) {
+        return addCorsHeaders({
           statusCode: 200,
           body: JSON.stringify({
-            message: "Vote successfully submitted",
-            goalVoted: goalId,
+            message: "New user created, Vote successful!",
           }),
-          headers: {
-            "Access-Control-Allow-Origin":
-              process.env.ACCESS_CONTROL_ALLOW_ORIGIN,
-            "Access-Control-Allow-Headers":
-              "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
-            "Access-Control-Allow-Methods": "OPTIONS,POST",
-          },
-        };
+        });
+      } else {
+        return addCorsHeaders({
+          statusCode: 500,
+          body: JSON.stringify({ message: "Failed to create new user" }),
+        });
       }
     } else {
-      // If no user with the given ID exists, return an error message
-      return {
-        statusCode: 500,
-        body: JSON.stringify({ message: "Internal Server Error, went" }),
-        headers: {
-          "Access-Control-Allow-Origin":
-            process.env.ACCESS_CONTROL_ALLOW_ORIGIN,
-          "Access-Control-Allow-Headers":
-            "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
-          "Access-Control-Allow-Methods": "OPTIONS,POST",
-        },
-      };
+      if (user.goalVoted > 0) {
+        return addCorsHeaders({
+          statusCode: 403,
+          body: JSON.stringify({ message: "User has already voted" }),
+        });
+      }
     }
   } catch (err) {
-    // If an error occurs during the process, log it and return an error message
-    console.error(err);
-    return {
+    console.log(err);
+    return addCorsHeaders({
       statusCode: 500,
-      body: JSON.stringify({
-        message: "Internal Server Error, didn't go in",
-        err,
-      }),
-      headers: {
-        "Access-Control-Allow-Origin": process.env.ACCESS_CONTROL_ALLOW_ORIGIN,
-        "Access-Control-Allow-Headers":
-          "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
-        "Access-Control-Allow-Methods": "OPTIONS,POST",
-      },
-    };
+      body: JSON.stringify({ message: "Recaptcha verification server error" }),
+    });
   }
 };
 
-// Export the `vote` function
-module.exports = { vote };
+module.exports = { formVote };

@@ -167,15 +167,21 @@ footer p {
   font-size: 18px;
 
   background-color: #000000;
-  color: #fff9f9;
+  color: #ffffff;
   font-weight: bold;
-  border: none;
+  border-color: #000;
   border-radius: 4px;
   cursor: pointer;
   margin: 0 auto;
   display: block;
   transition: background-color 0.3s, transform 0.3s;
+  border: 3px solid #000; /* Adjust the border thickness here */
 }
+.vote-button:hover {
+  background-color: #201f1f;
+  transform: translateY(-2px);
+}
+
 .goal-showForm-button {
   width: 80%;
   height: 48px;
@@ -231,11 +237,6 @@ footer p {
   background: #a59e9e;
   height: 2px;
   margin: 30px 20px;
-}
-
-.vote-button:hover {
-  background-color: #514e4e;
-  transform: translateY(-2px);
 }
 
 /* ranking */
@@ -1083,6 +1084,7 @@ footer p {
 }
 /* Media queries for landscape mode */
 @media only screen and (min-device-width: 320px) and (max-device-width: 950px) and (orientation: landscape) {
+  /* nav bar */
   .nav-bar {
     height: 20px;
     width: 100%;
@@ -1110,7 +1112,9 @@ footer p {
     margin-top: -10px;
   }
   .nav-search {
+    margin-top: 5px;
     width: 40%;
+    height: 50%;
   }
   .nav-center {
     flex-direction: row;
@@ -1127,20 +1131,54 @@ footer p {
     width: 100%;
     margin-left: 100px;
   }
-
-  .goal-card {
-    height: 300px;
+  .nav-text-img img {
+    margin-top: 10px;
+    margin-left: 80px;
+    width: 200px;
   }
-  .goal-video iframe {
-    margin-left: 50px;
-    width: 80%;
-    height: 60%;
+  /* hero */
+  .hero-text-over-image {
+    font-size: 30px;
+    top: 35%;
+    left: 30%;
   }
-  .goal-title {
+  .hero-text-over-image-text1 {
+    font-size: 90px;
+    margin-bottom: 30px;
+  }
+  .hero-container img {
+    height: 100vh; /* Viewport height */
+    width: 100vw; /* Viewport width */
+    filter: brightness(30%);
+    object-fit: cover;
+    margin-bottom: 100px;
+  }
+  .hero-scroll-down {
+    left: 45%;
+    bottom: 22%;
+  }
+  .hero-scroll-text {
+    font-size: 20px;
+  }
+  /* goal card */
+  .title {
     font-size: 20px;
   }
   .goal-description {
     display: none;
+  }
+  .goal-video iframe {
+    height: 80%;
+  }
+  .goal-video {
+    filter: brightness(70%);
+    width: 100%;
+    position: relative;
+    padding-top: 56.25%;
+    margin-bottom: -30px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    overflow: hidden;
   }
 
   .ranking-goal-title {
@@ -1153,9 +1191,12 @@ footer p {
   .votesPercent {
     font-size: 10px;
   }
+  /* ranking page */
   .ranking-nav-text-img {
-    top: 0;
+    top: 10;
     position: absolute;
+    height: 20px;
+    width: 150px;
   }
   .ranking-position {
     font-size: 16px;
@@ -1166,6 +1207,21 @@ footer p {
   .ranking-goal-card {
     margin-left: 0px;
     width: 100%;
+  }
+  .ranking-goal-container {
+    width: 100%;
+    margin: 0 auto;
+    margin-bottom: 300px;
+  }
+  .ranking-goal-video iframe {
+    width: 100%;
+    height: 85%;
+  }
+  .ranking-goal-title {
+    height: 5%;
+  }
+  .ranking-title-position {
+    height: 100%;
   }
 
   .ranking-goal-card.isActive {
