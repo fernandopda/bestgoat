@@ -1,15 +1,15 @@
-const axios = require("axios");
 const createConnection = require("./db");
+const { promisify } = require("util");
 
 // Function to add CORS headers to your response
 const addCorsHeaders = (response) => {
   return {
     ...response,
     headers: {
-      "Access-Control-Allow-Headers":
-        "Content-Type,X-Amz-Date,X-Amz-Security-Token,Authorization,X-Api-Key,X-Requested-With,Accept",
       "Access-Control-Allow-Origin": "https://www.bestgoat.net",
-      "Access-Control-Allow-Methods": "OPTIONS,PUT",
+      "Access-Control-Allow-Headers":
+        "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+      "Access-Control-Allow-Methods": "OPTIONS,POST",
       "Access-Control-Allow-Credentials": "true",
       "Cross-Origin-Opener-Policy": "same-origin-allow-popups",
     },
@@ -19,57 +19,31 @@ const addCorsHeaders = (response) => {
 const formVote = async (event) => {
   try {
     const connection = createConnection();
-    const { userName, userEmail, goalId, captchaValue } = JSON.parse(
-      event.body
-    );
-    const secretKey = process.env.RECAPTCHA_SITE_KEY;
-
-    // verifying the captcha token
-    const response = await axios.post(
-      `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${captchaValue}`,
-      {},
-      {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
-        },
-      }
-    );
-
-    // Add captcha success validation if needed
-    // if (!response.data.success) {
-    //   return addCorsHeaders({
-    //     statusCode: 400,
-    //     body: JSON.stringify({ message: 'Recaptcha verification failed' }),
-    //   });
-    // }
+    const { userName, userEmail, goalId } = JSON.parse(event.body);
 
     // tries to select email from database
-    const [users] = await connection.query(
-      "SELECT * FROM users WHERE email = ?",
-      [userEmail]
-    );
-    const user = users[0];
+    const query = "SELECT * FROM users WHERE email = ?";
+    let [user] = await promisify(connection.query).bind(connection)(query, [
+      userEmail,
+    ]);
+    console.log("This is the user", [user]);
 
-    if (!user) {
+    if (!user || user.length === 0) {
       // No user found with this email, creating new user
-      const [results] = await connection.query(
-        "INSERT INTO users (name, email,goalVoted) VALUES (?, ?,?);UPDATE goals SET votes = votes + 1 WHERE id = ?;",
-        [userName, userEmail, goalId, goalId]
-      );
-
-      if (results) {
-        return addCorsHeaders({
-          statusCode: 200,
-          body: JSON.stringify({
-            message: "New user created, Vote successful!",
-          }),
-        });
-      } else {
-        return addCorsHeaders({
-          statusCode: 500,
-          body: JSON.stringify({ message: "Failed to create new user" }),
-        });
-      }
+      const createUserQuery =
+        "INSERT INTO users (name, email,goalVoted) VALUES (?, ?,?);UPDATE goals SET votes = votes + 1 WHERE id = ?;";
+      await promisify(connection.query).bind(connection)(createUserQuery, [
+        userName,
+        userEmail,
+        goalId,
+        goalId,
+      ]);
+      return addCorsHeaders({
+        statusCode: 200,
+        body: JSON.stringify({
+          message: "New user created, Vote successful!",
+        }),
+      });
     } else {
       if (user.goalVoted > 0) {
         return addCorsHeaders({
@@ -82,7 +56,7 @@ const formVote = async (event) => {
     console.log(err);
     return addCorsHeaders({
       statusCode: 500,
-      body: JSON.stringify({ message: "Recaptcha verification server error" }),
+      body: JSON.stringify({ message: "An error occurred on the server", err }),
     });
   }
 };

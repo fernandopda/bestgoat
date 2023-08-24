@@ -1,6 +1,6 @@
 /* page shows the top 10 goals voted by users */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../App.css";
 import RankingGoals from "./RankingGoals";
 import UserPickedGoal from "./UserPickedGoal";
@@ -12,6 +12,11 @@ const RankingPage = ({ goals, navbarRef, totalVotes, goalVoted }) => {
   const sortedTop10Goals = sortedGoals
     .slice(0, 10)
     .sort((a, b) => a.votes - b.votes);
+
+  useEffect(() => {
+    setActiveGoalId(sortedTop10Goals[0].id);
+  }, []);
+
   return (
     <main>
       <div className="ranking-goal-container">

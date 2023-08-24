@@ -6,7 +6,7 @@ The Goal.js component represents individual goals in the voting system. It inclu
 import React, { useState } from "react";
 import LazyLoad from "react-lazyload";
 import "../App.css";
-import soccer_ball from "./img/soccer_ball2.svg";
+
 import config from "../config";
 import { GoogleLogin } from "react-google-login";
 import Cookies from "js-cookie";
@@ -16,6 +16,7 @@ import { useEffect } from "react";
 // The Goal component represents a single goal in the application.
 // It shows details about the goal, as well as providing functionality to vote for the goal.
 function Goal({
+  setVoteMessage,
   id,
   title,
   description,
@@ -24,16 +25,18 @@ function Goal({
   setIsVoted,
   setGoalVoted,
   setScrollTop,
+  setIsLoading,
 }) {
-  // These states are used to control loading states and media loading states.
-  const [isLoading, setIsLoading] = useState(false);
+  // These states are used to controlm loading states and media loading states.
+
   const [isMediaLoaded, setIsMediaLoaded] = useState(false);
   const [isFormVisible, setIsFormVisible] = useState(false);
-  const [isFormEntriesVisible, setIsFormEntriesVisible] = useState(false);
   const [formMessage, setFormMessage] = useState("");
+  const [isFormEntriesVisible, setIsFormEntriesVisible] = useState(false);
   const [captchaValue, setCaptchaValue] = useState(null);
   const [offset, setOffset] = useState(800);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 480);
+  const voteMessageTimeOut = 3000;
 
   //??
   useEffect(() => {
@@ -54,24 +57,46 @@ function Goal({
   };
   // messaged displayed when user votges
   const voteSuccess = () => {
-    setFormMessage(
-      "Thank you for voting! You will now be redirected for the top 10 goals.."
+    setVoteMessage(
+      <>
+        <div> Thank you for casting your vote!</div>{" "}
+        <div>
+          You will now be redirected to the{" "}
+          <span className="vote-message-top10">TOP 10 GOALS</span>
+        </div>
+      </>
     );
-    setTimeout(() => {
-      setIsVoted(true);
-      setIsAuthenticated(true);
-      setScrollTop(true);
-    }, 3500);
+
+    setIsVoted(true);
+    setIsAuthenticated(true);
   };
   const alredyVoted = () => {
-    setFormMessage(
-      "This user has already voted! You will now be redirected for the top 10 goals.. "
+    setVoteMessage(
+      <>
+        <div>User has already voted! </div>
+        <div>
+          You will now be redirected to the{" "}
+          <span className="vote-message-top10">TOP 10 GOALS</span>
+        </div>
+      </>
     );
-    setTimeout(() => {
-      setIsVoted(true);
-      setIsAuthenticated(true);
-      setScrollTop(true);
-    }, 3500);
+
+    setIsVoted(true);
+    setIsAuthenticated(true);
+  };
+  const alredyVotedToday = () => {
+    setVoteMessage(
+      <>
+        <div>User has already voted today! </div>
+        <div>
+          You will now be redirected to the{" "}
+          <span className="vote-message-top10">TOP 10 GOALS</span>
+        </div>
+      </>
+    );
+
+    setIsVoted(true);
+    setIsAuthenticated(true);
   };
 
   /* validates email format after user input*/
@@ -97,21 +122,20 @@ function Goal({
     }
     /* utilizes cookies to c heck if the customer has voted in the last 7 days */
     const hasVoted = Cookies.get("hasVoted");
-    // if (hasVoted) {
-    //   setError(
-    //     "You have already voted today, I will redirected to our top 10..."
-    //   );
-    //   setTimeout(() => {
-    //     setIsAuthenticated(true);
-    //     setIsVoted(true);
-    //   }, 2000);
-    //   return;
-    // }
+    if (hasVoted) {
+      setIsLoading(true);
+      alredyVotedToday();
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 5000);
+      return;
+    }
     if (!captchaValue) {
       setFormMessage("Please complete the captcha.");
       return;
     }
     console.log("this is the captcha:", captchaValue);
+
     try {
       setIsLoading(true);
       const response = await fetch(`${config.API_URL}/formVote`, {
@@ -119,12 +143,17 @@ function Goal({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ goalId: id, userName, userEmail, captchaValue }),
+        body: JSON.stringify({
+          goalId: id,
+          userName,
+          userEmail,
+          captchaValue,
+        }),
       });
-      const data = await response.json();
+
       if (response.status === 200) {
         voteSuccess();
-        // Cookies.set("hasVoted", "true", { expires: 1 });
+        Cookies.set("hasVoted", "true", { expires: 1 });
       } else if (response.status === 403) {
         alredyVoted();
       } else {
@@ -133,7 +162,10 @@ function Goal({
     } catch (error) {
       console.error("Error voting:", error);
     } finally {
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false);
+        window.scrollTo(0, 0);
+      }, voteMessageTimeOut);
     }
   };
 
@@ -175,10 +207,21 @@ function Goal({
 
     try {
       setIsLoading(true);
-      await voteWithGoogle(tokenId, id); // passing the goal's id here
+
+      try {
+        await voteWithGoogle(tokenId, id);
+      } catch (error) {
+        console.error("Login with Google failed:", error);
+      } finally {
+        setTimeout(async () => {
+          setIsLoading(false);
+          window.scrollTo(0, 0);
+          setVoteMessage("");
+        }, voteMessageTimeOut); // 2000 milliseconds (2 seconds) delay
+      }
     } catch (error) {
-      console.error("Login with Google failed:", error);
-    } finally {
+      console.error("An unexpected error occurred:", error);
+
       setIsLoading(false);
     }
   };
@@ -189,18 +232,6 @@ function Goal({
         isMediaLoaded ? "goal-card-loaded" : "goal-card-blur"
       }`}
     >
-      {isLoading && (
-        // Loading overlay for when the voting process is ongoing
-        <div className="loading-overlay">
-          <div className="ball-container">
-            <img
-              src={soccer_ball}
-              alt="Soccer Ball"
-              className="soccer-ball-spinner"
-            />
-          </div>
-        </div>
-      )}
       <div className="goal-title">{title}</div>
       <div className="goal-description">{description}</div>
       <div className="goal-video">
