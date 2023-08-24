@@ -12,6 +12,7 @@ import { gapi } from "gapi-script";
 import axios from "axios";
 import PrivacyPolicy from "./components/PrivacyPolicy";
 import { forceCheck } from "react-lazyload";
+import soccer_ball from "./components/img/soccer_ball2.svg";
 
 /* States
 	isAdmin - handles admin status
@@ -41,6 +42,9 @@ function App() {
   const [userToken, setUserToken] = useState("");
   const [userId, setUserId] = useState();
   const [totalVotes, setTotalVotes] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [voteMessage, setVoteMessage] = useState("");
+  const [displayMessage, setDisplayMessage] = useState("");
 
   const [goalVoted, setGoalVoted] = useState(0);
   const navbarRef = useRef(null);
@@ -49,6 +53,7 @@ function App() {
   const goalListOffset = 180;
 
   // loads google API
+
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://apis.google.com/js/api.js";
@@ -63,10 +68,6 @@ function App() {
 
     fetchGoals();
   }, []);
-  // scrolls to the top of the page when a vote is received
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [scrollTop]);
 
   // counts the toal number of votes, so percentage of goals voted for each goal can be calculated in the top10
   useEffect(() => {
@@ -77,6 +78,10 @@ function App() {
     );
   }, [goals]);
 
+  // Update voting mesage
+  useEffect(() => {
+    setDisplayMessage(voteMessage);
+  }, [voteMessage]);
   // manages navBar display, according to the scroll position of the page
   useEffect(() => {
     let initialHeight = window.innerHeight;
@@ -128,9 +133,23 @@ function App() {
     setSearchTerm(newSerchTerm);
 
     if (goalListRef.current) {
-      window.scrollTo({
-        top: goalListRef.current.offsetTop - goalListOffset,
-      });
+      const defaulViewPortHeight = window.innerHeight;
+
+      const keyboardThreshold = defaulViewPortHeight * 0.4;
+
+      if (window.innerHeight < defaulViewPortHeight - keyboardThreshold) {
+        const adjustedOffset =
+          goalListRef.current.offsetTop -
+          goalListOffset -
+          0.3 * window.innerHeight;
+        window.scrollTo({
+          top: adjustedOffset,
+        });
+      } else {
+        window.scrollTo({
+          top: goalListRef.current.offsetTop - goalListOffset,
+        });
+      }
     }
   };
 
@@ -158,6 +177,20 @@ function App() {
 
   return (
     <div className="container">
+      {isLoading && (
+        <div className="loading-overlay">
+          <div className="ball-container">
+            <img
+              src={soccer_ball}
+              alt="Soccer Ball"
+              className="soccer-ball-spinner"
+            />
+          </div>
+          <div>
+            {voteMessage && <div className="vote-message">{voteMessage}</div>}
+          </div>
+        </div>
+      )}
       <main>
         <NavBar
           ref={navbarRef}
@@ -208,6 +241,8 @@ function App() {
                       setIsVoted={setIsVoted}
                       setGoalVoted={setGoalVoted}
                       setScrollTop={setScrollTop}
+                      setIsLoading={setIsLoading}
+                      setVoteMessage={setVoteMessage}
                     />
                   ))}
               </div>
