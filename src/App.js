@@ -15,25 +15,25 @@ import { forceCheck } from "react-lazyload";
 import soccer_ball from "./components/img/soccer_ball2.svg";
 
 /* States
-	isAdmin - handles admin status
-	Goals - State array containing the goal cards info
-	searchTerm - Holds content input on the search bar
-	isAuthenticated - Golds authentication state of the user
-	isVoted - checks if user already voted
-	scrollTop - is set to true if conditions are met and the page scrolls to its top
-	userToken - Hols google token
-	userId - Hols user ID
-	totalVotes - holds the number of total votes
-	goalVoted - holds ID of the goal currently voted
-	navBarRef - holds nav bar reference
-	goalListRef - holds goal list Ref
+  isAdmin - handles admin status
+  Goals - State array containing the goal cards info
+  searchTerm - Holds content input on the search bar
+  isAuthenticated - Golds authentication state of the user
+  isVoted - checks if user already voted
+  scrollTop - is set to true if conditions are met and the page scrolls to its top
+  userToken - Hols google token
+  userId - Hols user ID
+  totalVotes - holds the number of total votes
+  goalVoted - holds ID of the goal currently voted
+  navBarRef - holds nav bar reference
+  goalListRef - holds goal list Ref
 
   */
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [goals, setGoals] = useState([]);
 
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState("3");
   const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
