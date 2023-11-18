@@ -2,10 +2,12 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
+
 html {
   scroll-behavior: smooth;
 }
@@ -37,29 +39,36 @@ footer p {
 .displaynone {
   opacity: 0;
 }
-.container {
+
+.wrap-container {
   margin: 0 auto;
 }
+
 .goal-container {
   background-color: #ffffff;
 }
+
 /* Goal list*/
 @keyframes slide-up {
   0% {
     transform: translateY(0px);
     opacity: 0;
   }
+
   100% {
     transform: translateY(-70px);
     opacity: 1;
   }
 }
+
 .goal-card-blur {
   opacity: 0;
 }
+
 .goal-card-loaded {
   animation: slide-up 0.6s ease-out forwards;
 }
+
 .goal-list {
   margin-top: 100px;
   display: flex;
@@ -79,18 +88,22 @@ footer p {
   max-width: 800px;
   width: 100%;
 }
+
 .goal-title {
-  font-size: 30px; /* Increase the font size for better readability */
+  font-size: 30px;
+  /* Increase the font size for better readability */
   font-weight: bold;
   line-height: 1.5;
   margin-bottom: 10px;
-  text-align: center; /* Center align the title */
+  text-align: center;
+  /* Center align the title */
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
 .goal-description {
-  font-size: 22px; /* Increase the font size for better readability */
+  font-size: 22px;
+  /* Increase the font size for better readability */
   margin-bottom: 16px;
   text-align: center;
   line-height: 1.5;
@@ -116,6 +129,7 @@ footer p {
   width: 100%;
   height: 100%;
 }
+
 .goal-vote-form {
   filter: brightness(70%);
   margin-top: -58px;
@@ -127,6 +141,7 @@ footer p {
   color: #000;
   padding: 20px;
 }
+
 .goal-form-message {
   margin-top: 20px;
   align-items: center;
@@ -137,11 +152,14 @@ footer p {
 .goal-vote-form.visible {
   max-height: 600px;
 }
+
 .goal-input-class::placeholder {
   color: #b0b0b0;
   font-size: 17px;
-  font-family: Arial, sans-serif; /* or any other font you prefer */
+  font-family: Arial, sans-serif;
+  /* or any other font you prefer */
 }
+
 .goal-input-class {
   background-color: #eee5e5c9;
   color: #000;
@@ -175,8 +193,10 @@ footer p {
   margin: 0 auto;
   display: block;
   transition: background-color 0.3s, transform 0.3s;
-  border: 3px solid #000; /* Adjust the border thickness here */
+  border: 3px solid #000;
+  /* Adjust the border thickness here */
 }
+
 .vote-button:hover {
   background-color: #201f1f;
   transform: translateY(-2px);
@@ -197,6 +217,7 @@ footer p {
   display: block;
   transition: background-color 0.3s, transform 0.3s;
 }
+
 .vote-button-red {
   width: 80%;
   height: 48px;
@@ -213,6 +234,7 @@ footer p {
   display: block;
   transition: background-color 0.3s, transform 0.3s;
 }
+
 .goal-vote-google-button {
   width: 35%;
 
@@ -220,6 +242,7 @@ footer p {
   color: #ffffff !important;
   background-color: #000000 !important;
 }
+
 .goal-divider {
   display: flex;
   align-items: center;
@@ -268,6 +291,7 @@ footer p {
   width: 100%;
   border: 1px solid #dddddd;
 }
+
 .ranking-number-position {
   font-size: 20px;
 }
@@ -476,23 +500,31 @@ footer p {
   z-index: 9999;
   /* Add styles for the loading spinner or progress bar */
 }
-.soccer-ball-spinner {
-  width: 50px; /* Adjust the size as needed */
-  height: 50px; /* Adjust the size as needed */
 
-  animation: spin 1s linear infinite; /* Apply the spinning animation */
+.soccer-ball-spinner {
+  width: 50px;
+  /* Adjust the size as needed */
+  height: 50px;
+  /* Adjust the size as needed */
+
+  animation: spin 1s linear infinite;
+  /* Apply the spinning animation */
 }
 
 .ball-container {
   margin-top: 350px;
-  width: 50px; /* Adjust the size as needed */
-  height: 50px; /* Adjust the size as needed */
+  width: 50px;
+  /* Adjust the size as needed */
+  height: 50px;
+  /* Adjust the size as needed */
   overflow: hidden;
   border-radius: 60%;
 }
+
 .vote-message-top10 {
   color: red;
 }
+
 .vote-message {
   font-size: 20px;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
@@ -510,16 +542,20 @@ footer p {
 }
 
 @keyframes dots {
+
   0%,
   20% {
     content: ".";
   }
+
   40% {
     content: "..";
   }
+
   60% {
     content: "...";
   }
+
   80%,
   100% {
     content: "";
@@ -530,6 +566,7 @@ footer p {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -589,10 +626,12 @@ footer p {
   flex-direction: column;
   width: 100%;
 }
+
 .social-login-text {
   margin-bottom: 30px;
   margin-top: 30px;
 }
+
 .googleLogin,
 .facebookLogin {
   display: flex;
@@ -639,7 +678,8 @@ footer p {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: -30px; /* Adjust this value as needed */
+  margin-top: -30px;
+  /* Adjust this value as needed */
 }
 
 .nav-top-goals-msg {
@@ -647,6 +687,7 @@ footer p {
   font-size: 14px;
   margin-left: 16px;
 }
+
 .nav-login-logo {
   margin-left: 20px;
   margin-right: 5px;
@@ -654,6 +695,7 @@ footer p {
   height: 20px;
   display: flex;
 }
+
 .nav-link {
   color: white;
   text-decoration: none;
@@ -666,12 +708,14 @@ footer p {
 .nav-link:hover {
   color: red;
 }
+
 .nav-search {
   display: flex;
   position: relative;
   width: 60%;
   margin-left: 200px;
 }
+
 .nav-search-responsive {
   display: none;
 }
@@ -683,26 +727,30 @@ footer p {
   border-radius: 4px;
   border: 1px solid #ccc;
 }
+
 /* Hero */
 @keyframes bounce {
+
   0%,
   100% {
     transform: translateY(0px);
     opacity: 0;
   }
+
   50% {
     transform: translateY(60px);
     opacity: 1;
   }
 }
-.hero-container {
-  margin-bottom: 100pxhero-text-over-image-text3;
-}
+
+.hero-container {}
+
 .hero-container img {
-  height: 100vh;
+  height: 120vh;
   width: 100%;
   filter: brightness(30%);
 }
+
 .hero-text-over-image {
   position: absolute;
   top: 40%;
@@ -713,15 +761,18 @@ footer p {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
+
 .hero-text-over-image-text1 {
   font-size: 100px;
   margin-bottom: 30px;
 }
-.hero-text-over-image-text2 {
-}
+
+.hero-text-over-image-text2 {}
+
 .hero-text-over-image-text3 {
   color: red;
 }
+
 .hero-scroll-down {
   display: flex;
   align-items: center;
@@ -731,11 +782,13 @@ footer p {
   color: white;
   animation: bounce 3s cubic-bezier(0.25, 1, 0.5, 1) infinite;
 }
+
 .hero-scroll-text {
   color: white;
   font-size: 25px;
   font-weight: bold;
 }
+
 .hero-arrows {
   font-size: 20px;
   font-weight: bold;
@@ -743,8 +796,53 @@ footer p {
   text-align: center;
   transform: rotate(90deg) scaleY(1.5);
 }
-.hero-arrow2 {
+
+.hero-arrow2 {}
+
+
+/* Intro */
+.intro-container {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  height: 1000px;
+  background-color: white;
 }
+
+.intro-boxes {
+  margin-top: -50px;
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  gap: 35px;
+  justify-content: center;
+  left: 50%;
+  transform: translate(-50%);
+}
+
+.intro-box {
+
+  width: 320px;
+  height: 320px;
+  border: solid 1px;
+  background-color: #fffcfc;
+  border-radius: 15px 0px 15px 0px;
+}
+
+.intro-balls-image {
+  margin-top: 300px;
+  margin-right: 300px;
+  width: 600px;
+  height: 600px;
+}
+
+.intro-balls-image img {
+  max-width: 100%;
+  height: auto;
+  border: none;
+
+}
+
 /* Admin page */
 .admin-page-container {
   display: flex;
@@ -783,6 +881,7 @@ footer p {
 .admin-page-submit-button:hover {
   background-color: #45a049;
 }
+
 /* privacy policy*/
 .privacy-policy-modal {
   display: flex;
@@ -833,6 +932,7 @@ footer p {
 .privacy-policy-modal button:hover {
   background-color: #333;
 }
+
 .privacy-policy-link {
   margin-bottom: 15px;
   text-decoration: underline;
@@ -851,6 +951,7 @@ footer p {
     font-size: 12px;
     padding-left: 30px;
   }
+
   .ranking-goal-description {
     display: none;
   }
@@ -861,11 +962,13 @@ footer p {
     width: 18px;
     height: 60%;
   }
+
   .ranking-goal-card {
     margin-bottom: 0px;
     margin-left: 0px;
     width: 100%;
   }
+
   .ranking-video-iframe {
     position: absolute;
     width: 100%;
@@ -874,11 +977,13 @@ footer p {
     margin-left: -10px;
     margin-top: 0px;
   }
+
   .ranking-goal-card.isActive {
     position: relative;
     box-shadow: none;
     height: 300px;
   }
+
   .percentage-container {
     display: none;
     position: relative;
@@ -890,13 +995,16 @@ footer p {
     background-color: #eee;
 
     border-radius: 4px;
-    bottom: 0; /* Keep the element at the bottom */
+    bottom: 0;
+    /* Keep the element at the bottom */
   }
+
   .ranking-goal-card.isActive .votesPercent {
     font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
     font-size: 14px;
     color: #000000;
   }
+
   .ranking-goal-card.isActive .percentage-container {
     display: inline-block;
     height: 20px;
@@ -928,9 +1036,11 @@ footer p {
     font-size: 30px;
     text-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
   }
+
   .goal-description {
     display: none;
   }
+
   .goal-card {
     filter: brightness(100%);
     background-color: rgb(255, 255, 255);
@@ -944,14 +1054,17 @@ footer p {
   .goal-title {
     font-size: 15px;
   }
+
   .goal-vote-google-button {
     width: 90%;
   }
+
   .goal-input-class {
     background-color: #f0efef;
     padding: 18px;
     width: 100%;
   }
+
   .goal-input-class::placeholder {
     font-size: 22px;
     color: #cac8c8;
@@ -960,11 +1073,13 @@ footer p {
   .vote-message {
     font-size: 22px;
   }
+
   .vote-message div {
     display: flex;
     flex-direction: column;
     align-items: center;
   }
+
   .ball-container {
     margin-top: 200px;
   }
@@ -972,62 +1087,77 @@ footer p {
   .vote-button {
     margin-top: -40px;
   }
+
   .vote-button-red {
     height: 35px;
   }
+
   .votesPercent {
     font-size: 12px;
   }
+
   .goal-form-message {
     font-size: 10px;
   }
 }
+
 /* goalCard */
 
 @media only screen and (max-width: 480px) {
   body {
     background-color: #ffffff;
   }
+
   .nav-title1,
   .ranking-nav-title1 {
     margin-left: 70px;
   }
+
   .nav-title1 {
     font-size: 13px;
   }
+
   .nav-title2 {
     font-size: 18px;
   }
+
   .nav-center {
     flex-direction: row;
   }
+
   .nav-login-logo,
   .ranking-nav-login-logo {
     margin-left: 2px;
     height: 16px;
   }
+
   .nav-link {
     font-size: 15px;
   }
+
   .nav-text-img {
     margin-top: 10px;
     margin-right: 140px;
     width: 230px;
   }
+
   .nav-top-goals-msg {
     margin: 10px;
     font-size: 12px;
     margin-left: 8px;
   }
+
   .nav-search {
     display: none;
   }
+
   .nav-search-responsive {
     display: flex;
     justify-content: center;
 
     margin-bottom: 10px;
   }
+
   .nav-search-responsive input {
     width: 80%;
     height: 20px;
@@ -1039,6 +1169,7 @@ footer p {
     margin-top: 5px;
     font-size: 22px;
   }
+
   .nav-bar {
     height: 80px;
     padding-top: 10px;
@@ -1054,14 +1185,17 @@ footer p {
     font-size: 12px;
     margin-right: 0px;
   }
+
   .ranking-nav-title2 {
     font-size: 20px;
     margin-right: 10px;
     margin-left: -10px;
   }
+
   .ranking-nav-top10 {
     display: none;
   }
+
   .ranking-nav-top10-responsive {
     display: flex;
     justify-content: center;
@@ -1071,71 +1205,89 @@ footer p {
     font-size: 35px;
     font-weight: 550;
   }
+
   .ranking-goal-container label {
     margin-left: 0px;
     width: 100%;
   }
+
   .ranking-goal-container {
     width: 100%;
   }
+
   .ranking-container {
     padding: 0px;
     width: 92%;
     margin-bottom: 500px;
     margin-left: 0px;
   }
+
   .goal-video {
     filter: brightness(110%);
     height: 0;
   }
+
   .goal-list {
     margin-top: 50px;
     gap: 34px;
     background-color: #ffffff;
   }
+
   .goal-vote-form {
     filter: brightness(100%);
     margin-top: -58px;
     background-color: #ffffff;
   }
+
   .login-modal {
     margin-top: 100px;
     width: 60%;
   }
+
   .privacy-policy-modal {
     font-size: 11px;
   }
+
   /* Hero */
 
   .hero-container img {
-    height: 100vh; /* Viewport height */
-    width: 100vw; /* Viewport width */
+    height: 100vh;
+    /* Viewport height */
+    width: 100vw;
+    /* Viewport width */
     filter: brightness(30%);
     object-fit: cover;
-    margin-bottom: 100px;
+
   }
+
   .hero-text-over-image {
     font-size: 30px;
     top: 50%;
     left: 40%;
   }
+
   .hero-text-over-image-text1 {
     font-size: 60px;
     margin-bottom: 30px;
   }
+
   .hero-scroll-down {
     left: 28%;
     bottom: 12%;
   }
+
   .hero-scroll-text {
     font-size: 20px;
   }
+
   .hero-arrows {
     font-size: 14px;
   }
 }
+
 /* Media queries for landscape mode */
 @media only screen and (min-device-width: 320px) and (max-device-width: 950px) and (orientation: landscape) {
+
   /* nav bar */
   .nav-bar {
     height: 20px;
@@ -1150,78 +1302,98 @@ footer p {
     font-size: 12px;
     width: 120px;
   }
+
   .nav-title2,
   .ranking-nav-title2 {
     margin-top: 0px;
     margin-left: 0px;
   }
+
   .nav-top-goals-msg {
     margin: 10px;
     font-size: 20px;
     margin-left: 0px;
   }
+
   .ranking-nav-top10 {
     margin-top: -10px;
   }
+
   .nav-search {
     margin-top: 5px;
     width: 40%;
     height: 50%;
   }
+
   .nav-center {
     flex-direction: row;
   }
+
   .nav-login-logo,
   .ranking-nav-login-logo {
     height: 15px;
   }
+
   .nav-link,
   .ranking-nav-link {
     font-size: 12px;
   }
+
   .nav-search {
     width: 100%;
     margin-left: 100px;
   }
+
   .nav-text-img img {
     margin-top: 10px;
     margin-left: 80px;
     width: 200px;
   }
+
   /* hero */
   .hero-text-over-image {
     font-size: 30px;
     top: 35%;
     left: 30%;
   }
+
   .hero-text-over-image-text1 {
     font-size: 90px;
     margin-bottom: 30px;
   }
+
   .hero-container img {
-    height: 100vh; /* Viewport height */
-    width: 100vw; /* Viewport width */
+    height: 100vh;
+    /* Viewport height */
+    width: 100vw;
+    /* Viewport width */
     filter: brightness(30%);
     object-fit: cover;
     margin-bottom: 100px;
   }
+
   .hero-scroll-down {
     left: 45%;
     bottom: 22%;
   }
+
   .hero-scroll-text {
     font-size: 20px;
   }
+
   /* goal card */
   .title {
     font-size: 20px;
   }
+
   .goal-description {
     display: none;
   }
+
   .goal-video iframe {
     height: 80%;
   }
+
   .goal-video {
     filter: brightness(70%);
     width: 100%;
@@ -1241,12 +1413,15 @@ footer p {
     font-size: 1em;
     padding-left: 30px;
   }
+
   .goal-video-iframe {
     height: 220px;
   }
+
   .votesPercent {
     font-size: 10px;
   }
+
   /* ranking page */
   .ranking-nav-text-img {
     top: 10;
@@ -1254,28 +1429,34 @@ footer p {
     height: 20px;
     width: 150px;
   }
+
   .ranking-position {
     font-size: 16px;
     padding: 8px;
     width: 18px;
     height: 60%;
   }
+
   .ranking-goal-card {
     margin-left: 0px;
     width: 100%;
   }
+
   .ranking-goal-container {
     width: 100%;
     margin: 0 auto;
     margin-bottom: 300px;
   }
+
   .ranking-goal-video iframe {
     width: 100%;
     height: 85%;
   }
+
   .ranking-goal-title {
     height: 5%;
   }
+
   .ranking-title-position {
     height: 100%;
   }
@@ -1285,6 +1466,7 @@ footer p {
     box-shadow: none;
     height: 320px;
   }
+
   .ranking-goal-card.isActive .ranking-goal-title {
     font-size: 10px;
     margin-bottom: 15px;
@@ -1295,20 +1477,24 @@ footer p {
     text-align: center;
     color: #ffffff;
   }
+
   .ranking-goal-card.isActive .percentage-container {
     display: inline-block;
     height: 25px;
     width: 400px;
     margin-left: 40px;
   }
+
   .ranking-goal-card.isActive .votesPercent {
     font-size: 20px;
   }
+
   .ranking-container {
     width: 100%;
     margin-bottom: 500px;
     margin-left: 0px;
   }
+
   .ranking-title-position {
     margin-right: 30px;
     margin-bottom: 15px;
@@ -1331,13 +1517,16 @@ footer p {
     margin-left: 0px;
     width: 100%;
   }
+
   .ranking-nav-text-img {
     margin-top: 10px;
   }
+
   .login-modal {
     width: 50%;
   }
 }
+
 .privacy-policy-modal {
   margin-top: 5px;
   font-size: 8px;
@@ -1351,25 +1540,31 @@ footer p {
     font-size: 12px;
     margin-left: 12px;
   }
+
   .ranking-goal-title {
     font-size: 1.05em;
     padding-left: 35px;
   }
+
   .ranking-goal-description {
     opacity: 0;
   }
+
   .goal-video-iframe {
     height: 300px;
   }
+
   .votesPercent {
     font-size: 12px;
   }
+
   .ranking-position {
     font-size: 18px;
     padding: 10px;
     width: 20px;
     height: 65%;
   }
+
   .nav-bar {
     height: 100px;
   }
@@ -1379,21 +1574,26 @@ footer p {
 
 /* Media queries for medium-sized screens */
 @media only screen and (min-width: 481px) and (max-width: 768px) {
+
   .nav-title1,
   .ranking-nav-title1 {
     margin-left: 32px;
   }
+
   .nav-search {
     width: 0%;
   }
+
   .nav-login-logo,
   .ranking-nav-login-logo {
     height: 18px;
   }
+
   .nav-link,
   .ranking-nav-link {
     font-size: 13px;
   }
+
   .nav-top-goals-msg {
     margin: 15px;
     font-size: 13px;

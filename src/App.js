@@ -2,15 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
 import Goal from "./components/Goal";
 import Hero from "./components/Hero";
-import LoginPopup from "./components/LoginPopup";
 import RankingPage from "./components/RankingPage";
 import NavBar from "./components/NavBar";
 import AdminPage from "./components/AdminPage";
+import Footer from "./components/Footer";
+import Intro from "./components/Intro"
 import config from "./config";
-import bestgoatlogo from "./components/img/bestGoat.png";
 import { gapi } from "gapi-script";
 import axios from "axios";
-import PrivacyPolicy from "./components/PrivacyPolicy";
 import { forceCheck } from "react-lazyload";
 import soccer_ball from "./components/img/soccer_ball2.svg";
 
@@ -33,8 +32,7 @@ function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [goals, setGoals] = useState([]);
 
-  const [searchTerm, setSearchTerm] = useState("3");
-  const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isVoted, setIsVoted] = useState(false);
@@ -155,28 +153,18 @@ function App() {
 
   const handleLoginSuccess = () => {
     setIsAuthenticated(true);
-    setIsLoginPopupOpen(false);
   };
 
-  const openLoginPopup = () => {
-    setIsLoginPopupOpen(true);
-  };
-  const closeLoginPopup = () => {
-    setIsLoginPopupOpen(false);
-  };
   const handleLogout = () => {
     setIsAuthenticated(false);
   };
 
-  const handleVote = () => {
-    setIsVoted = false;
-  };
   const goBack = () => {
     window.history.back();
   };
 
   return (
-    <div className="container">
+    <div className="wrap-container">
       {isLoading && (
         <div className="loading-overlay">
           <div className="ball-container">
@@ -195,7 +183,6 @@ function App() {
         <NavBar
           ref={navbarRef}
           isAuthenticated={isAuthenticated}
-          openLogin={openLoginPopup}
           onLogout={handleLogout}
           searchTerm={searchTerm}
           setSearchTerm={scrollSearchInput}
@@ -217,8 +204,10 @@ function App() {
           </>
         ) : (
           <>
+            <Hero />
+            <Intro />
             <div className="goal-container">
-              <Hero />
+
               <div ref={goalListRef} className="goal-list">
                 {goals
                   .filter((goal) =>
@@ -230,10 +219,8 @@ function App() {
                     <Goal
                       key={goal.id}
                       {...goal}
-                      openLoginPopup={openLoginPopup}
                       setIsAuthenticated={setIsAuthenticated}
                       setIsVoded={setIsVoted}
-                      token={userToken}
                       userId={userId}
                       onLoginSuccess={handleLoginSuccess}
                       setUserId={setUserId}
@@ -249,25 +236,8 @@ function App() {
             </div>
           </>
         )}
-        <LoginPopup
-          isOpen={isLoginPopupOpen}
-          closeLoginPopup={closeLoginPopup}
-          onLoginSuccess={handleLoginSuccess}
-          setGoalVoted={setGoalVoted}
-          setIsVoted={setIsVoted}
-          setIsAdmin={setIsAdmin}
-          setUserToken={setUserToken}
-          setUserId={setUserId}
-        />
       </main>
-
-      <footer className="footer">
-        <div className="landing-page-logo">
-          <img src={bestgoatlogo} alt="Best Goals Of All Time logo" />
-        </div>
-        <PrivacyPolicy />
-        <p>&copy; 2023 BestGOAT. All rights reserved.</p>
-      </footer>
+      <Footer />
     </div>
   );
 }
