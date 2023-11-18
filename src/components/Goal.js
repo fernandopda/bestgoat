@@ -228,9 +228,8 @@ function Goal({
 
   return (
     <div
-      className={`goal-card ${
-        isMediaLoaded ? "goal-card-loaded" : "goal-card-blur"
-      }`}
+      className={`goal-card ${isMediaLoaded ? "goal-card-loaded" : "goal-card-blur"
+        }`}
     >
       <div className="goal-title">{title}</div>
       <div className="goal-description">{description}</div>
@@ -242,7 +241,7 @@ function Goal({
             title={title}
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen
+            allowFullScreen
           />
         </LazyLoad>
       </div>

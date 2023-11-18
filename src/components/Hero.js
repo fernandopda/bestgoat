@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import soccerCrew from "./img/soccerCrew.avif";
-function Hero({}) {
+function Hero({ }) {
   return (
     <div className="hero-container">
       <img src={soccerCrew} alt="SoccerCreW" className="hero-image"></img>
@@ -13,11 +13,11 @@ function Hero({}) {
           Of All Time
         </div>
       </div>
-      <div class="hero-scroll-down">
+      <div className="hero-scroll-down">
         <div className="hero-scroll-text">Scroll Down</div>
         <div className="hero-arrows">
-          <span class="hero-arrow1">&gt;</span>
-          <span class="hero-arrow2">&gt;</span>
+          <span className="hero-arrow1">&gt;</span>
+          <span className="hero-arrow2">&gt;</span>
         </div>
       </div>
     </div>
