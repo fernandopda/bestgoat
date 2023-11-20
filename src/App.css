@@ -822,7 +822,7 @@ footer p {
 
 .intro-box {
 
-  width: 320px;
+  width: 360px;
   height: 320px;
   border: solid 1px;
   background-color: #fffcfc;
@@ -841,6 +841,12 @@ footer p {
   height: auto;
   border: none;
 
+}
+
+.intro-icons {
+  fill: #eb0a0a;
+  width: 100px;
+  height: 100px;
 }
 
 /* Admin page */
