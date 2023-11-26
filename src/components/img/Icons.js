@@ -17,7 +17,8 @@ export function IconSoccer(props) {
 export function IconTv() {
     return (
         <svg
-            className="intro-icons"
+            className="intro-icons-iconTv"
+            fill="white"
             stroke="currentColor"
             strokeLinecap="round"
             strokeLinejoin="round"
