@@ -4,6 +4,8 @@ import React, { forwardRef } from "react";
 import "../App.css";
 import logo from "./img/login.png";
 import navText from "./img/navBarText.png";
+import { IconSearch } from "./img/Icons";
+
 
 const NavBar = forwardRef(
   (
@@ -14,11 +16,13 @@ const NavBar = forwardRef(
       searchTerm,
       setSearchTerm,
       isVoted,
+      setSearchActive
     },
     ref
   ) => {
     //  sets value for searchTeam on searchbar
     const onSearchChange = (e) => {
+
       setSearchTerm(e.target.value);
     };
     return (
@@ -68,15 +72,19 @@ const NavBar = forwardRef(
                 <img src={navText} alt="Navigation Text" />
               </div>
               <div className="nav-search">
+                <IconSearch />
                 <input
                   type="text"
                   placeholder="Search for a goal.."
                   value={searchTerm}
                   onChange={onSearchChange}
+                  onFocus={() => setSearchActive(true)}
+                  onBlur={() => setSearchActive(false)}
                 />
               </div>
             </div>
             <div className="nav-search-responsive">
+
               <input
                 type="text"
                 placeholder="Search for a goal.."
