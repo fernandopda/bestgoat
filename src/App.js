@@ -43,6 +43,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [voteMessage, setVoteMessage] = useState("");
   const [displayMessage, setDisplayMessage] = useState("");
+  const [isSearchActive, setSearchActive] = useState(false);
 
   const [goalVoted, setGoalVoted] = useState(0);
   const navbarRef = useRef(null);
@@ -165,6 +166,7 @@ function App() {
 
   return (
     <div className="wrap-container">
+
       {isLoading && (
         <div className="loading-overlay">
           <div className="ball-container">
@@ -179,7 +181,9 @@ function App() {
           </div>
         </div>
       )}
+
       <main>
+        <div className={isSearchActive ? "nav-search-overlay active" : "nav-search-overlay"}></div>
         <NavBar
           ref={navbarRef}
           isAuthenticated={isAuthenticated}
@@ -187,6 +191,7 @@ function App() {
           searchTerm={searchTerm}
           setSearchTerm={scrollSearchInput}
           isVoted={isVoted}
+          setSearchActive={setSearchActive}
         />
         {isAuthenticated && isVoted ? (
           <>
@@ -211,9 +216,7 @@ function App() {
               <div ref={goalListRef} className="goal-list">
                 {goals
                   .filter((goal) =>
-                    goal.title
-                      .toLocaleLowerCase()
-                      .includes(searchTerm.toLocaleLowerCase())
+                    searchTerm.length < 3 || goal.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())
                   )
                   .map((goal) => (
                     <Goal
@@ -236,8 +239,12 @@ function App() {
             </div>
           </>
         )}
+        <Footer />
+
+
       </main>
-      <Footer />
+
+
     </div>
   );
 }
