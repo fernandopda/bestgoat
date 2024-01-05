@@ -72,10 +72,31 @@ footer p {
   background-color: #ffffff;
 }
 
+.goal-searching {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 500px;
+  width: 500px;
+}
+
+.goal-searching-soccer-ball-spinner {
+  width: 150px;
+  /* Adjust the size as needed */
+  height: 150px;
+  /* Adjust the size as needed */
+
+  animation: spin 1.5s linear infinite;
+  /* Apply the spinning animation */
+}
+
+.goal-searching-icon circle {
+  fill: #201f1f;
+}
+
 .goal-list {
   width: 60%;
-  background-color: rgb(255, 255, 255);
-  margin-top: 0px;
+  background-color: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -85,7 +106,7 @@ footer p {
 .goal-card {
   filter: brightness(160%);
   color: rgb(13, 13, 13);
-  background-color: rgb(248, 240, 240);
+  background-color: #fff;
   padding: 20px;
   border-radius: 15px;
   margin-top: 80px;
@@ -849,10 +870,10 @@ footer p {
 /* Intro */
 .intro-container {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   width: 100%;
   height: 1000px;
-  background-color: #ffffff
+  background-color: #ffffff;
 }
 
 .intro-boxes {
@@ -904,17 +925,15 @@ footer p {
 }
 
 .intro-balls-image {
-  margin-top: 300px;
-  margin-right: 300px;
-  width: 600px;
-  height: 600px;
+  margin-top: 10%;
+  width: 100%;
+  height: 100%;
 }
 
 .intro-balls-image img {
-  max-width: 100%;
-  height: auto;
+  height: 70%;
+  width: 100%;
   border: none;
-
 }
 
 .intro-icons {
@@ -1136,7 +1155,7 @@ footer p {
     margin-top: 100px;
     border-radius: 0px;
     width: 100%;
-    box-shadow: none;
+    box-shadow: f none;
   }
 
   .goal-title {
@@ -1320,6 +1339,8 @@ footer p {
     gap: 34px;
     background-color: #ffffff;
   }
+
+
 
   .goal-vote-form {
     filter: brightness(100%);
