@@ -1,4 +1,4 @@
-import introSoccerBalls from "./img/dalle_bestgoat.png";
+import introSoccerBalls from "./img/dalle-img4.png";
 import { IconSoccer, IconTv, IconVote } from "./img/Icons";
 
 function Intro({ }) {

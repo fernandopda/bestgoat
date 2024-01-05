@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
+import { IconLoading } from "./components/img/Icons";
 import Goal from "./components/Goal";
 import Hero from "./components/Hero";
 import RankingPage from "./components/RankingPage";
@@ -26,7 +27,9 @@ import soccer_ball from "./components/img/soccer_ball2.svg";
   goalVoted - holds ID of the goal currently voted
   navBarRef - holds nav bar reference
   goalListRef - holds goal list Ref
-
+  searchActive - cheks if search input is focused
+  OverlayActive- it handles overlay display when user is searching goals
+  goalLoading - it shows loading feature when goal is being loaded after search
   */
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -44,6 +47,8 @@ function App() {
   const [voteMessage, setVoteMessage] = useState("");
   const [displayMessage, setDisplayMessage] = useState("");
   const [isSearchActive, setSearchActive] = useState(false);
+  const [isOverlayActive, setIsOverlayActive] = useState(false);
+  const [isGoalLoading, setIsGoalLoading] = useState(false);
 
   const [goalVoted, setGoalVoted] = useState(0);
   const navbarRef = useRef(null);
@@ -54,16 +59,16 @@ function App() {
   // loads google API
 
   useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://apis.google.com/js/api.js";
-    script.onload = () => {
-      gapi.load("auth2", () => {
-        gapi.auth2.init({
-          client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-        });
-      });
-    };
-    document.body.appendChild(script);
+    // const script = document.createElement("script");
+    // script.src = "https://apis.google.com/js/api.js";
+    // script.onload = () => {
+    //   gapi.load("auth2", () => {
+    //     gapi.auth2.init({
+    //       client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+    //     });
+    //   });
+    // };
+    // document.body.appendChild(script);
 
     fetchGoals();
   }, []);
@@ -81,26 +86,28 @@ function App() {
   useEffect(() => {
     setDisplayMessage(voteMessage);
   }, [voteMessage]);
-  // manages navBar display, according to the scroll position of the page
+  // Handles navBar display, according to the scroll position of the page
   useEffect(() => {
     let initialHeight = window.innerHeight;
     const handleResize = () => {
       initialHeight = window.innerHeight;
     };
 
+
     const handleHeroNavScroll = () => {
       if (hasScrolled) {
         return;
       }
+      if (goalListRef.current) {
+        const goalListPos = goalListRef.current.offsetTop;
+        const scrollPos = window.scrollY;
 
-      const goalListPos = goalListRef.current.offsetTop;
-      const scrollPos = window.scrollY;
-
-      if (scrollPos + goalListOffset >= goalListPos) {
-        navbarRef.current.style.display = "flex";
-        hasScrolled = true;
-      } else {
-        navbarRef.current.style.display = "none";
+        if (scrollPos + goalListOffset >= goalListPos) {
+          navbarRef.current.style.display = "flex";
+          hasScrolled = true;
+        } else {
+          navbarRef.current.style.display = "none";
+        }
       }
     };
 
@@ -117,7 +124,25 @@ function App() {
   useEffect(() => {
     forceCheck();
   }, [searchTerm]);
+
+  //Hangle search overlay display
+  useEffect(() => {
+    displayOverlay();
+  }, [isSearchActive, searchTerm]);
+
+  //Handles goal loading feature after search
+  useEffect(() => {
+    if (!isOverlayActive) {
+      setIsGoalLoading(true);
+      const timer = setTimeout(() => {
+        setIsGoalLoading(false)
+      }, 1500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isOverlayActive]);
   // fetch list of goals from database
+
   const fetchGoals = async () => {
     try {
       const response = await axios.get(`${config.API_URL}/goals`);
@@ -152,6 +177,10 @@ function App() {
     }
   };
 
+  const displayOverlay = () => {
+    setIsOverlayActive(isSearchActive && searchTerm.length < 3);
+  };
+
   const handleLoginSuccess = () => {
     setIsAuthenticated(true);
   };
@@ -183,7 +212,7 @@ function App() {
       )}
 
       <main>
-        <div className={isSearchActive ? "nav-search-overlay active" : "nav-search-overlay"}></div>
+        <div className={isOverlayActive ? "nav-search-overlay active" : "nav-search-overlay"}></div>
         <NavBar
           ref={navbarRef}
           isAuthenticated={isAuthenticated}
@@ -212,30 +241,37 @@ function App() {
             <Hero />
             <Intro />
             <div className="goal-container">
+              {isGoalLoading ? (<div className="goal-searching">  <img
+                src={soccer_ball}
+                alt="Soccer Ball"
+                className="goal-searching-soccer-ball-spinner"
+              /></div>
+              ) : (
+                <div ref={goalListRef} className="goal-list">
+                  {goals
+                    .filter((goal) =>
+                      searchTerm.length < 3 || goal.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())
+                    )
+                    .map((goal) => (
+                      <Goal
+                        key={goal.id}
+                        {...goal}
+                        setIsAuthenticated={setIsAuthenticated}
+                        setIsVoded={setIsVoted}
+                        userId={userId}
+                        onLoginSuccess={handleLoginSuccess}
+                        setUserId={setUserId}
+                        setIsAdmin={setIsAdmin}
+                        setIsVoted={setIsVoted}
+                        setGoalVoted={setGoalVoted}
+                        setScrollTop={setScrollTop}
+                        setIsLoading={setIsLoading}
+                        setVoteMessage={setVoteMessage}
+                      />
+                    ))}
+                </div>)
+              }
 
-              <div ref={goalListRef} className="goal-list">
-                {goals
-                  .filter((goal) =>
-                    searchTerm.length < 3 || goal.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())
-                  )
-                  .map((goal) => (
-                    <Goal
-                      key={goal.id}
-                      {...goal}
-                      setIsAuthenticated={setIsAuthenticated}
-                      setIsVoded={setIsVoted}
-                      userId={userId}
-                      onLoginSuccess={handleLoginSuccess}
-                      setUserId={setUserId}
-                      setIsAdmin={setIsAdmin}
-                      setIsVoted={setIsVoted}
-                      setGoalVoted={setGoalVoted}
-                      setScrollTop={setScrollTop}
-                      setIsLoading={setIsLoading}
-                      setVoteMessage={setVoteMessage}
-                    />
-                  ))}
-              </div>
             </div>
           </>
         )}
