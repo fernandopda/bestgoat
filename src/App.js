@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import "./App.css";
 import { IconLoading } from "./components/img/Icons";
 import Goal from "./components/Goal";
@@ -49,12 +49,22 @@ function App() {
   const [isSearchActive, setSearchActive] = useState(false);
   const [isOverlayActive, setIsOverlayActive] = useState(false);
   const [isGoalLoading, setIsGoalLoading] = useState(false);
-
+  const [displayResults, setDisplayResults] = useState(false);
+  const [showAllResultsTxt, setShowAllResultsTxt] = useState(true);
+  const [showNavBar, setShowNavBar] = useState(false);
+  const [showGoalList, setShowGoalList] = useState(false);
+  const [isFullListLoading, setIsFullListLoading] = useState(false);
+  const [hasOverlay, setHasOverlay] = useState(false);
+  const [showBall, setShowBall] = useState(false);
   const [goalVoted, setGoalVoted] = useState(0);
+  const ballSpinerTimeOut = [3000, 2000]
   const navbarRef = useRef(null);
   const goalListRef = useRef(null);
+  const goalContainerRef = useRef(null);
   let hasScrolled = false;
   const goalListOffset = 180;
+
+
 
   // loads google API
 
@@ -87,41 +97,45 @@ function App() {
     setDisplayMessage(voteMessage);
   }, [voteMessage]);
   // Handles navBar display, according to the scroll position of the page
+  const handleHeroNavScroll = () => {
+    if (hasScrolled) {
+      return;
+    }
+    if (goalContainerRef.current) {
+      const goalContainerRect = goalContainerRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const offset = 300;
+
+      // Check if the bottom of the viewport has reached the top of goalContainer
+      if (goalContainerRect.top < viewportHeight - offset) {
+
+        setShowNavBar(true);
+        setShowGoalList(true);
+        setIsGoalLoading(true);
+        setIsFullListLoading(true);
+        setTimeout(() => {
+          setIsGoalLoading(false);
+          setIsFullListLoading(false);
+        }, ballSpinerTimeOut[0]);
+        hasScrolled = true;
+      } else {
+        setShowNavBar(false);
+        setShowGoalList(false);
+      }
+    }
+  };
+
   useEffect(() => {
-    let initialHeight = window.innerHeight;
-    const handleResize = () => {
-      initialHeight = window.innerHeight;
-    };
-
-
-    const handleHeroNavScroll = () => {
-      if (hasScrolled) {
-        return;
-      }
-      if (goalListRef.current) {
-        const goalListPos = goalListRef.current.offsetTop;
-        const scrollPos = window.scrollY;
-
-        if (scrollPos + goalListOffset >= goalListPos) {
-          navbarRef.current.style.display = "flex";
-          hasScrolled = true;
-        } else {
-          navbarRef.current.style.display = "none";
-        }
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-    window.addEventListener("scroll", handleHeroNavScroll);
-
+    window.addEventListener('scroll', handleHeroNavScroll);
     return () => {
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("scroll", handleHeroNavScroll);
+      window.removeEventListener('scroll', handleHeroNavScroll);
     };
   }, []);
-
-  // Activates lazyloading everytime user input a text on searchbar
+  // Cheks if goalsearch input is empty in order to show all goals txt,Activates lazyloading everytime user input a text on searchbar with forcecheck
   useEffect(() => {
+    searchTerm.length === 0 ? setShowAllResultsTxt(true) : setShowAllResultsTxt(false);
+    searchTerm.length > 0 && searchTerm.length < 3 ? setDisplayResults(false) : setDisplayResults(true);
+
     forceCheck();
   }, [searchTerm]);
 
@@ -130,17 +144,35 @@ function App() {
     displayOverlay();
   }, [isSearchActive, searchTerm]);
 
+  //Creates array for filtered goals depending on searchTerm
+  const filteredGoals = useMemo(() => {
+    if (goals.filter(goal => searchTerm.l))
+      return goals.filter(goal =>
+        searchTerm.length >= 3 && goal.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+  }, [goals, searchTerm]);
+
+
   //Handles goal loading feature after search
   useEffect(() => {
-    if (!isOverlayActive) {
+
+    if (isOverlayActive) {
+      setHasOverlay(true);
+    }
+    if (!isOverlayActive && !isFullListLoading && hasOverlay) {
+      setShowBall(true)
       setIsGoalLoading(true);
       const timer = setTimeout(() => {
         setIsGoalLoading(false)
-      }, 1500);
+      }, ballSpinerTimeOut[1]);
 
       return () => clearTimeout(timer);
     }
   }, [isOverlayActive]);
+
+  useEffect(() => {
+
+  });
   // fetch list of goals from database
 
   const fetchGoals = async () => {
@@ -213,7 +245,7 @@ function App() {
 
       <main>
         <div className={isOverlayActive ? "nav-search-overlay active" : "nav-search-overlay"}></div>
-        <NavBar
+        {showNavBar && <NavBar
           ref={navbarRef}
           isAuthenticated={isAuthenticated}
           onLogout={handleLogout}
@@ -221,7 +253,8 @@ function App() {
           setSearchTerm={scrollSearchInput}
           isVoted={isVoted}
           setSearchActive={setSearchActive}
-        />
+        />}
+
         {isAuthenticated && isVoted ? (
           <>
             {isAdmin ? (
@@ -240,35 +273,58 @@ function App() {
           <>
             <Hero />
             <Intro />
-            <div className="goal-container">
-              {isGoalLoading ? (<div className="goal-searching">  <img
-                src={soccer_ball}
-                alt="Soccer Ball"
-                className="goal-searching-soccer-ball-spinner"
-              /></div>
+            <div ref={goalContainerRef} className="goal-container">
+              {isGoalLoading ? (isFullListLoading ? (<div className="goal-searching">
+
+                <div className="goal-searching-container">
+                  <div className="goal-searching-txt-container">
+                    <p className="goal-searching-txt">FULL LIST LOADING</p>
+                  </div>
+                  <div className="goal-searching-soccer-ball-container">
+                    <img src={soccer_ball} alt="Soccer Ball" className="goal-searching-soccer-ball-spinner-moving" />
+                  </div>
+                </div>
+
+
+
+              </div>) : (
+                <div className="goal-searching">
+                  <img
+                    src={soccer_ball}
+                    alt="Soccer Ball"
+                    className={`goal-searching-soccer-ball-spinner ${showBall ? 'show' : ''}`}
+                  /></div>)
+
               ) : (
+                showGoalList &&
                 <div ref={goalListRef} className="goal-list">
-                  {goals
-                    .filter((goal) =>
-                      searchTerm.length < 3 || goal.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())
-                    )
-                    .map((goal) => (
-                      <Goal
-                        key={goal.id}
-                        {...goal}
-                        setIsAuthenticated={setIsAuthenticated}
-                        setIsVoded={setIsVoted}
-                        userId={userId}
-                        onLoginSuccess={handleLoginSuccess}
-                        setUserId={setUserId}
-                        setIsAdmin={setIsAdmin}
-                        setIsVoted={setIsVoted}
-                        setGoalVoted={setGoalVoted}
-                        setScrollTop={setScrollTop}
-                        setIsLoading={setIsLoading}
-                        setVoteMessage={setVoteMessage}
-                      />
-                    ))}
+                  {showAllResultsTxt ? (<div className="goal-list-results"> Showing <span>all</span> {goals.length} goals</div>
+                  ) : (
+                    displayResults && <div className="goal-list-results"> {filteredGoals.length} results for <span>{searchTerm}</span> </div>
+                  )}
+
+                  <div className="goal-goals">
+                    {goals
+                      .filter((goal) =>
+                        searchTerm.length < 3 || goal.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())
+                      )
+                      .map((goal) => (
+                        <Goal
+                          key={goal.id}
+                          {...goal}
+                          setIsAuthenticated={setIsAuthenticated}
+                          setIsVoded={setIsVoted}
+                          userId={userId}
+                          onLoginSuccess={handleLoginSuccess}
+                          setUserId={setUserId}
+                          setIsAdmin={setIsAdmin}
+                          setIsVoted={setIsVoted}
+                          setGoalVoted={setGoalVoted}
+                          setScrollTop={setScrollTop}
+                          setIsLoading={setIsLoading}
+                          setVoteMessage={setVoteMessage}
+                        />
+                      ))}</div>
                 </div>)
               }
 
