@@ -180,9 +180,12 @@ footer p {
   gap: 24px;
 }
 
+
+
 .goal-list-results {
   align-self: flex-start;
-  font-size: 15px;
+  font-size: 20px;
+  margin-left: 20px;
 }
 
 .goal-list-results span {
@@ -195,7 +198,7 @@ footer p {
   background-color: #fff;
   padding: 20px;
   border-radius: 15px;
-  margin-top: 80px;
+  margin-top: 60px;
   width: 80%;
 
 }
@@ -1002,9 +1005,9 @@ footer p {
 }
 
 .intro-balls-image {
-  margin-top: 10%;
+  margin-top: 5%;
   width: 100%;
-  height: 100%;
+  height: 110%;
 }
 
 .intro-balls-image img {
@@ -1126,121 +1129,46 @@ footer p {
 
 /* Media queries for mobile devices up to iPhone Pro */
 @media only screen and (max-width: 480px) {
-  /* Ranking */
 
-  .ranking-goal-title {
-    margin-left: 0;
-    padding-left: 0;
-    margin-top: 10px;
-    font-size: 12px;
-    padding-left: 30px;
+  /* goalCard */
+  body {
+    background-color: #ffffff;
   }
 
-  .ranking-goal-description {
-    display: none;
+  .ball-container {
+    margin-top: 200px;
   }
 
-  .ranking-position {
-    font-size: 16px;
-    padding: 8px;
-    width: 18px;
-    height: 60%;
-  }
-
-  .ranking-goal-card {
-    margin-bottom: 0px;
-    margin-left: 0px;
+  .goal-goals {
     width: 100%;
   }
 
-  .ranking-video-iframe {
-    position: absolute;
-    width: 100%;
-    height: 250px;
-    margin-bottom: 50px;
-    margin-left: -10px;
-    margin-top: 0px;
-  }
-
-  .ranking-goal-card.isActive {
-    position: relative;
-    box-shadow: none;
-    height: 300px;
-  }
-
-  .percentage-container {
-    display: none;
-    position: relative;
-    width: 100%;
-    margin-bottom: 10px;
-    margin-left: 20px;
-    margin-right: 60px;
-    height: 18px;
-    background-color: #eee;
-
-    border-radius: 4px;
-    bottom: 0;
-    /* Keep the element at the bottom */
-  }
-
-  .ranking-goal-card.isActive .votesPercent {
-    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
-    font-size: 14px;
-    color: #000000;
-  }
-
-  .ranking-goal-card.isActive .percentage-container {
-    display: inline-block;
-    height: 20px;
-    width: 400px;
-    margin-left: 20px;
-  }
-
-  .ranking-goal-title {
-    width: 100%;
-    font-size: 12px;
-  }
-
-  .ranking-goal-card.isActive .ranking-goal-title {
-    width: 400px;
-    margin-left: 0px;
-    font-size: 7px;
-    margin-bottom: 10px;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
+  .goal-list {
     text-align: center;
-    color: #ffffff;
+    background-color: #ffffff;
+    gap: 34px;
+    margin-top: 50px;
+    width: 90%;
   }
 
-  .ranking-title-position {
-    margin-right: 20px;
-    margin-left: -20px;
-    font-size: 30px;
-    text-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
+
+
+  .goal-card {
+    background-color: rgb(255, 255, 255);
+    border-radius: 0px;
+    box-shadow: none;
+    filter: brightness(100%);
+    margin-top: 100px;
+    padding: 0px;
+    width: 100%;
   }
 
   .goal-description {
     display: none;
   }
 
-  .goal-card {
-    filter: brightness(100%);
-    background-color: rgb(255, 255, 255);
-    padding: 0px;
-    margin-top: 100px;
-    border-radius: 0px;
-    width: 100%;
-    box-shadow: f none;
-  }
-
-  .goal-title {
-    font-size: 15px;
-  }
-
-  .goal-vote-google-button {
-    width: 90%;
+  .goal-form-message {
+    font-size: 10px;
   }
 
   .goal-input-class {
@@ -1250,22 +1178,278 @@ footer p {
   }
 
   .goal-input-class::placeholder {
-    font-size: 22px;
     color: #cac8c8;
-  }
-
-  .vote-message {
     font-size: 22px;
   }
 
-  .vote-message div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+
+  .goal-title {
+    font-size: 15px;
   }
 
-  .ball-container {
-    margin-top: 200px;
+  .goal-video {
+    filter: brightness(110%);
+    height: 0;
+  }
+
+  .goal-vote-form {
+    background-color: #ffffff;
+    filter: brightness(100%);
+    margin-top: -58px;
+  }
+
+  .goal-vote-google-button {
+    width: 90%;
+  }
+
+  .hero-arrows {
+    font-size: 14px;
+  }
+
+  .hero-container img {
+    filter: brightness(30%);
+    height: 100vh;
+    object-fit: cover;
+    width: 100vw;
+  }
+
+  .hero-scroll-down {
+    bottom: 12%;
+    left: 28%;
+  }
+
+  .hero-scroll-text {
+    font-size: 20px;
+  }
+
+  .hero-text-over-image {
+    font-size: 30px;
+    left: 40%;
+    top: 50%;
+  }
+
+  .hero-text-over-image-text1 {
+    font-size: 60px;
+    margin-bottom: 30px;
+  }
+
+  /* intro */
+  .intro-balls-image {
+    display: none;
+  }
+
+  .intro-boxes {
+    flex-direction: column;
+    gap: 70px;
+  }
+
+  .intro-container {
+    margin-bottom: 100px;
+  }
+
+  .login-modal {
+    margin-top: 100px;
+    width: 60%;
+  }
+
+  .nav-bar {
+    height: 80px;
+    padding-top: 10px;
+  }
+
+  .nav-center {
+    flex-direction: row;
+  }
+
+  .nav-link {
+    font-size: 15px;
+  }
+
+  .nav-login-logo,
+  .ranking-nav-login-logo {
+    height: 16px;
+    margin-left: 2px;
+  }
+
+  .nav-search {
+    display: none;
+  }
+
+  .nav-search-responsive {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  .nav-search-responsive input {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 22px;
+    height: 20px;
+    margin-right: 25px;
+    margin-top: 5px;
+    padding: 4px;
+    touch-action: manipulation;
+    width: 80%;
+  }
+
+  .nav-text-img {
+    margin-right: 140px;
+    margin-top: 10px;
+    width: 230px;
+  }
+
+  .nav-text-img img {
+    margin-left: 80px;
+    width: 200px;
+  }
+
+  .nav-title1,
+  .ranking-nav-title1 {
+    font-size: 13px;
+    margin-left: 70px;
+  }
+
+  .nav-title2 {
+    font-size: 18px;
+  }
+
+  .nav-top-goals-msg {
+    font-size: 12px;
+    margin: 10px;
+    margin-left: 8px;
+  }
+
+  .percentage-container {
+    background-color: #eee;
+    border-radius: 4px;
+    bottom: 0;
+    display: none;
+    height: 18px;
+    margin-bottom: 10px;
+    margin-left: 20px;
+    margin-right: 60px;
+    position: relative;
+    width: 100%;
+  }
+
+  .privacy-policy-modal {
+    font-size: 11px;
+  }
+
+  .ranking-container {
+    margin-bottom: 500px;
+    margin-left: 0px;
+    padding: 0px;
+    width: 92%;
+  }
+
+  .ranking-goal-card {
+    margin-bottom: 0px;
+    margin-left: 0px;
+    width: 100%;
+  }
+
+  .ranking-goal-card.isActive {
+    box-shadow: none;
+    height: 300px;
+    position: relative;
+  }
+
+  .ranking-goal-card.isActive .percentage-container {
+    display: inline-block;
+    height: 20px;
+    margin-left: 20px;
+    width: 400px;
+  }
+
+  .ranking-goal-card.isActive .ranking-goal-title {
+    bottom: 0;
+    color: #ffffff;
+    font-size: 7px;
+    left: 0;
+    margin-bottom: 10px;
+    margin-left: 0px;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    width: 400px;
+  }
+
+  .ranking-goal-card.isActive .votesPercent {
+    color: #000000;
+    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+    font-size: 14px;
+  }
+
+  .ranking-goal-container {
+    width: 100%;
+  }
+
+  .ranking-goal-container label {
+    margin-left: 0px;
+    width: 100%;
+  }
+
+  .ranking-goal-description {
+    display: none;
+  }
+
+  .ranking-goal-title {
+    font-size: 12px;
+    margin-left: 0;
+    margin-top: 10px;
+    padding-left: 30px;
+    width: 100%;
+  }
+
+  .ranking-nav-title1 {
+    font-size: 12px;
+    margin-left: 50px;
+    margin-right: 0px;
+  }
+
+  .ranking-nav-title2 {
+    font-size: 20px;
+    margin-left: -10px;
+    margin-right: 10px;
+  }
+
+  .ranking-nav-top10 {
+    display: none;
+  }
+
+  .ranking-nav-top10-responsive {
+    display: flex;
+    font-size: 35px;
+    font-weight: 550;
+    justify-content: center;
+    margin-bottom: 10px;
+    margin-top: 15px;
+    padding-top: 10px;
+  }
+
+  .ranking-position {
+    font-size: 16px;
+    height: 60%;
+    padding: 8px;
+    width: 18px;
+  }
+
+  .ranking-title-position {
+    font-size: 30px;
+    margin-left: -20px;
+    margin-right: 20px;
+    text-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
+  }
+
+  .ranking-video-iframe {
+    height: 250px;
+    margin-bottom: 50px;
+    margin-left: -10px;
+    margin-top: 0px;
+    position: absolute;
+    width: 100%;
   }
 
   .vote-button {
@@ -1276,198 +1460,18 @@ footer p {
     height: 35px;
   }
 
-  .votesPercent {
-    font-size: 12px;
-  }
-
-  .goal-form-message {
-    font-size: 10px;
-  }
-}
-
-/* goalCard */
-
-@media only screen and (max-width: 480px) {
-  body {
-    background-color: #ffffff;
-  }
-
-  .nav-title1,
-  .ranking-nav-title1 {
-    margin-left: 70px;
-  }
-
-  .nav-title1 {
-    font-size: 13px;
-  }
-
-  .nav-title2 {
-    font-size: 18px;
-  }
-
-  .nav-center {
-    flex-direction: row;
-  }
-
-  .nav-login-logo,
-  .ranking-nav-login-logo {
-    margin-left: 2px;
-    height: 16px;
-  }
-
-  .nav-link {
-    font-size: 15px;
-  }
-
-  .nav-text-img {
-    margin-top: 10px;
-    margin-right: 140px;
-    width: 230px;
-  }
-
-  .nav-top-goals-msg {
-    margin: 10px;
-    font-size: 12px;
-    margin-left: 8px;
-  }
-
-  .nav-search {
-    display: none;
-  }
-
-  .nav-search-responsive {
-    display: flex;
-    justify-content: center;
-
-    margin-bottom: 10px;
-  }
-
-  .nav-search-responsive input {
-    width: 80%;
-    height: 20px;
-    margin-right: 25px;
-    padding: 4px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    touch-action: manipulation;
-    margin-top: 5px;
+  .vote-message {
     font-size: 22px;
   }
 
-  .nav-bar {
-    height: 80px;
-    padding-top: 10px;
-  }
-
-  .nav-text-img img {
-    margin-left: 80px;
-    width: 200px;
-  }
-
-  .ranking-nav-title1 {
-    margin-left: 50px;
-    font-size: 12px;
-    margin-right: 0px;
-  }
-
-  .ranking-nav-title2 {
-    font-size: 20px;
-    margin-right: 10px;
-    margin-left: -10px;
-  }
-
-  .ranking-nav-top10 {
-    display: none;
-  }
-
-  .ranking-nav-top10-responsive {
+  .vote-message div {
+    align-items: center;
     display: flex;
-    justify-content: center;
-    margin-top: 15px;
-    padding-top: 10px;
-    margin-bottom: 10px;
-    font-size: 35px;
-    font-weight: 550;
+    flex-direction: column;
   }
 
-  .ranking-goal-container label {
-    margin-left: 0px;
-    width: 100%;
-  }
-
-  .ranking-goal-container {
-    width: 100%;
-  }
-
-  .ranking-container {
-    padding: 0px;
-    width: 92%;
-    margin-bottom: 500px;
-    margin-left: 0px;
-  }
-
-  .goal-video {
-    filter: brightness(110%);
-    height: 0;
-  }
-
-  .goal-list {
-    margin-top: 50px;
-    gap: 34px;
-    background-color: #ffffff;
-  }
-
-
-
-  .goal-vote-form {
-    filter: brightness(100%);
-    margin-top: -58px;
-    background-color: #ffffff;
-  }
-
-  .login-modal {
-    margin-top: 100px;
-    width: 60%;
-  }
-
-  .privacy-policy-modal {
-    font-size: 11px;
-  }
-
-  /* Hero */
-
-  .hero-container img {
-    height: 100vh;
-    /* Viewport height */
-    width: 100vw;
-    /* Viewport width */
-    filter: brightness(30%);
-    object-fit: cover;
-
-  }
-
-  .hero-text-over-image {
-    font-size: 30px;
-    top: 50%;
-    left: 40%;
-  }
-
-  .hero-text-over-image-text1 {
-    font-size: 60px;
-    margin-bottom: 30px;
-  }
-
-  .hero-scroll-down {
-    left: 28%;
-    bottom: 12%;
-  }
-
-  .hero-scroll-text {
-    font-size: 20px;
-  }
-
-  .hero-arrows {
-    font-size: 14px;
+  .votesPercent {
+    font-size: 12px;
   }
 }
 
@@ -1754,12 +1758,8 @@ footer p {
   .nav-bar {
     height: 100px;
   }
-}
 
-/* Navigation bar media queries for iPhone 12 Pro and similar devices */
 
-/* Media queries for medium-sized screens */
-@media only screen and (min-width: 481px) and (max-width: 768px) {
 
   .nav-title1,
   .ranking-nav-title1 {

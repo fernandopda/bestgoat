@@ -51,6 +51,7 @@ function App() {
   const [isGoalLoading, setIsGoalLoading] = useState(false);
   const [displayResults, setDisplayResults] = useState(false);
   const [showAllResultsTxt, setShowAllResultsTxt] = useState(true);
+  const [noSearchResults, setNoSerachResults] = useState(false);
   const [showNavBar, setShowNavBar] = useState(false);
   const [showGoalList, setShowGoalList] = useState(false);
   const [isFullListLoading, setIsFullListLoading] = useState(false);
@@ -133,9 +134,9 @@ function App() {
   }, []);
   // Cheks if goalsearch input is empty in order to show all goals txt,Activates lazyloading everytime user input a text on searchbar with forcecheck
   useEffect(() => {
+
     searchTerm.length === 0 ? setShowAllResultsTxt(true) : setShowAllResultsTxt(false);
     searchTerm.length > 0 && searchTerm.length < 3 ? setDisplayResults(false) : setDisplayResults(true);
-
     forceCheck();
   }, [searchTerm]);
 
@@ -159,11 +160,12 @@ function App() {
     if (isOverlayActive) {
       setHasOverlay(true);
     }
-    if (!isOverlayActive && !isFullListLoading && hasOverlay) {
+    if (!isOverlayActive && !isFullListLoading && hasOverlay && searchTerm.length > 0) {
       setShowBall(true)
       setIsGoalLoading(true);
       const timer = setTimeout(() => {
         setIsGoalLoading(false)
+        filteredGoals.length === 0 ? setNoSerachResults(true) : setNoSerachResults(false);
       }, ballSpinerTimeOut[1]);
 
       return () => clearTimeout(timer);
@@ -208,6 +210,17 @@ function App() {
       }
     }
   };
+
+  // handle search result text
+  const renderSearchResultTxt = () => {
+    if (noSearchResults) {
+      return <div className="goal-list-no-results"> No results found for <span>{searchTerm}</span></div>;
+    } else if (showAllResultsTxt) {
+      return <div className="goal-list-results"> Showing <span>all</span> {goals.length} goals</div>;
+    } else if (displayResults) {
+      return <div className="goal-list-results"> {filteredGoals.length} results for <span>{searchTerm}</span> </div>;
+    }
+  }
 
   const displayOverlay = () => {
     setIsOverlayActive(isSearchActive && searchTerm.length < 3);
@@ -298,10 +311,7 @@ function App() {
               ) : (
                 showGoalList &&
                 <div ref={goalListRef} className="goal-list">
-                  {showAllResultsTxt ? (<div className="goal-list-results"> Showing <span>all</span> {goals.length} goals</div>
-                  ) : (
-                    displayResults && <div className="goal-list-results"> {filteredGoals.length} results for <span>{searchTerm}</span> </div>
-                  )}
+                  <span>{renderSearchResultTxt()}</span>
 
                   <div className="goal-goals">
                     {goals
