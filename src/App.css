@@ -37,7 +37,7 @@ footer p {
 }
 
 .displaynone {
-  opacity: 0;
+  display: none;
 }
 
 .wrap-container {
@@ -193,14 +193,12 @@ footer p {
 }
 
 .goal-card {
-  filter: brightness(160%);
   color: rgb(13, 13, 13);
   background-color: #fff;
   padding: 20px;
   border-radius: 15px;
   margin-top: 60px;
   width: 80%;
-
 }
 
 .goal-title {
@@ -239,16 +237,15 @@ footer p {
   left: 0;
   width: 100%;
   height: 100%;
+  filter: brightness(130%);
 }
 
 .goal-vote-form {
-  filter: brightness(70%);
   margin-top: -58px;
-
   max-height: 0;
   overflow: hidden;
   transition: max-height 1s ease-out;
-  background-color: #ebe6e6;
+  background-color: #ffffff;
   color: #000;
   padding: 20px;
 }
@@ -294,23 +291,23 @@ footer p {
   width: 80%;
   height: 48px;
   font-size: 18px;
-
-  background-color: #000000;
-  color: #ffffff;
+  background-color: #f1f1f1;
+  color: #da2121;
+  border: none;
   font-weight: bold;
-  border-color: #000;
   border-radius: 4px;
   cursor: pointer;
   margin: 0 auto;
   display: block;
-  transition: background-color 0.3s, transform 0.3s;
-  border: 3px solid #000;
+  transition: background-color 0.1s, transform 0.1s;
+
   /* Adjust the border thickness here */
 }
 
 .vote-button:hover {
-  background-color: #201f1f;
+  background-color: #ffffff;
   transform: translateY(-2px);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .goal-showForm-button {
@@ -746,13 +743,12 @@ footer p {
   border-radius: 4px;
 }
 
-/* Nav Bar */
+/* Nav-bar-desktop*/
 .nav-bar {
   display: flex;
   width: 100%;
   top: 0;
   z-index: 100;
-  margin-top: -30px;
   height: 80px;
   padding-bottom: 16px;
   background-color: #000000;
@@ -776,18 +772,20 @@ footer p {
   align-items: center;
 }
 
+
+
 .nav-center {
+  width: 70%;
+  margin-top: 30px;
+  margin-left: 100px;
   display: flex;
   flex-direction: row;
   /* Adjust this value as needed */
 }
 
-.nav-center {
-  width: 70%;
-  margin-left: 100px;
-  display: flex;
-  flex-direction: row;
-  /* Adjust this value as needed */
+.nav-text-img img {
+  margin-top: 10px;
+  width: 100%;
 }
 
 
@@ -1140,11 +1138,12 @@ footer p {
   }
 
   .goal-goals {
-    width: 100%;
+    width: 105%;
   }
 
   .goal-list {
     text-align: center;
+    align-items: center;
     background-color: #ffffff;
     gap: 34px;
     margin-top: 50px;
@@ -1190,6 +1189,7 @@ footer p {
   .goal-video {
     filter: brightness(110%);
     height: 0;
+    width: 100%;
   }
 
   .goal-vote-form {
@@ -1238,6 +1238,10 @@ footer p {
     display: none;
   }
 
+  .intro-box {
+    width: 360px;
+  }
+
   .intro-boxes {
     flex-direction: column;
     gap: 70px;
@@ -1252,13 +1256,32 @@ footer p {
     width: 60%;
   }
 
+  /* nav-bar-mobile-480*/
+
   .nav-bar {
-    height: 80px;
+    flex-direction: row;
+    height: 30px;
     padding-top: 10px;
+
   }
 
   .nav-center {
+    width: 100%;
+    display: flex;
     flex-direction: row;
+    align-items: self-end;
+    justify-content: start;
+    margin-left: 0px;
+  }
+
+  .nav-text-img img {
+    width: 80%;
+    margin-left: 5%;
+  }
+
+  .nav-text-img {
+    width: 30%;
+    margin-left: 2%;
   }
 
   .nav-link {
@@ -1277,8 +1300,7 @@ footer p {
 
   .nav-search-responsive {
     display: flex;
-    justify-content: center;
-    margin-bottom: 10px;
+
   }
 
   .nav-search-responsive input {
@@ -1286,23 +1308,15 @@ footer p {
     border-radius: 4px;
     font-size: 22px;
     height: 20px;
-    margin-right: 25px;
+
     margin-top: 5px;
     padding: 4px;
     touch-action: manipulation;
-    width: 80%;
+    width: 90%;
   }
 
-  .nav-text-img {
-    margin-right: 140px;
-    margin-top: 10px;
-    width: 230px;
-  }
 
-  .nav-text-img img {
-    margin-left: 80px;
-    width: 200px;
-  }
+
 
   .nav-title1,
   .ranking-nav-title1 {
@@ -1453,7 +1467,8 @@ footer p {
   }
 
   .vote-button {
-    margin-top: -40px;
+    margin-top: -20px;
+    height: 30px;
   }
 
   .vote-button-red {
