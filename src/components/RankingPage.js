@@ -11,7 +11,7 @@ const RankingPage = ({ goals, navbarRef, totalVotes, goalVoted }) => {
   const sortedGoals = [...goals].sort((a, b) => b.votes - a.votes);
   const sortedTop10Goals = sortedGoals
     .slice(0, 10)
-    .sort((a, b) => a.votes - b.votes);
+    .sort((a, b) => b.votes - a.votes);
 
   useEffect(() => {
     setActiveGoalId(sortedTop10Goals[0].id);
@@ -20,14 +20,14 @@ const RankingPage = ({ goals, navbarRef, totalVotes, goalVoted }) => {
   return (
     <main>
       <div className="ranking-goal-container">
-        <label>TOP 10</label>
+        <label></label>
         {sortedTop10Goals.map(
           (goal, i) =>
             i < 10 && (
               <RankingGoals
                 key={goal.id}
                 {...goal}
-                position={10 - i}
+                position={i + 1}
                 isActive={goal.id === activeGoalId}
                 setActiveGoalId={setActiveGoalId}
                 navbarRef={navbarRef}

@@ -4,7 +4,7 @@ import React, { forwardRef, useState } from "react";
 import "../App.css";
 import logo from "./img/login.png";
 import navText from "./img/navBarText.png";
-import { IconSearch } from "./img/Icons";
+import { IconSearch, IconArrowBack } from "./img/Icons";
 
 
 const NavBar = forwardRef(
@@ -32,9 +32,8 @@ const NavBar = forwardRef(
         {isAuthenticated && isVoted ? (
           <>
             <div className="ranking-nav-left">
-              <img className="ranking-nav-login-logo" src={logo} />
-              <a className="ranking-nav-link" onClick={onLogout}>
-                GO BACK
+              <a onClick={onLogout}>
+                <IconArrowBack />
               </a>
 
               {/* 
@@ -43,7 +42,7 @@ const NavBar = forwardRef(
              </button> */}
             </div>
             <div className="ranking-nav-center ">
-              <img className="ranking-nav-text-img" src={navText} />
+              <span>TOP 10</span>
             </div>
           </>
         ) : (

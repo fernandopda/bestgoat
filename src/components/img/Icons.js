@@ -91,3 +91,19 @@ export function IconLoading() {
 
     );
 }
+
+export function IconArrowBack() {
+    return (
+        <svg
+            className="ranking-nav-arrowback"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={3}
+            viewBox="0 0 24 24"
+
+        >
+            <path stroke="none" d="M0 0h24v24H0z" />
+            <path d="M9 11l-4 4 4 4m-4-4h11a4 4 0 000-8h-1" />
+        </svg>
+    );
+}
