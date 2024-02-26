@@ -70,17 +70,16 @@ function App() {
   // loads google API
 
   useEffect(() => {
-    // const script = document.createElement("script");
-    // script.src = "https://apis.google.com/js/api.js";
-    // script.onload = () => {
-    //   gapi.load("auth2", () => {
-    //     gapi.auth2.init({
-    //       client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-    //     });
-    //   });
-    // };
-    // document.body.appendChild(script);
-
+    const script = document.createElement("script");
+    script.src = "https://apis.google.com/js/api.js";
+    script.onload = () => {
+      gapi.load("auth2", () => {
+        gapi.auth2.init({
+          client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+        });
+      });
+    };
+    document.body.appendChild(script);
     fetchGoals();
   }, []);
 
@@ -216,7 +215,7 @@ function App() {
     if (noSearchResults) {
       return <div className="goal-list-no-results"> No results found for <span>{searchTerm}</span></div>;
     } else if (showAllResultsTxt) {
-      return <div className="goal-list-results"> Showing <span>all</span> {goals.length} goals</div>;
+      return <div className="goal-list-results"> Showing <span>all</span> goals ({goals.length})</div>;
     } else if (displayResults) {
       return <div className="goal-list-results"> {filteredGoals.length} results for <span>{searchTerm}</span> </div>;
     }

@@ -32,7 +32,7 @@ function Goal({
   const [isMediaLoaded, setIsMediaLoaded] = useState(false);
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [formMessage, setFormMessage] = useState("");
-  const [isFormEntriesVisible, setIsFormEntriesVisible] = useState(false);
+  const [showFormSubmit, setShowFormSubimit] = useState(false);
   const [captchaValue, setCaptchaValue] = useState(null);
   const [offset, setOffset] = useState(800);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 480);
@@ -52,9 +52,7 @@ function Goal({
   const showForm = () => {
     setIsFormVisible(true);
   };
-  const showEntriesForm = () => {
-    setIsFormEntriesVisible(true);
-  };
+
   // messaged displayed when user votges
   const voteSuccess = () => {
     setVoteMessage(
@@ -104,17 +102,19 @@ function Goal({
     var re =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!re.test(String(email).toLowerCase())) {
-      setFormMessage("Email not valid");
+      setShowFormSubimit(false);
       return false;
     }
+    setShowFormSubimit(true);
     setFormMessage(""); // Clear error if validation passes
+
     return true;
   }
 
   /* responsible for handling vote using name and email form*/
   const handleVote = async (e) => {
     e.preventDefault();
-    const userName = e.target.elements.userName.value;
+    const userName = 'BLANK';
     const userEmail = e.target.elements.userEmail.value;
     // stops function when email format is not valid
     if (!validateEmail(userEmail)) {
@@ -247,6 +247,52 @@ function Goal({
       </div>
       {isFormVisible && (
         <div className={`goal-vote-form ${isFormVisible ? "visible" : ""}`}>
+
+
+          {
+            <form onSubmit={handleVote}>
+
+              <input
+                className="goal-input-class"
+                name="userEmail"
+                type="email"
+                placeholder="Enter your email"
+                onChange={(e) => {
+                  const email = e.target.value;
+                  validateEmail(email);
+                }}
+
+              />
+              {showFormSubmit && (
+                <>
+                  <ReCAPTCHA
+                    className="goal-recaptcha"
+                    sitekey="6LcGj0AnAAAAACT9G3Qxp8Db0e74nQjqKyxVRLmj"
+                    onChange={(value) => {
+                      setCaptchaValue(value);
+                    }}
+                  />
+
+                  {formMessage && (
+                    <div className="goal-form-message">{formMessage}</div>
+                  )}
+                  <input
+                    type="submit"
+                    value="Submit Vote"
+                    className="vote-button-red "
+                  />
+                </>
+              )}
+
+            </form>
+          }
+
+          {formMessage && (
+            <div className="goal-form-message">{formMessage}</div>
+          )}
+          <div className="goal-divider">
+            <span>OR</span>
+          </div>
           <div className="googleLogin">
             {" "}
             {/* Google login button */}
@@ -259,50 +305,7 @@ function Goal({
               cookiePolicy={"single_host_origin"} // Cookie policy
             />
           </div>
-          {!isFormEntriesVisible && formMessage && (
-            <div className="goal-form-message">{formMessage}</div>
-          )}
-          <div className="goal-divider">
-            <span>OR</span>
-          </div>
-          {!isFormEntriesVisible && (
-            <button onClick={showEntriesForm} className="goal-showForm-button">
-              Enter your details
-            </button>
-          )}
 
-          {isFormEntriesVisible && (
-            <form onSubmit={handleVote}>
-              <input
-                className="goal-input-class"
-                name="userName"
-                type="text"
-                placeholder="Name"
-              />
-              <input
-                className="goal-input-class"
-                name="userEmail"
-                type="email"
-                placeholder="Email"
-              />
-              <ReCAPTCHA
-                className="goal-recaptcha"
-                sitekey="6LcGj0AnAAAAACT9G3Qxp8Db0e74nQjqKyxVRLmj"
-                onChange={(value) => {
-                  setCaptchaValue(value);
-                }}
-              />
-
-              {formMessage && (
-                <div className="goal-form-message">{formMessage}</div>
-              )}
-              <input
-                type="submit"
-                value="Submit Vote"
-                className="vote-button-red "
-              />
-            </form>
-          )}
         </div>
       )}
 
