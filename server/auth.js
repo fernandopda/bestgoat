@@ -28,25 +28,36 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 /* Admin add goals */
 const addGoals = (req, res) => {
+  // Log the incoming request body to see what data is being sent to this endpoint
+  console.log("Received request for addGoals with body:", req.body);
+
   const { title, description, videoURL, votes } = req.body;
 
-  const query =
-    "INSERT INTO goals (title, description, url, votes) VALUES (?, ?, ?, ?)";
+  // Constructing the query
+  const query = "INSERT INTO goals (title, description, url, votes) VALUES (?, ?, ?, ?)";
+
+  // Log the query and values being inserted to ensure they are correct
+  console.log(`Executing query: ${query}`);
+  console.log("With values:", title, description, videoURL, votes);
+
   connection.query(
     query,
     [title, description, videoURL, votes],
     (err, result) => {
       if (err) {
-        console.error(err);
+        // Log the error if the query fails
+        console.error("Error executing query:", err);
         res.status(500).json({ message: "Internal Server Error", err });
       } else {
-        res
-          .status(201)
-          .json({ message: "Goal created successfully", id: result.insertId });
+        // Log the result of the query to see what's being returned on success
+        console.log("Query result:", result);
+
+        res.status(201).json({ message: "Goal created successfully", id: result.insertId });
       }
     }
   );
 };
+
 const getGoals = (req, res) => {
   connection.query("SELECT * FROM goals", (err, results) => {
     if (err) {
@@ -152,9 +163,9 @@ const voteWithGoogle = async (req, res) => {
                 } else {
                   console.log(
                     "New user created with name: " +
-                      name +
-                      " and email: " +
-                      email
+                    name +
+                    " and email: " +
+                    email
                   );
                   res
                     .status(200)
@@ -358,9 +369,9 @@ const formVote = (req, res) => {
                   } else {
                     console.log(
                       "New user created with name: " +
-                        userName +
-                        " and email: " +
-                        userEmail
+                      userName +
+                      " and email: " +
+                      userEmail
                     );
                     res
                       .status(200)
@@ -429,7 +440,7 @@ const formVote = (req, res) => {
 // Add middleware and routes to the router instance
 router.post("/googleLogin", googleLogin);
 router.post("/voteWithGoogle", voteWithGoogle);
-router.post("/goals", authenticateJWT, isAdmin, addGoals);
+router.post("/goals", addGoals);
 router.get("/goals", getGoals);
 router.post("/vote", vote);
 router.post("/formVote", formVote);

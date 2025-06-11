@@ -1,30 +1,29 @@
-const mysql = require("mysql");
+// db.js
+const mysql = require("mysql2/promise");
 require("dotenv").config();
 
-let connection;
+let pool;
 
-function createConnection() {
-  if (!connection) {
-    connection = mysql.createConnection({
+/**
+ * Returns a MySQL connection from a singleton pool. 
+ * Uses environment variables: DT_DATABASE_HOST, DT_DATABASE_USER, DT_DATABASE_PW, DT_DATABASE.
+ */
+async function createConnection() {
+  if (!pool) {
+    pool = mysql.createPool({
       host: process.env.DT_DATABASE_HOST,
       user: process.env.DT_DATABASE_USER,
       password: process.env.DT_DATABASE_PW,
       database: process.env.DT_DATABASE,
       port: 3306,
-      multipleStatements: true,
+      waitForConnections: true,
+      connectionLimit: 5,       // adjust as needed
+      queueLimit: 0,
+      multipleStatements: true, // because we run INSERT + UPDATE in one string
     });
-
-    connection.connect((err) => {
-      if (err) {
-        console.error("Error connecting to the database:", err.stack);
-        return;
-      }
-
-      console.log("Successfully connected to the database");
-    });
+    console.log("MySQL Pool created");
   }
-
-  return connection;
+  return pool;
 }
 
 module.exports = createConnection;

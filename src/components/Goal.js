@@ -134,7 +134,7 @@ function Goal({
       setFormMessage("Please complete the captcha.");
       return;
     }
-    console.log("this is the captcha:", captchaValue);
+  
 
     try {
       setIsLoading(true);
@@ -197,12 +197,12 @@ function Goal({
 
   /* Function to handles failure of Google Login */
   const onGoogleLoginFailure = (error) => {
-    console.log("Google login failed:", error);
+    ;
   };
 
   /* Function executed when login with google is executed by the user, calling voteWithGoogle function to cast vote in case of succefull authentication  */
   const handleGoogleVote = async (response) => {
-    console.log("Google login successful. Response:", response);
+   ;
     const { tokenId } = response;
 
     try {
