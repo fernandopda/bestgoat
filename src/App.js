@@ -84,7 +84,7 @@ function App() {
   }, []);
 
   // counts the toal number of votes, so percentage of goals voted for each goal can be calculated in the top10
-  useEffect(() => {git remote -v
+  useEffect(() => {
     setTotalVotes(
       goals.reduce((acc, g) => {
         return acc + g.votes;
