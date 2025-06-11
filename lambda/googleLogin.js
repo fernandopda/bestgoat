@@ -8,25 +8,12 @@
  * In either case, the function then creates a JSON Web Token (JWT), signs it, and sends it back in the response. This token is typically used on the frontend to maintain the user's session.
  */
 
+
 const jwt = require("jsonwebtoken");
 const createConnection = require("./db");
 const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const { promisify } = require("util");
-
-// Function to add CORS headers to your response
-const addCorsHeaders = (response) => {
-  return {
-    ...response,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Headers":
-        "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
-      "Access-Control-Allow-Methods": "OPTIONS,POST",
-      "Access-Control-Allow-Credentials": "true",
-    },
-  };
-};
 
 const googleLogin = async (event) => {
   try {
@@ -67,17 +54,17 @@ const googleLogin = async (event) => {
           expiresIn: process.env.JWT_EXPIRES_IN,
         });
 
-        return addCorsHeaders({
+        return {
           statusCode: 200,
           body: JSON.stringify({ token }),
-        });
+        };
       } else {
-        return addCorsHeaders({
+        return {
           statusCode: 500,
           body: JSON.stringify({
             message: "It was not possible to create a new user",
           }),
-        });
+        };
       }
     } else {
       // If the user does exist, sign and send the JWT
@@ -87,7 +74,7 @@ const googleLogin = async (event) => {
         expiresIn: process.env.JWT_EXPIRES_IN,
       });
 
-      return addCorsHeaders({
+      return {
         statusCode: 200,
         body: JSON.stringify({
           token,
@@ -95,18 +82,18 @@ const googleLogin = async (event) => {
           userId,
           goalVoted: user.goalVoted,
         }),
-      });
+      };
     }
   } catch (err) {
     // If there's an error in the try block, catch it and return a 500 error response
-    return addCorsHeaders({
+    return {
       statusCode: 500,
       body: JSON.stringify({
         message: "AUTH!! Internal Server Error",
         error: err.message,
         eventBody: event.body,
       }),
-    });
+    };
   }
 };
 

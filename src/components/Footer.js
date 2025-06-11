@@ -9,7 +9,7 @@ function Footer({ }) {
                 <img src={bestgoatlogo} alt="Best Goals Of All Time logo" />
             </div>
             <PrivacyPolicy />
-            <p>&copy; 2023 BestGOAT. All rights reserved.</p>
+            <p>&copy; 2025 BestGOAT. All rights reserved.</p>
         </footer>
     );
 }
