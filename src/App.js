@@ -32,7 +32,7 @@ import soccer_ball from "./components/img/soccer_ball2.svg";
   goalLoading - it shows loading feature when goal is being loaded after search
   */
 function App() {
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(true);
   const [goals, setGoals] = useState([]);
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -283,7 +283,7 @@ function App() {
           </>
         ) : (
           <>
-            <Hero />
+            <AdminPage />
             <Intro />
             <div ref={goalContainerRef} className="goal-container">
               {isGoalLoading ? (isFullListLoading ? (<div className="goal-searching">
