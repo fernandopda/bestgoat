@@ -1,6 +1,8 @@
 const createConnection = require("./db");
 require("dotenv").config();
 
+let connectionPool;  // Global pool for reuse
+
 // Main handler for DB operations
 exports.handler = async (event) => {
   // event = { action: 'insertIfNotExists', data: { videoId, title, ... } }
@@ -11,19 +13,21 @@ exports.handler = async (event) => {
     return { statusCode: 400, body: { message: 'Invalid action or data' } };
   }
 
-  let connection;
   try {
-    connection = await createConnection();
+    // Create or reuse the pool
+    if (!connectionPool) {
+      connectionPool = await createConnection();  // Assume this returns a mysql2 promise pool
+    }
 
     // Check if video already exists
-    const [existing] = await connection.query('SELECT id FROM suggestions WHERE video_id = ?', [data.videoId]);
+    const [existing] = await connectionPool.query('SELECT id FROM suggestions WHERE video_id = ?', [data.videoId]);
 
     if (existing.length > 0) {
       return { statusCode: 200, body: { inserted: false, message: 'Duplicate video' } };
     }
 
     // Insert new suggestion
-    await connection.query(
+    await connectionPool.query(
       'INSERT INTO suggestions (video_id, title, description, url, thumbnail_url, views, likes, comment_count, score, ai_reason, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
       [data.videoId, data.title, data.description, data.url, data.thumbnail_url, data.views, data.likes, data.comment_count, data.score, data.ai_reason, 'pending']
     );
@@ -32,7 +36,5 @@ exports.handler = async (event) => {
   } catch (err) {
     console.error('DB error:', err);
     return { statusCode: 500, body: { message: 'DB error', error: err.message } };
-  } finally {
-    if (connection) await connection.end();
-  }
+  }  // No finally or end() - keep pool open for reuse
 };
